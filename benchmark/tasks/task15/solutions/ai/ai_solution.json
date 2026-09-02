@@ -1,23 +1,20 @@
 [
   {
-    "model": "claude-3-5-haiku-20241022",
-    "prompt_type": "zero_shot",
-    "language": "Python",
-    "code": "def solve(n, a, b):\n    door_sides = 2 * (2 * a + b)\n    return (door_sides + n - 1) // n\n\nn = int(input())\na = int(input())\nb = int(input())\nprint(solve(n, a, b))",
-    "timestamp": "2025-08-05 17:31:35"
-  },
-  {
-    "model": "deepseek-v3",
-    "prompt_type": "zero_shot",
-    "language": "Python",
-    "code": "n = int(input())\na = int(input())\nb = int(input())\n\ntotal_needed = 4 * a + 2 * b\n\nif total_needed <= n:\n    print(1)\nelse:\n    # Calculate how many bars are needed by trying to fit as much as possible into each bar\n    bars = 0\n    remaining = total_needed\n    while remaining > 0:\n        # Try to fit the largest possible side first\n        # The approach is to fit the largest remaining piece into the current bar\n        # Since sides must be solid, we can't combine parts\n        # So the minimal bars is ceil(total_needed / n)\n        bars += 1\n        remaining -= n\n    print(bars)",
-    "timestamp": "2025-08-05 17:31:45"
-  },
-  {
-    "model": "gpt-4o",
+    "model": "deepseek-chat",
     "prompt_type": "zero_shot",
     "language": "python",
-    "code": "def minimal_wooden_bars(n, a, b):\n    required_length = 4 * a + 2 * b\n    return (required_length + n - 1) // n\n\nn = int(input().strip())\na = int(input().strip())\nb = int(input().strip())\n\nprint(minimal_wooden_bars(n, a, b))",
-    "timestamp": "2025-08-12 21:41:06"
+    "code": "n = int(input())\na = int(input())\nb = int(input())\n\n# We need 4 of a, 2 of b\nneeded = [a]*4 + [b]*2\n\n# Try from 1 bar up to 6 bars\nfor bars in range(1, 7):\n    # Try to assign pieces to bars\n    # Use backtracking\n    remaining = needed[:]\n    bar_lengths = [n] * bars\n    \n    def backtrack(piece_idx):\n        if piece_idx == len(remaining):\n            return True\n        piece = remaining[piece_idx]\n        for i in range(bars):\n            if bar_lengths[i] >= piece:\n                bar_lengths[i] -= piece\n                if backtrack(piece_idx + 1):\n                    return True\n                bar_lengths[i] += piece\n        return False\n    \n    if backtrack(0):\n        print(bars)\n        break"
+  },
+  {
+    "model": "claude-sonnet-4-6",
+    "prompt_type": "zero_shot",
+    "language": "python",
+    "code": "from functools import lru_cache\n\ndef solve():\n    n = int(input())\n    a = int(input())\n    b = int(input())\n    \n    # Find valid (x, y) per bar\n    valid = []\n    for x in range(5):\n        for y in range(3):\n            if x * a + y * b <= n:\n                valid.append((x, y))\n    \n    # Try minimum k bars\n    for k in range(1, 7):\n        # Can we place 4 a's and 2 b's in k bars?\n        # DFS\n        def can_place(bar_idx, rem_a, rem_b):\n            if rem_a == 0 and rem_b == 0:\n                return True\n            if bar_idx == k:\n                return False\n            for (x, y) in valid:\n                use_a = min(x, rem_a)\n                use_b = min(y, rem_b)\n                # Actually x and y are exact amounts for this bar\n                if x <= rem_a and y <= rem_b:\n                    if can_place(bar_idx + 1, rem_a - x, rem_b - y):\n                        return True\n            return False\n        \n        if can_place(0, 4, 2):\n            print(k)\n            return\n\nsolve()"
+  },
+  {
+    "model": "gpt-5.4",
+    "prompt_type": "zero_shot",
+    "language": "python",
+    "code": "import sys\n\ndef main():\n    data = sys.stdin.read().strip().split()\n    if not data:\n        return\n    n, a, b = map(int, data)\n\n    pieces = [a, a, a, a, b, b]  # two doors: 4 vertical sides and 2 top sides\n\n    # dp[mask] = minimal number of bars used to place pieces in 'mask',\n    # with the current last bar having the maximal possible remaining length\n    INF = 10**9\n    size = 1 << 6\n    dp = [(-1, -1)] * size  # (bars_used, remaining_in_current_bar)\n    dp[0] = (1, n)  # start with one empty bar\n\n    for mask in range(size):\n        bars_used, rem = dp[mask]\n        if bars_used == -1:\n            continue\n        for i in range(6):\n            if not (mask & (1 << i)):\n                length = pieces[i]\n                nmask = mask | (1 << i)\n                if length <= rem:\n                    cand = (bars_used, rem - length)\n                else:\n                    cand = (bars_used + 1, n - length)\n\n                cur = dp[nmask]\n                if cur[0] == -1 or cand[0] < cur[0] or (cand[0] == cur[0] and cand[1] > cur[1]):\n                    dp[nmask] = cand\n\n    print(dp[size - 1][0])\n\nif __name__ == \"__main__\":\n    main()"
   }
 ]

@@ -1,107 +1,74 @@
 [
   {
-    "model": "claude-3-5-haiku-20241022",
-    "prompt_type": "zero_shot",
-    "language": "C",
-    "code": "#include <stdio.h>\n#include <stdlib.h>\n\n#define MAX_H 50\n#define MAX_W 50\n#define COLORS 4\n\nint grid[MAX_H][MAX_W];\nint H, W, D;\n\nint is_valid_color(int row, int col, int color) {\n    for (int r = 0; r < H; r++) {\n        for (int c = 0; c < W; c++) {\n            if (r == row && c == col) continue;\n            \n            int dist = abs(row - r) + abs(col - c);\n            if (dist == D && grid[r][c] == color) {\n                return 0;\n            }\n        }\n    }\n    return 1;\n}\n\nint solve(int row, int col) {\n    if (row == H) return 1;\n    if (col == W) return solve(row + 1, 0);\n\n    for (int color = 0; color < COLORS; color++) {\n        if (is_valid_color(row, col, color)) {\n            grid[row][col] = color;\n            \n            if (solve(row, col + 1)) {\n                return 1;\n            }\n            \n            grid[row][col] = -1;\n        }\n    }\n    \n    return 0;\n}\n\nint main() {\n    scanf(\"%d %d %d\", &H, &W, &D);\n    \n    for (int r = 0; r < H; r++) {\n        for (int c = 0; c < W; c++) {\n            grid[r][c] = -1;\n        }\n    }\n    \n    solve(0, 0);\n    \n    for (int r = 0; r < H; r++) {\n        for (int c = 0; c < W; c++) {\n            printf(\"%d \", grid[r][c]);\n        }\n        printf(\"\\n\");\n    }\n    \n    return 0;\n}",
-    "timestamp": "2025-08-05 23:13:50"
-  },
-  {
-    "model": "deepseek-v3",
-    "prompt_type": "zero_shot",
-    "language": "C",
-    "code": "#include <stdio.h>\n\nint main() {\n    int H, W, d;\n    scanf(\"%d %d %d\", &H, &W, &d);\n    \n    for (int i = 0; i < H; i++) {\n        for (int j = 0; j < W; j++) {\n            int x = (i + j) / d;\n            int y = (i - j) / d;\n            int color = (x % 2) * 2 + (y % 2);\n            \n            switch (color) {\n                case 0: putchar('R'); break;\n                case 1: putchar('Y'); break;\n                case 2: putchar('G'); break;\n                case 3: putchar('B'); break;\n            }\n        }\n        putchar('\\n');\n    }\n    \n    return 0;\n}",
-    "timestamp": "2025-08-05 23:13:59"
-  },
-  {
-    "model": "deepseek-v3",
-    "prompt_type": "zero_shot",
-    "language": "C++",
-    "code": "#include <iostream>\nusing namespace std;\n\nint main() {\n    int H, W, d;\n    cin >> H >> W >> d;\n    \n    for (int i = 0; i < H; ++i) {\n        for (int j = 0; j < W; ++j) {\n            int x = (i + j) / d;\n            int y = (i - j) / d;\n            if (x % 2 == 0) {\n                if (y % 2 == 0) {\n                    cout << 'R';\n                } else {\n                    cout << 'Y';\n                }\n            } else {\n                if (y % 2 == 0) {\n                    cout << 'G';\n                } else {\n                    cout << 'B';\n                }\n            }\n        }\n        cout << endl;\n    }\n    \n    return 0;\n}",
-    "timestamp": "2025-08-05 23:14:08"
-  },
-  {
-    "model": "deepseek-v3",
-    "prompt_type": "zero_shot",
-    "language": "Java",
-    "code": "import java.util.Scanner;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        int H = sc.nextInt();\n        int W = sc.nextInt();\n        int d = sc.nextInt();\n        \n        char[][] color = new char[H][W];\n        char[] colors = {'R', 'Y', 'G', 'B'};\n        \n        for (int i = 0; i < H; i++) {\n            for (int j = 0; j < W; j++) {\n                int x = i + j;\n                int y = i - j;\n                int colorIndex = ((x / d) % 2) * 2 + ((y / d) % 2);\n                color[i][j] = colors[colorIndex];\n            }\n        }\n        \n        for (int i = 0; i < H; i++) {\n            for (int j = 0; j < W; j++) {\n                System.out.print(color[i][j]);\n            }\n            System.out.println();\n        }\n    }\n}",
-    "timestamp": "2025-08-05 23:14:19"
-  },
-  {
-    "model": "claude-3-5-haiku-20241022",
-    "prompt_type": "zero_shot",
-    "language": "Java",
-    "code": "import java.util.*;\n\npublic class SquareColoring {\n    public static int[][] paintGrid(int H, int W, int d) {\n        int[][] colors = new int[H][W];\n        \n        for (int i = 0; i < H; i++) {\n            for (int j = 0; j < W; j++) {\n                colors[i][j] = (i + j) % 4;\n            }\n        }\n        \n        return colors;\n    }\n    \n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        \n        int H = scanner.nextInt();\n        int W = scanner.nextInt();\n        int d = scanner.nextInt();\n        \n        int[][] result = paintGrid(H, W, d);\n        \n        for (int[] row : result) {\n            for (int color : row) {\n                System.out.print(color + \" \");\n            }\n            System.out.println();\n        }\n        \n        scanner.close();\n    }\n}",
-    "timestamp": "2025-08-05 23:14:24"
-  },
-  {
-    "model": "claude-3-5-haiku-20241022",
-    "prompt_type": "zero_shot",
-    "language": "C++",
-    "code": "#include <iostream>\n#include <vector>\n#include <cmath>\n\nusing namespace std;\n\nint main() {\n    int H, W, D;\n    cin >> H >> W >> D;\n\n    vector<vector<int>> colors(H, vector<int>(W));\n\n    for (int i = 0; i < H; i++) {\n        for (int j = 0; j < W; j++) {\n            colors[i][j] = ((i + j) / D) % 4;\n        }\n    }\n\n    for (int i = 0; i < H; i++) {\n        for (int j = 0; j < W; j++) {\n            cout << colors[i][j] << \" \";\n        }\n        cout << endl;\n    }\n\n    return 0;\n}",
-    "timestamp": "2025-08-05 23:14:28"
-  },
-  {
-    "model": "gpt-4o",
-    "prompt_type": "zero_shot",
-    "language": "python",
-    "code": "def color_grid(H, W, d):\n    # Initialize a color grid\n    grid = [[None for _ in range(W)] for _ in range(H)]\n    colors = ['R', 'Y', 'G', 'B']\n\n    # Paint the squares\n    for i in range(H):\n        for j in range(W):\n            # Determine the color index based on parity\n            grid[i][j] = colors[(i + j) % 4]\n\n    return grid\n\n# Example usage:\nH, W, d = 5, 5, 2\ngrid = color_grid(H, W, d)\nfor row in grid:\n    print(' '.join(row))",
-    "timestamp": "2025-08-13 14:15:05"
-  },
-  {
-    "model": "gpt-4o",
-    "prompt_type": "zero_shot",
-    "language": "java",
-    "code": "import java.util.Scanner;\n\npublic class GridColoring {\n\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        int H = scanner.nextInt();\n        int W = scanner.nextInt();\n        \n        // Colors: 0 = Red, 1 = Yellow, 2 = Green, 3 = Blue\n        String[] colorNames = {\"Red\", \"Yellow\", \"Green\", \"Blue\"};\n        int[][] grid = new int[H][W];\n        \n        for (int i = 0; i < H; i++) {\n            for (int j = 0; j < W; j++) {\n                // Calculate the color index based on the sum of indices\n                // Sum of indices modulo 4 gives a pattern ensuring a solution\n                grid[i][j] = (i + j) % 4;\n            }\n        }\n\n        // Print the grid with color names\n        for (int i = 0; i < H; i++) {\n            for (int j = 0; j < W; j++) {\n                System.out.print(colorNames[grid[i][j]] + \" \");\n            }\n            System.out.println();\n        }\n        \n        scanner.close();\n    }\n}",
-    "timestamp": "2025-08-13 14:15:10"
-  },
-  {
-    "model": "gpt-4o",
+    "model": "deepseek-chat",
     "prompt_type": "zero_shot",
     "language": "c",
-    "code": "#include <stdio.h>\n\nvoid paintGrid(int H, int W, int d) {\n    char colors[] = {'R', 'Y', 'G', 'B'};\n    char grid[H][W];\n\n    for (int i = 0; i < H; i++) {\n        for (int j = 0; j < W; j++) {\n            grid[i][j] = colors[((i + j) % d) % 4];\n        }\n    }\n\n    for (int i = 0; i < H; i++) {\n        for (int j = 0; j < W; j++) {\n            printf(\"%c \", grid[i][j]);\n        }\n        printf(\"\\n\");\n    }\n}\n\nint main() {\n    int H, W, d;\n    scanf(\"%d %d %d\", &H, &W, &d);\n    paintGrid(H, W, d);\n    return 0;\n}",
-    "timestamp": "2025-08-13 14:15:18"
+    "code": "#include <stdio.h>\n\nint main() {\n    int H, W, d;\n    scanf(\"%d %d %d\", &H, &W, &d);\n    \n    char colors[] = \"RGBY\";\n    \n    for (int i = 0; i < H; i++) {\n        for (int j = 0; j < W; j++) {\n            int id = ((i + j) % 2) * 2 + (j % 2);\n            putchar(colors[id]);\n        }\n        putchar('\\n');\n    }\n    \n    return 0;\n}"
   },
   {
-    "model": "gpt-4o",
+    "model": "claude-sonnet-4-6",
+    "prompt_type": "zero_shot",
+    "language": "c",
+    "code": "#include <stdio.h>\n\nint main() {\n    int H, W, d;\n    scanf(\"%d %d %d\", &H, &W, &d);\n    char colors[] = \"RYGB\";\n    for (int i = 0; i < H; i++) {\n        for (int j = 0; j < W; j++) {\n            int a = (2 * i / d) % 2;\n            int b = (2 * j / d) % 2;\n            int c = a * 2 + b;\n            printf(\"%c\", colors[c]);\n            if (j < W-1) printf(\" \");\n        }\n        printf(\"\\n\");\n    }\n    return 0;\n}"
+  },
+  {
+    "model": "gpt-5.4",
+    "prompt_type": "zero_shot",
+    "language": "c",
+    "code": "#include <stdio.h>\n\nint main(void) {\n    int H, W, d;\n    if (scanf(\"%d %d %d\", &H, &W, &d) != 3) return 0;\n\n    const char color[4] = {'R', 'Y', 'G', 'B'};\n\n    for (int i = 0; i < H; i++) {\n        for (int j = 0; j < W; j++) {\n            int a = i + j;\n            int b = i - j;\n\n            int p = ((a / d) % 2 + 2) % 2;\n            int q = ((b / d) % 2 + 2) % 2;\n\n            putchar(color[p * 2 + q]);\n        }\n        putchar('\\n');\n    }\n\n    return 0;\n}"
+  },
+  {
+    "model": "deepseek-chat",
     "prompt_type": "zero_shot",
     "language": "c++",
-    "code": "#include <iostream>\n#include <vector>\n\nint main() {\n    int H, W, d;\n    std::cin >> H >> W >> d;\n    std::vector<std::vector<char>> grid(H, std::vector<char>(W));\n    char colors[4] = {'R', 'Y', 'G', 'B'};\n    \n    for (int i = 0; i < H; ++i) {\n        for (int j = 0; j < W; ++j) {\n            grid[i][j] = colors[(i + j) % 4];\n        }\n    }\n    \n    for (int i = 0; i < H; ++i) {\n        for (int j = 0; j < W; ++j) {\n            std::cout << grid[i][j];\n            if (j != W - 1) std::cout << \" \";\n        }\n        std::cout << \"\\n\";\n    }\n    \n    return 0;\n}",
-    "timestamp": "2025-08-13 14:15:20"
+    "code": "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    ios::sync_with_stdio(false);\n    cin.tie(nullptr);\n    \n    int H, W, d;\n    cin >> H >> W >> d;\n    const string colors = \"RYGB\";\n    \n    for (int i = 0; i < H; i++) {\n        for (int j = 0; j < W; j++) {\n            // Map to a 4-coloring based on blocks of size d\n            int x = (i / d) % 2;\n            int y = (j / d) % 2;\n            int idx = x * 2 + y;\n            cout << colors[idx];\n        }\n        cout << \"\\n\";\n    }\n    \n    return 0;\n}"
   },
   {
-    "model": "claude-3-5-haiku-20241022",
+    "model": "claude-sonnet-4-6",
+    "prompt_type": "zero_shot",
+    "language": "c++",
+    "code": "#include <bits/stdc++.h>\nusing namespace std;\n\nint main(){\n    int H, W, d;\n    cin >> H >> W >> d;\n    \n    string colors = \"RYGB\";\n    \n    for(int i = 0; i < H; i++){\n        for(int j = 0; j < W; j++){\n            // color based on block position\n            int bi = (i * 2 / d) % 2;\n            int bj = (j * 2 / d) % 2;\n            int c = bi * 2 + bj;\n            if(j) cout << ' ';\n            cout << colors[c];\n        }\n        cout << '\\n';\n    }\n    \n    return 0;\n}"
+  },
+  {
+    "model": "gpt-5.4",
+    "prompt_type": "zero_shot",
+    "language": "c++",
+    "code": "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    ios::sync_with_stdio(false);\n    cin.tie(nullptr);\n\n    long long H, W, d;\n    cin >> H >> W >> d;\n\n    // Find one representation:\n    // d = a^2 + b^2 with a,b >= 0\n    // It is guaranteed that a solution exists, so such (a,b) exists.\n    long long a = -1, b = -1;\n    for (long long x = 0; x * x <= d; ++x) {\n        long long y2 = d - x * x;\n        long long y = sqrt((long double)y2);\n        while ((y + 1) * (y + 1) <= y2) ++y;\n        while (y * y > y2) --y;\n        if (y * y == y2) {\n            a = x;\n            b = y;\n            break;\n        }\n    }\n\n    // 2-coloring by parity of floor((a*x + b*y)/d),\n    // and another independent 2-coloring by parity of floor((b*x - a*y)/d).\n    // Combining them gives 4 colors.\n    //\n    // For any two cells whose squared Euclidean distance is d,\n    // their difference vector is one of (±a, ±b) or (±b, ±a),\n    // which flips at least one of these two parities.\n\n    for (long long i = 0; i < H; ++i) {\n        for (long long j = 0; j < W; ++j) {\n            long long p = (long long)floor((long double)(a * i + b * j) / d) & 1LL;\n            long long q = (long long)floor((long double)(b * i - a * j) / d) & 1LL;\n            int color = (int)(p * 2 + q); // 0..3\n            cout << color << (j + 1 == W ? '\\n' : ' ');\n        }\n    }\n\n    return 0;\n}"
+  },
+  {
+    "model": "deepseek-chat",
+    "prompt_type": "zero_shot",
+    "language": "java",
+    "code": "import java.io.*;\n\npublic class Main {\n    public static void main(String[] args) throws IOException {\n        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));\n        String[] parts = br.readLine().split(\" \");\n        int H = Integer.parseInt(parts[0]);\n        int W = Integer.parseInt(parts[1]);\n        \n        char[] colors = {'R', 'Y', 'G', 'B'};\n        StringBuilder sb = new StringBuilder();\n        \n        for (int i = 0; i < H; i++) {\n            for (int j = 0; j < W; j++) {\n                int idx = (i % 2) * 2 + (j % 2);\n                sb.append(colors[idx]);\n            }\n            sb.append('\\n');\n        }\n        System.out.print(sb.toString());\n    }\n}"
+  },
+  {
+    "model": "claude-sonnet-4-6",
+    "prompt_type": "zero_shot",
+    "language": "java",
+    "code": "import java.util.*;\nimport java.io.*;\n\npublic class Main {\n    public static void main(String[] args) throws IOException {\n        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));\n        StringTokenizer st = new StringTokenizer(br.readLine());\n        int H = Integer.parseInt(st.nextToken());\n        int W = Integer.parseInt(st.nextToken());\n        int d = Integer.parseInt(st.nextToken());\n        String[] colors = {\"R\", \"Y\", \"G\", \"B\"};\n        StringBuilder sb = new StringBuilder();\n        for (int i = 0; i < H; i++) {\n            for (int j = 0; j < W; j++) {\n                int a = (i + j) / d % 2;\n                int b = ((i - j) + 100000 * d) / d % 2;\n                sb.append(colors[a * 2 + b]);\n                if (j < W - 1) sb.append(' ');\n            }\n            sb.append('\\n');\n        }\n        System.out.print(sb);\n    }\n}"
+  },
+  {
+    "model": "gpt-5.4",
+    "prompt_type": "zero_shot",
+    "language": "java",
+    "code": "import java.io.*;\nimport java.util.*;\n\npublic class Main {\n    public static void main(String[] args) throws Exception {\n        FastScanner fs = new FastScanner(System.in);\n        int H = fs.nextInt();\n        int W = fs.nextInt();\n        long d = fs.nextLong();\n\n        // Let d = 2^k * odd.\n        // If d is odd:\n        //   color = ((x+y)&1) * 2 + (f(x,y)&1)\n        // where f(x,y) = ((x+y)/2) mod 2 after rotating coordinates.\n        //\n        // More generally, for d:\n        // Let t be the exponent of 2 in d.\n        // Define u = x + y, v = x - y.\n        // Then color by the t-th bit of u and v:\n        //   a = ((u mod 2^(t+1)) >= 2^t) ? 1 : 0\n        //   b = ((v mod 2^(t+1)) >= 2^t) ? 1 : 0\n        //   color = a*2 + b\n        //\n        // This works because for any pair at Manhattan distance exactly d,\n        // after rotation:\n        //   (Δu, Δv) = (p+q, p-q), where |p|+|q| = d\n        // and both Δu, Δv are multiples of 2^t but not both multiples of 2^(t+1),\n        // so at least one of the t-th bits differs.\n\n        int t = 0;\n        long tmp = d;\n        while ((tmp & 1L) == 0) {\n            t++;\n            tmp >>= 1;\n        }\n\n        long mod = 1L << (t + 1);\n        long half = 1L << t;\n\n        char[] map = {'R', 'Y', 'G', 'B'};\n        StringBuilder sb = new StringBuilder();\n\n        for (int i = 0; i < H; i++) {\n            for (int j = 0; j < W; j++) {\n                long u = (long) i + j;\n                long v = (long) i - j;\n\n                long um = floorMod(u, mod);\n                long vm = floorMod(v, mod);\n\n                int a = (um >= half) ? 1 : 0;\n                int b = (vm >= half) ? 1 : 0;\n\n                int color = a * 2 + b;\n                sb.append(map[color]);\n            }\n            sb.append('\\n');\n        }\n\n        System.out.print(sb.toString());\n    }\n\n    static long floorMod(long x, long m) {\n        long r = x % m;\n        return r < 0 ? r + m : r;\n    }\n\n    static class FastScanner {\n        private final InputStream in;\n        private final byte[] buffer = new byte[1 << 16];\n        private int ptr = 0, len = 0;\n\n        FastScanner(InputStream is) {\n            in = is;\n        }\n\n        private int read() throws IOException {\n            if (ptr >= len) {\n                len = in.read(buffer);\n                ptr = 0;\n                if (len <= 0) return -1;\n            }\n            return buffer[ptr++];\n        }\n\n        int nextInt() throws IOException {\n            return (int) nextLong();\n        }\n\n        long nextLong() throws IOException {\n            int c;\n            do {\n                c = read();\n            } while (c <= ' ' && c != -1);\n\n            long sign = 1;\n            if (c == '-') {\n                sign = -1;\n                c = read();\n            }\n\n            long val = 0;\n            while (c > ' ') {\n                val = val * 10 + (c - '0');\n                c = read();\n            }\n            return val * sign;\n        }\n    }\n}"
+  },
+  {
+    "model": "deepseek-chat",
     "prompt_type": "zero_shot",
     "language": "python",
-    "code": "def solve_grid_coloring(H, W, d):\n    colors = ['red', 'yellow', 'green', 'blue']\n    grid = [[None for _ in range(W)] for _ in range(H)]\n    \n    def can_place_color(row, col, color):\n        for r in range(H):\n            for c in range(W):\n                if grid[r][c] == color and abs(r - row) + abs(c - col) == d:\n                    return False\n        return True\n    \n    def backtrack(row, col):\n        if row == H:\n            return True\n        \n        next_row = row\n        next_col = col + 1\n        if next_col == W:\n            next_row += 1\n            next_col = 0\n        \n        for color in colors:\n            if can_place_color(row, col, color):\n                grid[row][col] = color\n                if backtrack(next_row, next_col):\n                    return True\n                grid[row][col] = None\n        \n        return False\n    \n    backtrack(0, 0)\n    return grid\n\n# Example usage\nH, W, d = 3, 4, 2\nresult = solve_grid_coloring(H, W, d)\nfor row in result:\n    print(row)",
-    "timestamp": "2025-08-13 14:15:26"
+    "code": "H, W = map(int, input().split())\ncolors = [\"R\", \"Y\", \"G\", \"B\"]\n\nfor i in range(H):\n    row = []\n    for j in range(W):\n        color_index = (i % 2) * 2 + (j % 2)\n        row.append(colors[color_index])\n    print(\"\".join(row))"
   },
   {
-    "model": "deepseek-v3",
+    "model": "claude-sonnet-4-6",
     "prompt_type": "zero_shot",
     "language": "python",
-    "code": "h, w, d = map(int, input().split())\n\ncolor_map = [[0] * w for _ in range(h)]\n\nfor i in range(h):\n    for j in range(w):\n        x = (i + j) // d\n        y = (i - j) // d\n        if x % 2 == 0 and y % 2 == 0:\n            color_map[i][j] = 0\n        elif x % 2 == 0 and y % 2 == 1:\n            color_map[i][j] = 1\n        elif x % 2 == 1 and y % 2 == 0:\n            color_map[i][j] = 2\n        else:\n            color_map[i][j] = 3\n\ncolor_chars = ['R', 'Y', 'G', 'B']\n\nfor row in color_map:\n    print(''.join([color_chars[c] for c in row]))",
-    "timestamp": "2025-08-13 14:15:32"
+    "code": "import sys\ninput_data = sys.stdin.read().split()\nH, W, d = int(input_data[0]), int(input_data[1]), int(input_data[2])\ncolors = \"RYGB\"\nresult = []\nfor i in range(H):\n    row = []\n    for j in range(W):\n        c = (((i + j) % (2 * d)) // d) * 2 + (((i - j) % (2 * d)) // d)\n        row.append(colors[c])\n    result.append(\"\".join(row))\nprint(\"\\n\".join(result))"
   },
   {
-    "model": "gpt-4o",
+    "model": "gpt-5.4",
     "prompt_type": "zero_shot",
-    "language": "js",
-    "code": "function paintGrid(H, W, d) {\n    const colors = ['red', 'yellow', 'green', 'blue'];\n    const grid = Array.from({ length: H }, () => Array(W).fill(''));\n\n    for (let i = 0; i < H; i++) {\n        for (let j = 0; j < W; j++) {\n            // Calculate the \"color index\" based on the distance from the origin (i.e., (0, 0))\n            const colorIndex = ((i + j) % colors.length);\n            grid[i][j] = colors[colorIndex];\n        }\n    }\n\n    return grid;\n}\n\n// Example usage:\nconsole.log(paintGrid(4, 4, 2)); // This line is just an example to show how to use the function",
-    "timestamp": "2025-08-13 14:15:37"
-  },
-  {
-    "model": "claude-3-5-haiku-20241022",
-    "prompt_type": "zero_shot",
-    "language": "js",
-    "code": "function paintGrid(H, W, d) {\n    const colors = ['red', 'yellow', 'green', 'blue'];\n    const grid = Array.from({ length: H }, () => Array(W).fill(null));\n\n    function canPaintColor(row, col, color) {\n        for (let i = 0; i < H; i++) {\n            for (let j = 0; j < W; j++) {\n                if (grid[i][j] === color && \n                    Math.abs(row - i) + Math.abs(col - j) === d) {\n                    return false;\n                }\n            }\n        }\n        return true;\n    }\n\n    for (let i = 0; i < H; i++) {\n        for (let j = 0; j < W; j++) {\n            for (const color of colors) {\n                if (canPaintColor(i, j, color)) {\n                    grid[i][j] = color;\n                    break;\n                }\n            }\n        }\n    }\n\n    return grid;\n}",
-    "timestamp": "2025-08-13 14:15:42"
-  },
-  {
-    "model": "deepseek-v3",
-    "prompt_type": "zero_shot",
-    "language": "js",
-    "code": "function solve() {\n    const readline = require('readline');\n    const rl = readline.createInterface({\n        input: process.stdin,\n        output: process.stdout\n    });\n\n    rl.on('line', (input) => {\n        const [H, W, d] = input.split(' ').map(Number);\n        const grid = new Array(H);\n        for (let i = 0; i < H; i++) {\n            grid[i] = new Array(W);\n        }\n\n        const colors = ['R', 'Y', 'G', 'B'];\n        for (let i = 0; i < H; i++) {\n            for (let j = 0; j < W; j++) {\n                const x = i + j;\n                const y = i - j;\n                const colorIndex = Math.floor(x / d) % 2 + (Math.floor(y / d) % 2) * 2;\n                grid[i][j] = colors[colorIndex];\n            }\n        }\n\n        for (let i = 0; i < H; i++) {\n            console.log(grid[i].join(''));\n        }\n\n        rl.close();\n    });\n}\n\nsolve();",
-    "timestamp": "2025-08-13 14:15:50"
+    "language": "python",
+    "code": "import sys\n\ndef main():\n    input = sys.stdin.readline\n    H, W, d = map(int, input().split())\n\n    # If d is odd:\n    # color(i,j) = ((i+j)&1) * 2 + ((i-j)&1)\n    # Then any pair at odd Manhattan distance must differ in parity of (i+j),\n    # so they get different colors.\n    #\n    # If d is even:\n    # Let k be the exponent of 2 in d, so d = 2^k * m (m odd), and t = 2^(k/2) if k even,\n    # or use the standard invariant with x=i+j, y=i-j.\n    # A simpler known construction:\n    # Let t be the largest integer such that 2*t*t divides d, i.e. d = 2*t^2 * q or t^2 * q.\n    # But an easier universal implementation is:\n    #\n    # Write d = 2^k * m (m odd).\n    # If k is odd, use parity of ((i+j)>>((k+1)//2)) and ((i-j)>>((k+1)//2)).\n    # If k is even, use parity of (i>> (k//2)) and (j>> (k//2)).\n    #\n    # This is the standard 4-coloring for AtCoder ABC099 D/AGC-style lattice condition.\n    #\n    # More directly and safely, use the well-known construction:\n    # - If d is odd: based on parity of i+j and i-j.\n    # - Else divide coordinates by powers of 2 recursively.\n    #\n    # We implement recursively:\n    # For even d, color(i,j,d) = color(i//2, j//2, d//4) if d % 4 == 0\n    # otherwise use parity-based coloring on transformed coordinates.\n    #\n    # But simpler iterative formula:\n    # Let x=i-1, y=j-1 (0-based).\n    # Repeatedly while d % 4 == 0: x//=2, y//=2, d//=4\n    # Then:\n    #   if d % 2 == 1: use odd formula on (x,y)\n    #   else: d % 4 == 2, use color = (x&1)*2 + (y&1)\n    #\n    # This works because dividing both coordinates by 2 reduces distances by factor 2\n    # in the rotated lattice representation.\n\n    ans = []\n\n    for i in range(H):\n        row = []\n        for j in range(W):\n            x, y = i, j\n            dd = d\n            while dd % 4 == 0:\n                x //= 2\n                y //= 2\n                dd //= 4\n\n            if dd % 2 == 1:\n                c = ((x + y) & 1) * 2 + ((x - y) & 1)\n            else:\n                # dd % 4 == 2\n                c = (x & 1) * 2 + (y & 1)\n\n            row.append(str(c + 1))  # output colors as 1..4\n        ans.append(\" \".join(row))\n\n    print(\"\\n\".join(ans))\n\nif __name__ == \"__main__\":\n    main()"
   }
 ]

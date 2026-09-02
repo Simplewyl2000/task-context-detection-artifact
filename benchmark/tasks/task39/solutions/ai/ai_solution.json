@@ -1,23 +1,20 @@
 [
   {
-    "model": "claude-3-5-haiku-20241022",
-    "prompt_type": "zero_shot",
-    "language": "Python",
-    "code": "def solve_caterpillar_problem(h1, h2, a, b):\n    # Distance to travel\n    distance = h2 - h1\n    \n    # Check if impossible\n    if a <= b:\n        return -1\n    \n    # Daytime progress\n    net_daily_progress = a - b\n    \n    # Check if can reach in zero days\n    if distance <= a and h1 + a >= h2:\n        return 0\n    \n    # Calculate full days needed\n    full_days = (distance - (a - b)) // net_daily_progress\n    \n    # Check if can reach on last partial day\n    remaining_height = distance - (full_days * net_daily_progress)\n    \n    if remaining_height <= a:\n        return full_days + 1\n    \n    return -1\n\n# Read input\nh1, h2 = map(int, input().split())\na, b = map(int, input().split())\n\n# Solve and print result\nprint(solve_caterpillar_problem(h1, h2, a, b))",
-    "timestamp": "2025-08-05 17:32:35"
-  },
-  {
-    "model": "deepseek-v3",
-    "prompt_type": "zero_shot",
-    "language": "Python",
-    "code": "h1, h2 = map(int, input().split())\na, b = map(int, input().split())\n\nremaining = h2 - h1\ndaily_net = 12 * (a - b)\n\nif a <= b:\n    if 8 * a >= remaining:\n        print(0)\n    else:\n        print(-1)\nelse:\n    remaining -= 8 * a\n    if remaining <= 0:\n        print(0)\n    else:\n        days_needed = (remaining + daily_net - 1) // daily_net\n        print(days_needed)",
-    "timestamp": "2025-08-05 17:32:44"
-  },
-  {
-    "model": "gpt-4o",
+    "model": "deepseek-chat",
     "prompt_type": "zero_shot",
     "language": "python",
-    "code": "def days_until_apple(caterpillar_height, apple_height, day_climb, night_slip):\n    if day_climb * 12 >= apple_height - caterpillar_height:\n        return 0\n    \n    net_day_climb = day_climb * 12\n    net_night_slip = night_slip * 12\n    \n    if net_day_climb <= net_night_slip:\n        return -1\n\n    current_height = caterpillar_height + net_day_climb - net_night_slip\n    days = 1\n    \n    while current_height < apple_height:\n        current_height += net_day_climb - net_night_slip\n        days += 1\n    \n    return days\n\n# Gather input and call the function\nh_1, h_2 = map(int, input().split())\na, b = map(int, input().split())\n\nprint(days_until_apple(h_1, h_2, a, b))",
-    "timestamp": "2025-08-12 21:54:20"
+    "code": "h1, h2 = map(int, input().strip().split())\na, b = map(int, input().strip().split())\n\n# Day 0: from 2 pm to 10 pm = 8 hours up\ncurrent = h1 + a * 8\nif current >= h2:\n    print(0)\nelse:\n    # After day 0, each full day: night down 12h, day up 12h\n    night_down = b * 12\n    day_up = a * 12\n    net = day_up - night_down\n    if net <= 0:\n        print(-1)\n    else:\n        days = 0\n        while True:\n            days += 1\n            # night: slip down\n            current -= night_down\n            # day: go up\n            current += day_up\n            if current >= h2:\n                print(days)\n                break"
+  },
+  {
+    "model": "claude-sonnet-4-6",
+    "prompt_type": "zero_shot",
+    "language": "python",
+    "code": "def solve():\n    h1, h2 = map(int, input().split())\n    a, b = map(int, input().split())\n    \n    # Day 0: 8 hours remaining\n    if h1 + 8 * a >= h2:\n        print(0)\n        return\n    \n    # After night 0\n    pos = h1 + 8 * a - 12 * b\n    \n    # Day k (k >= 1): pos + 12*a >= h2?\n    # pos_k = h1 + 8*a - 12*b + (k-1)*12*(a-b)\n    # We need pos_k + 12*a >= h2\n    \n    if a <= b:\n        # No improvement each cycle\n        # Check day 1\n        if pos + 12 * a >= h2:\n            print(1)\n        else:\n            print(-1)\n        return\n    \n    # a > b: find minimum k >= 1\n    # pos + 12*a >= h2\n    # h1 + 8*a - 12*b + (k-1)*12*(a-b) + 12*a >= h2\n    # (k-1)*12*(a-b) >= h2 - h1 - 8*a - 12*a + 12*b\n    # (k-1)*12*(a-b) >= h2 - h1 - 20*a + 12*b\n    \n    needed = h2 - (pos + 12 * a)\n    if needed <= 0:\n        print(1)\n        return\n    \n    # needed > 0, need (k-1)*12*(a-b) >= needed\n    # k-1 >= needed / (12*(a-b))\n    import math\n    k_minus_1 = math.ceil(needed / (12 * (a - b)))\n    print(k_minus_1 + 1)\n\nsolve()"
+  },
+  {
+    "model": "gpt-5.4",
+    "prompt_type": "zero_shot",
+    "language": "python",
+    "code": "import sys\n\ndef main():\n    input = sys.stdin.readline\n\n    h1, h2 = map(int, input().split())\n    a, b = map(int, input().split())\n\n    need = h2 - h1\n\n    # From 2 pm to 10 pm on the first day: 8 hours of climbing\n    first_day_gain = 8 * a\n    if first_day_gain >= need:\n        print(0)\n        return\n\n    # Each full next day-night cycle:\n    # night 10 pm -> 10 am: 12 hours slipping\n    # day   10 am -> 10 pm: 12 hours climbing\n    cycle_gain = 12 * (a - b)\n\n    if cycle_gain <= 0:\n        print(-1)\n        return\n\n    # After k full additional cycles, before the daytime climb of day k+1,\n    # total guaranteed progress increases by k * cycle_gain.\n    # During that next day, it can climb up to 12*a more.\n    #\n    # We need the smallest k >= 0 such that:\n    # first_day_gain + k * cycle_gain + 12 * a >= need\n    #\n    # Since first_day_gain was not enough, answer in days is k + 1.\n    remaining = need - first_day_gain\n    k = max(0, (remaining - 12 * a + cycle_gain - 1) // cycle_gain)\n    print(k + 1)\n\nif __name__ == \"__main__\":\n    main()"
   }
 ]

@@ -1,86 +1,74 @@
 [
   {
-    "model": "deepseek-v3",
-    "prompt_type": "zero_shot",
-    "language": "C",
-    "code": "#include <stdio.h>\n#include <string.h>\n\nvoid maxPoints(char* digits, int K) {\n    int n = strlen(digits);\n    char stack[n];\n    int top = -1;\n    int remove = K;\n\n    for (int i = 0; i < n; ++i) {\n        while (top != -1 && stack[top] < digits[i] && remove > 0) {\n            top--;\n            remove--;\n        }\n        stack[++top] = digits[i];\n    }\n\n    stack[top + 1 - remove] = '\\0';\n    printf(\"%s\\n\", stack);\n}\n\nint main() {\n    char digits[100001];\n    int K;\n    scanf(\"%s %d\", digits, &K);\n    maxPoints(digits, K);\n    return 0;\n}",
-    "timestamp": "2025-08-05 18:46:01"
-  },
-  {
-    "model": "claude-3-5-haiku-20241022",
-    "prompt_type": "zero_shot",
-    "language": "Java",
-    "code": "import java.util.*;\n\npublic class DigitalK {\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        String number = scanner.next();\n        int k = scanner.nextInt();\n        \n        System.out.println(findMaxPoints(number, k));\n        scanner.close();\n    }\n    \n    public static String findMaxPoints(String number, int k) {\n        StringBuilder sb = new StringBuilder(number);\n        \n        for (int i = 0; i < k; i++) {\n            int j = 0;\n            while (j < sb.length() - 1 && sb.charAt(j) <= sb.charAt(j + 1)) {\n                j++;\n            }\n            sb.deleteCharAt(j);\n        }\n        \n        return sb.toString();\n    }\n}",
-    "timestamp": "2025-08-05 18:46:06"
-  },
-  {
-    "model": "deepseek-v3",
-    "prompt_type": "zero_shot",
-    "language": "C++",
-    "code": "#include <iostream>\n#include <vector>\n#include <string>\n\nusing namespace std;\n\nstring maxPoints(string num, int k) {\n    vector<char> stack;\n    int remove = k;\n    for (char c : num) {\n        while (!stack.empty() && stack.back() < c && remove > 0) {\n            stack.pop_back();\n            remove--;\n        }\n        stack.push_back(c);\n    }\n    while (remove > 0) {\n        stack.pop_back();\n        remove--;\n    }\n    return string(stack.begin(), stack.end());\n}\n\nint main() {\n    string num;\n    int k;\n    cin >> num >> k;\n    cout << maxPoints(num, k) << endl;\n    return 0;\n}",
-    "timestamp": "2025-08-05 18:46:14"
-  },
-  {
-    "model": "claude-3-5-haiku-20241022",
-    "prompt_type": "zero_shot",
-    "language": "C",
-    "code": "#include <stdio.h>\n#include <string.h>\n\nchar* findMaxNumber(char* num, int k) {\n    int len = strlen(num);\n    int remainLen = len - k;\n    static char result[10001];\n    int top = 0;\n\n    for (int i = 0; i < len; i++) {\n        while (top > 0 && k > 0 && result[top-1] < num[i]) {\n            top--;\n            k--;\n        }\n        result[top++] = num[i];\n    }\n\n    result[remainLen] = '\\0';\n    return result;\n}\n\nint main() {\n    char num[10001];\n    int k;\n    \n    scanf(\"%s %d\", num, &k);\n    \n    printf(\"%s\\n\", findMaxNumber(num, k));\n    \n    return 0;\n}",
-    "timestamp": "2025-08-05 18:46:18"
-  },
-  {
-    "model": "claude-3-5-haiku-20241022",
-    "prompt_type": "zero_shot",
-    "language": "C++",
-    "code": "#include <iostream>\n#include <string>\n#include <algorithm>\n\nusing namespace std;\n\nstring getMaxNumber(string num, int k) {\n    while (k > 0) {\n        bool removed = false;\n        for (int i = 0; i < num.length() - 1; i++) {\n            if (num[i] < num[i + 1]) {\n                num.erase(num.begin() + i);\n                k--;\n                removed = true;\n                break;\n            }\n        }\n        \n        if (!removed) {\n            num.erase(num.end() - 1);\n            k--;\n        }\n    }\n    \n    return num;\n}\n\nint main() {\n    string ticket;\n    int k;\n    \n    cin >> ticket >> k;\n    \n    string result = getMaxNumber(ticket, k);\n    \n    cout << result << endl;\n    \n    return 0;\n}",
-    "timestamp": "2025-08-05 18:46:23"
-  },
-  {
-    "model": "deepseek-v3",
-    "prompt_type": "zero_shot",
-    "language": "Java",
-    "code": "import java.util.Scanner;\nimport java.util.Stack;\n\npublic class DigitalK {\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        String numStr = scanner.next();\n        int K = scanner.nextInt();\n        int digitsToKeep = numStr.length() - K;\n        Stack<Character> stack = new Stack<>();\n\n        for (int i = 0; i < numStr.length(); i++) {\n            char c = numStr.charAt(i);\n            while (!stack.isEmpty() && stack.peek() < c && K > 0) {\n                stack.pop();\n                K--;\n            }\n            stack.push(c);\n        }\n\n        StringBuilder result = new StringBuilder();\n        for (int i = 0; i < digitsToKeep; i++) {\n            result.append(stack.get(i));\n        }\n        System.out.println(result.toString());\n    }\n}",
-    "timestamp": "2025-08-05 18:46:32"
-  },
-  {
-    "model": "gpt-4o",
-    "prompt_type": "zero_shot",
-    "language": "python",
-    "code": "def max_points(sequence, K):\n    stack = []\n    to_remove = K\n\n    for digit in sequence:\n        while stack and to_remove > 0 and stack[-1] < digit:\n            stack.pop()\n            to_remove -= 1\n        stack.append(digit)\n\n    return ''.join(stack[:len(sequence) - K])\n\n# Example usage:\nsequence = \"1414213\"\nK = 3\nprint(max_points(sequence, K))  # Output: 4413",
-    "timestamp": "2025-08-13 00:51:49"
-  },
-  {
-    "model": "gpt-4o",
-    "prompt_type": "zero_shot",
-    "language": "java",
-    "code": "import java.util.Scanner;\nimport java.util.Stack;\n\npublic class DigitalK {\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        String digits = scanner.next();\n        int K = scanner.nextInt();\n        scanner.close();\n\n        int N = digits.length();\n        int newLength = N - K;\n        Stack<Character> stack = new Stack<>();\n\n        for (int i = 0; i < N; i++) {\n            char current = digits.charAt(i);\n            while (!stack.isEmpty() && stack.size() + (N - i) > newLength && stack.peek() < current) {\n                stack.pop();\n            }\n            if (stack.size() < newLength) {\n                stack.push(current);\n            }\n        }\n\n        StringBuilder result = new StringBuilder();\n        for (char c : stack) {\n            result.append(c);\n        }\n\n        System.out.println(result.toString());\n    }\n}",
-    "timestamp": "2025-08-13 00:51:54"
-  },
-  {
-    "model": "gpt-4o",
-    "prompt_type": "zero_shot",
-    "language": "c",
-    "code": "#include <stdio.h>\n#include <string.h>\n\nvoid findMaxPoints(char *digits, int N, int K) {\n    int stack[N];\n    int top = -1;\n    int remaining = N - K;\n\n    for (int i = 0; i < N; i++) {\n        while (top >= 0 && stack[top] < digits[i] - '0' && K > 0) {\n            top--;\n            K--;\n        }\n        if (top < remaining - 1) {\n            stack[++top] = digits[i] - '0';\n        } else {\n            K--;\n        }\n    }\n\n    for (int i = 0; i < remaining; i++) {\n        printf(\"%d\", stack[i]);\n    }\n    printf(\"\\n\");\n}\n\nint main() {\n    char digits[101];\n    int N, K;\n\n    scanf(\"%d %d\", &N, &K);\n    scanf(\"%s\", digits);\n\n    findMaxPoints(digits, N, K);\n\n    return 0;\n}",
-    "timestamp": "2025-08-13 00:51:57"
-  },
-  {
-    "model": "claude-3-5-haiku-20241022",
-    "prompt_type": "zero_shot",
-    "language": "python",
-    "code": "def max_points(N, K, digits):\n    stack = []\n    for digit in digits:\n        while K > 0 and stack and stack[-1] < digit:\n            stack.pop()\n            K -= 1\n        stack.append(digit)\n    \n    while K > 0:\n        stack.pop()\n        K -= 1\n    \n    return int(''.join(map(str, stack)))\n\n# Read input\nN, K = map(int, input().split())\ndigits = list(map(int, list(input().strip())))\n\n# Output result\nprint(max_points(N, K, digits))",
-    "timestamp": "2025-08-13 00:52:04"
-  },
-  {
-    "model": "deepseek-v3",
-    "prompt_type": "zero_shot",
-    "language": "python",
-    "code": "def max_points(s, k):\n    stack = []\n    for digit in s:\n        while k > 0 and stack and stack[-1] < digit:\n            stack.pop()\n            k -= 1\n        stack.append(digit)\n    if k > 0:\n        stack = stack[:-k]\n    return ''.join(stack)\n\nn, k = map(int, input().split())\ns = input().strip()\nprint(max_points(s, k))",
-    "timestamp": "2025-08-13 00:52:11"
-  },
-  {
-    "model": "gpt-4o",
+    "model": "deepseek-chat",
     "prompt_type": "zero_shot",
     "language": "c++",
-    "code": "#include <iostream>\n#include <string>\n#include <deque>\nusing namespace std;\n\nstring maximizePoints(string number, int K) {\n    int numLength = number.length();\n    int keep = numLength - K;\n    deque<char> dq;\n\n    for (int i = 0; i < numLength; ++i) {\n        while (!dq.empty() && K > 0 && dq.back() < number[i]) {\n            dq.pop_back();\n            --K;\n        }\n        dq.push_back(number[i]);\n    }\n\n    string result = \"\";\n    while (keep-- > 0 && !dq.empty()) {\n        result += dq.front();\n        dq.pop_front();\n    }\n\n    return result;\n}\n\nint main() {\n    string number;\n    int K;\n    cin >> number >> K;\n    cout << maximizePoints(number, K) << endl;\n    return 0;\n}",
-    "timestamp": "2025-08-13 10:56:21"
+    "code": "#include <iostream>\n#include <string>\n#include <vector>\nusing namespace std;\n\nint main() {\n    ios::sync_with_stdio(false);\n    cin.tie(nullptr);\n    \n    string s;\n    int K;\n    cin >> s >> K;\n    \n    vector<char> st;\n    int to_remove = K;\n    \n    for (char c : s) {\n        while (!st.empty() && to_remove > 0 && st.back() < c) {\n            st.pop_back();\n            to_remove--;\n        }\n        st.push_back(c);\n    }\n    \n    // If we still need to remove digits, remove from the end\n    while (to_remove > 0) {\n        st.pop_back();\n        to_remove--;\n    }\n    \n    for (char c : st) {\n        cout << c;\n    }\n    cout << '\\n';\n    \n    return 0;\n}"
+  },
+  {
+    "model": "claude-sonnet-4-6",
+    "prompt_type": "zero_shot",
+    "language": "c++",
+    "code": "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    string s;\n    int k;\n    while (cin >> s >> k) {\n        int n = s.size();\n        // We want to remove k digits to maximize the number\n        // Greedy: use a stack, remove smaller digits when a larger one comes\n        string stack_s = \"\";\n        int remove = k;\n        for (char c : s) {\n            while (remove > 0 && !stack_s.empty() && stack_s.back() < c) {\n                stack_s.pop_back();\n                remove--;\n            }\n            stack_s.push_back(c);\n        }\n        // If still need to remove, remove from end\n        if (remove > 0) {\n            stack_s = stack_s.substr(0, stack_s.size() - remove);\n        }\n        cout << stack_s << \"\\n\";\n    }\n    return 0;\n}"
+  },
+  {
+    "model": "gpt-5.4",
+    "prompt_type": "zero_shot",
+    "language": "c++",
+    "code": "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    ios::sync_with_stdio(false);\n    cin.tie(nullptr);\n\n    string s;\n    int K;\n    if (!(cin >> s >> K)) return 0;\n\n    int n = (int)s.size();\n    int keep = n - K;\n\n    string ans;\n    ans.reserve(keep);\n\n    vector<char> st;\n    st.reserve(n);\n\n    for (char c : s) {\n        while (!st.empty() && K > 0 && st.back() < c) {\n            st.pop_back();\n            --K;\n        }\n        st.push_back(c);\n    }\n\n    while (K > 0) {\n        st.pop_back();\n        --K;\n    }\n\n    for (int i = 0; i < keep; ++i) ans += st[i];\n    cout << ans << '\\n';\n    return 0;\n}"
+  },
+  {
+    "model": "deepseek-chat",
+    "prompt_type": "zero_shot",
+    "language": "c",
+    "code": "#include <stdio.h>\n#include <string.h>\n\nint main() {\n    char s[100001];\n    int k, n;\n    \n    scanf(\"%s\", s);\n    scanf(\"%d\", &k);\n    \n    n = strlen(s);\n    int keep = n - k;\n    \n    char stack[100001];\n    int top = -1;\n    \n    for (int i = 0; i < n; i++) {\n        while (top >= 0 && k > 0 && stack[top] < s[i]) {\n            top--;\n            k--;\n        }\n        stack[++top] = s[i];\n    }\n    \n    stack[keep] = '\\0';\n    printf(\"%s\\n\", stack);\n    \n    return 0;\n}"
+  },
+  {
+    "model": "claude-sonnet-4-6",
+    "prompt_type": "zero_shot",
+    "language": "c",
+    "code": "#include <stdio.h>\n#include <string.h>\n\nint main() {\n    char s[1000005];\n    int k;\n    \n    while (scanf(\"%s %d\", s, &k) == 2) {\n        int n = strlen(s);\n        char stack[1000005];\n        int top = 0;\n        int removals = k;\n        \n        for (int i = 0; i < n; i++) {\n            while (removals > 0 && top > 0 && stack[top-1] < s[i]) {\n                top--;\n                removals--;\n            }\n            stack[top++] = s[i];\n        }\n        \n        // If still have removals, remove from end\n        top -= removals;\n        \n        // Print result\n        for (int i = 0; i < top; i++) {\n            printf(\"%c\", stack[i]);\n        }\n        printf(\"\\n\");\n    }\n    \n    return 0;\n}"
+  },
+  {
+    "model": "gpt-5.4",
+    "prompt_type": "zero_shot",
+    "language": "c",
+    "code": "#include <stdio.h>\n#include <string.h>\n\n#define MAXN 1000005\n\nint main(void) {\n    int N, K;\n    char s[MAXN];\n    char st[MAXN];\n\n    if (scanf(\"%d %d\", &N, &K) != 2) return 0;\n    if (scanf(\"%s\", s) != 1) return 0;\n\n    int top = 0;\n    int rem = K;\n\n    for (int i = 0; i < N; i++) {\n        while (top > 0 && rem > 0 && st[top - 1] < s[i]) {\n            top--;\n            rem--;\n        }\n        st[top++] = s[i];\n    }\n\n    top -= rem;  // remove from the end if deletions remain\n    st[top] = '\\0';\n\n    printf(\"%s\\n\", st);\n    return 0;\n}"
+  },
+  {
+    "model": "deepseek-chat",
+    "prompt_type": "zero_shot",
+    "language": "java",
+    "code": "import java.util.*;\n\npublic class DigitalK {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        \n        String number = sc.next();\n        int K = sc.nextInt();\n        \n        Deque<Character> stack = new ArrayDeque<>();\n        \n        for (char digit : number.toCharArray()) {\n            while (K > 0 && !stack.isEmpty() && stack.peekLast() < digit) {\n                stack.pollLast();\n                K--;\n            }\n            stack.addLast(digit);\n        }\n        \n        // If there are still digits to remove, remove from the end\n        while (K > 0) {\n            stack.pollLast();\n            K--;\n        }\n        \n        StringBuilder result = new StringBuilder();\n        for (char c : stack) {\n            result.append(c);\n        }\n        \n        System.out.println(result.toString());\n        \n        sc.close();\n    }\n}"
+  },
+  {
+    "model": "claude-sonnet-4-6",
+    "prompt_type": "zero_shot",
+    "language": "java",
+    "code": "import java.util.*;\nimport java.io.*;\n\npublic class Main {\n    public static void main(String[] args) throws IOException {\n        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));\n        String line;\n        StringBuilder sb = new StringBuilder();\n        \n        while ((line = br.readLine()) != null) {\n            line = line.trim();\n            if (line.isEmpty()) continue;\n            \n            // Parse: the line contains the digit sequence and K\n            // Based on the problem: \"Given a sequence of digits and an integer K\"\n            // Need to figure out input format\n            // Likely: first line is the digit sequence, second line is K\n            // Or they might be on the same line\n            \n            String digits = line;\n            String kLine = br.readLine();\n            if (kLine == null) break;\n            int k = Integer.parseInt(kLine.trim());\n            \n            // Greedy: remove k digits to maximize remaining number\n            int n = digits.length();\n            int keep = n - k;\n            \n            // Use stack-based greedy\n            char[] stack = new char[n];\n            int top = 0;\n            int removals = k;\n            \n            for (int i = 0; i < n; i++) {\n                char c = digits.charAt(i);\n                while (top > 0 && removals > 0 && stack[top-1] < c) {\n                    top--;\n                    removals--;\n                }\n                stack[top++] = c;\n            }\n            \n            // If still have removals left, remove from the end\n            // top - removals = keep\n            StringBuilder result = new StringBuilder();\n            for (int i = 0; i < keep; i++) {\n                result.append(stack[i]);\n            }\n            \n            sb.append(result.toString()).append(\"\\n\");\n        }\n        \n        System.out.print(sb);\n    }\n}"
+  },
+  {
+    "model": "gpt-5.4",
+    "prompt_type": "zero_shot",
+    "language": "java",
+    "code": "import java.io.*;\nimport java.util.*;\n\npublic class Main {\n    public static void main(String[] args) throws Exception {\n        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));\n        String line1 = br.readLine();\n        String line2 = br.readLine();\n\n        if (line1 == null || line2 == null) return;\n\n        String s = line1.trim();\n        int k = Integer.parseInt(line2.trim());\n\n        int keep = s.length() - k;\n        StringBuilder stack = new StringBuilder();\n\n        for (int i = 0; i < s.length(); i++) {\n            char c = s.charAt(i);\n            while (k > 0 && stack.length() > 0 && stack.charAt(stack.length() - 1) < c) {\n                stack.deleteCharAt(stack.length() - 1);\n                k--;\n            }\n            stack.append(c);\n        }\n\n        // If deletions remain, remove from the end\n        while (k > 0 && stack.length() > 0) {\n            stack.deleteCharAt(stack.length() - 1);\n            k--;\n        }\n\n        System.out.println(stack.substring(0, keep));\n    }\n}"
+  },
+  {
+    "model": "deepseek-chat",
+    "prompt_type": "zero_shot",
+    "language": "python",
+    "code": "def solve():\n    import sys\n    input_data = sys.stdin.read().strip().split()\n    N = int(input_data[0])\n    K = int(input_data[1])\n    digits = list(input_data[2].strip())\n    \n    stack = []\n    to_remove = K\n    \n    for d in digits:\n        while to_remove > 0 and stack and stack[-1] < d:\n            stack.pop()\n            to_remove -= 1\n        stack.append(d)\n    \n    # If there are still removals left, remove from the end\n    result = ''.join(stack[:N - K])\n    print(result)\n\nif __name__ == \"__main__\":\n    solve()"
+  },
+  {
+    "model": "claude-sonnet-4-6",
+    "prompt_type": "zero_shot",
+    "language": "python",
+    "code": "def solve():\n    import sys\n    data = sys.stdin.read().split()\n    idx = 0\n    while idx < len(data):\n        n = int(data[idx]); k = int(data[idx+1])\n        idx += 2\n        digits = data[idx]\n        idx += 1\n        \n        # We want to keep N-K digits maximizing the number\n        # Greedy: remove a digit if it's less than the next digit\n        stack = []\n        remove = k\n        for d in digits:\n            while remove > 0 and stack and stack[-1] < d:\n                stack.pop()\n                remove -= 1\n            stack.append(d)\n        \n        # If still need to remove, remove from end\n        if remove > 0:\n            stack = stack[:-remove]\n        \n        print(''.join(stack))\n\nsolve()"
+  },
+  {
+    "model": "gpt-5.4",
+    "prompt_type": "zero_shot",
+    "language": "python",
+    "code": "import sys\n\ndef main():\n    data = sys.stdin.read().strip().split()\n    if not data:\n        return\n\n    # Input format:\n    # N K\n    # digits (as a string of length N)\n    #\n    # Some judges may also provide only:\n    # K\n    # digits\n    # but the official statement indicates N and K are given.\n    if len(data) >= 3:\n        n = int(data[0])\n        k = int(data[1])\n        s = data[2].strip()\n    else:\n        # Fallback just in case\n        k = int(data[0])\n        s = data[1].strip()\n        n = len(s)\n\n    keep = n - k\n    stack = []\n\n    for ch in s:\n        while k > 0 and stack and stack[-1] < ch:\n            stack.pop()\n            k -= 1\n        stack.append(ch)\n\n    # If deletions remain, remove from the end\n    if k > 0:\n        stack = stack[:-k]\n\n    # Ensure exactly n-k_original digits remain\n    print(''.join(stack[:keep]))\n\nif __name__ == \"__main__\":\n    main()"
   }
 ]

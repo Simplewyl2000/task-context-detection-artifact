@@ -1,23 +1,20 @@
 [
   {
-    "model": "claude-3-5-haiku-20241022",
-    "prompt_type": "zero_shot",
-    "language": "Python",
-    "code": "a = int(input())\nb = int(input())\nc = int(input())\n\nmax_compote = min(a, b // 2, c // 4)\n\nprint(max_compote * 7 if max_compote > 0 else 0)",
-    "timestamp": "2025-08-05 17:32:17"
-  },
-  {
-    "model": "deepseek-v3",
-    "prompt_type": "zero_shot",
-    "language": "Python",
-    "code": "a = int(input())\nb = int(input())\nc = int(input())\n\nmax_k = min(a, b // 2, c // 4)\nprint(7 * max_k if max_k >= 0 else 0)",
-    "timestamp": "2025-08-05 17:32:22"
-  },
-  {
-    "model": "gpt-4o",
+    "model": "deepseek-chat",
     "prompt_type": "zero_shot",
     "language": "python",
-    "code": "a = int(input())\nb = int(input())\nc = int(input())\n\nx = min(a, b // 2, c // 4)\nresult = x + 2 * x + 4 * x\nprint(result)",
-    "timestamp": "2025-08-12 21:53:42"
+    "code": "# Read the input values\na = int(input().strip())\nb = int(input().strip())\nc = int(input().strip())\n\n# Maximum possible number of lemons we can use is limited by the counts\n# For each lemon we need 2 apples and 4 pears\nmax_lemons = min(a, b // 2, c // 4)\n\n# Total fruits used = lemons + apples + pears = max_lemons * (1 + 2 + 4)\ntotal = max_lemons * 7\n\nprint(total)"
+  },
+  {
+    "model": "claude-sonnet-4-6",
+    "prompt_type": "zero_shot",
+    "language": "python",
+    "code": "a = int(input())\nb = int(input())\nc = int(input())\n\nk = min(a, b // 2, c // 4)\nprint(k * 7)"
+  },
+  {
+    "model": "gpt-5.4",
+    "prompt_type": "zero_shot",
+    "language": "python",
+    "code": "import sys\n\ndef main():\n    data = list(map(int, sys.stdin.read().strip().split()))\n    a, b, c = data[0], data[1], data[2]\n    \n    x = min(a, b // 2, c // 4)\n    print(7 * x)\n\nif __name__ == \"__main__\":\n    main()"
   }
 ]

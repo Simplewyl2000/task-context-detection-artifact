@@ -1,23 +1,20 @@
 [
   {
-    "model": "claude-3-5-haiku-20241022",
-    "prompt_type": "zero_shot",
-    "language": "Python",
-    "code": "def solve(N, K, R, S, P, T):\n    # DP to track max score and last hand used\n    dp = [[0] * 3 for _ in range(N)]\n    \n    # Mapping for winning hands\n    wins = {'r': 'p', 'p': 's', 's': 'r'}\n    \n    # Scoring for each hand\n    scores = {'r': P, 'p': S, 's': R}\n    \n    # First K rounds can use any hand\n    for i in range(min(K, N)):\n        hand = wins[T[i]]\n        dp[i][{'p': 0, 's': 1, 'r': 2}[hand]] = scores[hand]\n    \n    # DP for rest of the rounds\n    for i in range(K, N):\n        for j in range(3):\n            hand_now = ['p', 's', 'r'][j]\n            \n            # Check if current hand wins against machine's hand\n            if hand_now == wins[T[i]]:\n                max_prev = max(dp[i-K][:j] + dp[i-K][j+1:])\n                dp[i][j] = max_prev + scores[hand_now]\n    \n    return max(dp[N-1])\n\n# Read input\nN, K = map(int, input().split())\nR, S, P = map(int, input().split())\nT = input().strip()\n\n# Print result\nprint(solve(N, K, R, S, P, T))",
-    "timestamp": "2025-08-05 17:33:43"
-  },
-  {
-    "model": "deepseek-v3",
-    "prompt_type": "zero_shot",
-    "language": "Python",
-    "code": "def solve():\n    N, K = map(int, input().split())\n    R, S, P = map(int, input().split())\n    T = input().strip()\n    \n    # Map to determine the winning hand and corresponding points\n    win_hand = {'r': ('p', P), 's': ('r', R), 'p': ('s', S)}\n    \n    total = 0\n    # Track the last used hand in each mod K group\n    last_used = [None] * K\n    \n    for i in range(N):\n        mod = i % K\n        current_char = T[i]\n        hand, points = win_hand[current_char]\n        if last_used[mod] != hand:\n            total += points\n            last_used[mod] = hand\n        else:\n            last_used[mod] = None  # can't use in the next round in this group\n    \n    print(total)\n\nsolve()",
-    "timestamp": "2025-08-05 17:34:36"
-  },
-  {
-    "model": "gpt-4o",
+    "model": "deepseek-chat",
     "prompt_type": "zero_shot",
     "language": "python",
-    "code": "def max_score(N, K, R, S, P, T):\n    dp = [[0] * 3 for _ in range(N+1)]\n    hand_points = {'r': P, 'p': S, 's': R}\n    \n    for i in range(N):\n        for j in range(3):\n            dp[i+1][j] = max(dp[i][j], dp[i+1][j])\n            dp[i+1][j] = max(dp[i+1][j], dp[i+1][(j+1)%3], dp[i+1][(j+2)%3])\n            \n            if i >= K and dp[i+1][j] == dp[i-K+1][(j+1)%3]:\n                continue\n            if i >= K and dp[i+1][j] == dp[i-K+1][(j+2)%3]:\n                continue\n\n            winning_move = {'r': 0, 's': 1, 'p': 2}\n            move = winning_move[T[i]]\n            dp[i+1][move] = max(dp[i+1][move], dp[i][j] + hand_points[T[i]])\n    \n    print(max(dp[N][0], dp[N][1], dp[N][2]))\n\nimport sys\ninput = sys.stdin.read\ndata = input().split()\nN, K = map(int, data[:2])\nR, S, P = map(int, data[2:5])\nT = data[5]\n\nmax_score(N, K, R, S, P, T)",
-    "timestamp": "2025-08-12 21:55:30"
+    "code": "n, k = map(int, input().split())\nr, s, p = map(int, input().split())\nt = input().strip()\n\nhand_score = {'r': p, 'p': s, 's': r}\nbeat_hand = {'r': 'p', 'p': 's', 's': 'r'}\n\nused = [None] * n\ntotal = 0\n\nfor i in range(n):\n    win_move = beat_hand[t[i]]\n    if i >= k and used[i - k] == win_move:\n        # cannot use win_move, skip scoring\n        used[i] = None  # choose something else, but no score\n        continue\n    total += hand_score[t[i]]\n    used[i] = win_move\n\nprint(total)"
+  },
+  {
+    "model": "gpt-5.4",
+    "prompt_type": "zero_shot",
+    "language": "python",
+    "code": "import sys\n\ndef main():\n    input = sys.stdin.readline\n\n    N, K = map(int, input().split())\n    R, S, P = map(int, input().split())\n    T = input().strip()\n\n    # Score obtained when winning against each machine hand\n    score = {'r': P, 's': R, 'p': S}\n\n    ans = 0\n    used_win = [False] * N  # whether we chose the winning hand at round i\n\n    for i in range(N):\n        if i < K:\n            ans += score[T[i]]\n            used_win[i] = True\n        else:\n            # If taking the winning hand now would repeat the hand used at i-K,\n            # and we actually used that winning hand then, we must avoid it.\n            if T[i] == T[i - K] and used_win[i - K]:\n                used_win[i] = False\n            else:\n                ans += score[T[i]]\n                used_win[i] = True\n\n    print(ans)\n\nif __name__ == \"__main__\":\n    main()"
+  },
+  {
+    "model": "claude-sonnet-4-6",
+    "prompt_type": "zero_shot",
+    "language": "python",
+    "code": "def solve():\n    line1 = input().split()\n    N, K = int(line1[0]), int(line1[1])\n    line2 = input().split()\n    R, S, P = int(line2[0]), int(line2[1]), int(line2[2])\n    T = input().strip()\n    \n    # winning hand against machine's hand, and score\n    # machine plays r -> we play p -> P points\n    # machine plays s -> we play r -> R points  \n    # machine plays p -> we play s -> S points\n    win_hand = {'r': 'p', 's': 'r', 'p': 's'}\n    score_map = {'r': R, 's': S, 'p': P}\n    \n    hands = ['r', 's', 'p']\n    hand_idx = {'r': 0, 's': 1, 'p': 2}\n    \n    total = 0\n    \n    for start in range(K):\n        # chain: start, start+K, start+2K, ...\n        chain = list(range(start, N, K))\n        \n        # dp[h] = max score when last hand played was h\n        # Initially (before any round), no constraint\n        INF = float('-inf')\n        dp = [0, 0, 0]  # no previous hand constraint for first round\n        \n        first = True\n        for idx in chain:\n            m = T[idx]\n            w = win_hand[m]\n            w_idx = hand_idx[w]\n            \n            new_dp = [INF, INF, INF]\n            max_dp = max(dp)\n            \n            for h in range(3):\n                pts = score_map[hands[h]] if h == w_idx else 0\n                if first:\n                    new_dp[h] = pts\n                else:\n                    # can't use h if previous was h\n                    best_prev = max(dp[j] for j in range(3) if j != h)\n                    if best_prev != INF:\n                        new_dp[h] = best_prev + pts\n            \n            dp = new_dp\n            first = False\n        \n        total += max(dp)\n    \n    print(total)\n\nsolve()"
   }
 ]

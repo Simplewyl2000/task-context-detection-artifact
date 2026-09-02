@@ -1,86 +1,74 @@
 [
   {
-    "model": "deepseek-v3",
-    "prompt_type": "zero_shot",
-    "language": "C",
-    "code": "#include <stdio.h>\n#include <math.h>\n\nint count_divisors(int num) {\n    if (num == 1) return 1;\n    int count = 2; // 1 and num\n    int sqrt_num = sqrt(num);\n    for (int i = 2; i <= sqrt_num; i++) {\n        if (num % i == 0) {\n            if (i * i == num) {\n                count += 1;\n            } else {\n                count += 2;\n            }\n        }\n    }\n    return count;\n}\n\nint is_ginkgo_prime(int m, int n) {\n    int sum = m * m + n * n;\n    if (sum <= 1) {\n        return 0;\n    }\n    return count_divisors(sum) == 8;\n}\n\nint main() {\n    int m, n;\n    while (scanf(\"%d %d\", &m, &n) == 2) {\n        if (is_ginkgo_prime(m, n)) {\n            printf(\"1\\n\");\n        } else {\n            printf(\"0\\n\");\n        }\n    }\n    return 0;\n}",
-    "timestamp": "2025-08-05 20:50:45"
-  },
-  {
-    "model": "deepseek-v3",
-    "prompt_type": "zero_shot",
-    "language": "C++",
-    "code": "#include <iostream>\n#include <cmath>\n\nusing namespace std;\n\nint countDivisors(int num) {\n    if (num == 1) return 1;\n    int count = 2; // 1 and num itself\n    for (int i = 2; i <= sqrt(num); ++i) {\n        if (num % i == 0) {\n            if (i * i == num) {\n                count += 1;\n            } else {\n                count += 2;\n            }\n        }\n    }\n    return count;\n}\n\nbool isGinkgoPrime(int m, int n) {\n    int sum = m * m + n * n;\n    if (sum <= 1) return false;\n    return countDivisors(sum) == 8;\n}\n\nint main() {\n    int T;\n    cin >> T;\n    while (T--) {\n        int m, n;\n        cin >> m >> n;\n        if (isGinkgoPrime(m, n)) {\n            cout << \"P\" << endl;\n        } else {\n            cout << \"C\" << endl;\n        }\n    }\n    return 0;\n}",
-    "timestamp": "2025-08-05 20:50:58"
-  },
-  {
-    "model": "deepseek-v3",
-    "prompt_type": "zero_shot",
-    "language": "Java",
-    "code": "import java.util.*;\n\npublic class GinkgoPrimeChecker {\n    public static boolean isGinkgoPrime(int m, int n) {\n        int num = m * m + n * n;\n        if (num <= 1) {\n            return false;\n        }\n        return countDivisors(num) == 8;\n    }\n\n    private static int countDivisors(int num) {\n        int count = 0;\n        for (int i = 1; i <= Math.sqrt(num); i++) {\n            if (num % i == 0) {\n                if (num / i == i) {\n                    count++;\n                } else {\n                    count += 2;\n                }\n            }\n        }\n        return count;\n    }\n\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        int m = scanner.nextInt();\n        int n = scanner.nextInt();\n        System.out.println(isGinkgoPrime(m, n));\n    }\n}",
-    "timestamp": "2025-08-05 20:51:15"
-  },
-  {
-    "model": "claude-3-5-haiku-20241022",
-    "prompt_type": "zero_shot",
-    "language": "Java",
-    "code": "public class GinkgoNumberPrimality {\n    public static boolean isPrimeGinkgoNumber(int m, int n) {\n        if (m * m + n * n <= 1) {\n            return false;\n        }\n        \n        return countDivisors(m * m + n * n) == 8;\n    }\n    \n    private static int countDivisors(int num) {\n        int count = 0;\n        for (int i = 1; i <= Math.sqrt(num); i++) {\n            if (num % i == 0) {\n                if (num / i == i) {\n                    count++;\n                } else {\n                    count += 2;\n                }\n            }\n        }\n        return count;\n    }\n    \n    public static void main(String[] args) {\n        // Example usage\n        System.out.println(isPrimeGinkgoNumber(2, 3)); // Example call\n    }\n}",
-    "timestamp": "2025-08-05 20:51:19"
-  },
-  {
-    "model": "claude-3-5-haiku-20241022",
-    "prompt_type": "zero_shot",
-    "language": "C",
-    "code": "#include <stdio.h>\n#include <stdbool.h>\n#include <math.h>\n\nint count_divisors(int m, int n) {\n    int num = m * m + n * n;\n    int divisors = 0;\n    \n    for (int i = 1; i <= sqrt(num); i++) {\n        if (num % i == 0) {\n            if (i * i == num)\n                divisors++;\n            else\n                divisors += 2;\n        }\n    }\n    \n    return divisors;\n}\n\nbool is_ginkgo_prime(int m, int n) {\n    int num = m * m + n * n;\n    \n    if (num <= 1)\n        return false;\n    \n    return count_divisors(m, n) == 8;\n}\n\nint main() {\n    int m, n;\n    scanf(\"%d %d\", &m, &n);\n    \n    printf(is_ginkgo_prime(m, n) ? \"Yes\\n\" : \"No\\n\");\n    \n    return 0;\n}",
-    "timestamp": "2025-08-05 20:51:24"
-  },
-  {
-    "model": "claude-3-5-haiku-20241022",
-    "prompt_type": "zero_shot",
-    "language": "C++",
-    "code": "#include <iostream>\n#include <cmath>\n#include <vector>\n\nusing namespace std;\n\nbool isGinkgoPrime(int m, int n) {\n    int number = m * m + n * n;\n    \n    if (number <= 1) return false;\n    \n    vector<int> divisors;\n    for (int i = 1; i <= sqrt(number); ++i) {\n        if (number % i == 0) {\n            divisors.push_back(i);\n            if (i != number / i) {\n                divisors.push_back(number / i);\n            }\n        }\n    }\n    \n    return divisors.size() == 8;\n}\n\nint main() {\n    int m, n;\n    cin >> m >> n;\n    \n    if (isGinkgoPrime(m, n)) {\n        cout << \"Prime\" << endl;\n    } else {\n        cout << \"Not Prime\" << endl;\n    }\n    \n    return 0;\n}",
-    "timestamp": "2025-08-05 20:51:28"
-  },
-  {
-    "model": "gpt-4o",
-    "prompt_type": "zero_shot",
-    "language": "python",
-    "code": "def count_divisors(x):\n    count = 0\n    for i in range(1, int(x**0.5) + 1):\n        if x % i == 0:\n            count += 1\n            if i != x // i:\n                count += 1\n    return count\n\ndef is_ginkgo_prime(m, n):\n    value = m**2 + n**2\n    if value > 1 and count_divisors(value) == 8:\n        return True\n    return False\n\n# Example usage:\n# ginkgo_number = (m, n)\n# print(is_ginkgo_prime(*ginkgo_number))",
-    "timestamp": "2025-08-13 03:55:00"
-  },
-  {
-    "model": "gpt-4o",
-    "prompt_type": "zero_shot",
-    "language": "java",
-    "code": "import java.util.ArrayList;\nimport java.util.List;\n\npublic class GinkgoNumberChecker {\n    public static boolean isPrimeGinkgoNumber(int m, int n) {\n        int number = m * m + n * n;\n        \n        if (number <= 1) return false;\n        \n        List<Integer> divisors = new ArrayList<>();\n        for (int i = 1; i <= Math.sqrt(number); i++) {\n            if (number % i == 0) {\n                divisors.add(i);\n                if (i != number / i) {\n                    divisors.add(number / i);\n                }\n            }\n        }\n        \n        return divisors.size() == 8;\n    }\n\n    public static void main(String[] args) {\n        int m = 2;\n        int n = 3;\n        \n        boolean result = isPrimeGinkgoNumber(m, n);\n        System.out.println(\"<\" + m + \", \" + n + \"> is \" + (result ? \"prime\" : \"not prime\"));\n    }\n}",
-    "timestamp": "2025-08-13 03:55:03"
-  },
-  {
-    "model": "gpt-4o",
+    "model": "deepseek-chat",
     "prompt_type": "zero_shot",
     "language": "c",
-    "code": "#include <stdio.h>\n#include <math.h>\n\nint count_divisors(int num) {\n    int count = 0;\n    for (int i = 1; i <= sqrt(num); i++) {\n        if (num % i == 0) {\n            count += (i * i == num) ? 1 : 2;\n        }\n    }\n    return count;\n}\n\nint is_ginkgo_prime(int m, int n) {\n    int number = m * m + n * n;\n    if (number > 1 && count_divisors(number) == 8) {\n        return 1;\n    }\n    return 0;\n}\n\nint main() {\n    int m, n;\n    printf(\"Enter Ginkgo number <m, n>: \");\n    scanf(\"%d %d\", &m, &n);\n\n    if (is_ginkgo_prime(m, n)) {\n        printf(\"<%d, %d> is a Ginkgo prime.\\n\", m, n);\n    } else {\n        printf(\"<%d, %d> is not a Ginkgo prime.\\n\", m, n);\n    }\n    \n    return 0;\n}",
-    "timestamp": "2025-08-13 03:55:07"
+    "code": "#include <stdio.h>\n#include <math.h>\n\nint count_divisors(int x) {\n    int count = 0;\n    int sqrt_x = (int)sqrt(x);\n    for (int i = 1; i <= sqrt_x; i++) {\n        if (x % i == 0) {\n            count += 2; // i and x/i\n            if (i == x / i) count--; // perfect square fix\n        }\n    }\n    return count;\n}\n\nint main() {\n    int m, n;\n    scanf(\"%d %d\", &m, &n);\n    \n    int v = m * m + n * n;\n    \n    if (v <= 1) {\n        printf(\"no\\n\");\n        return 0;\n    }\n    \n    if (count_divisors(v) == 8) {\n        printf(\"yes\\n\");\n    } else {\n        printf(\"no\\n\");\n    }\n    \n    return 0;\n}"
   },
   {
-    "model": "claude-3-5-haiku-20241022",
+    "model": "claude-sonnet-4-6",
     "prompt_type": "zero_shot",
-    "language": "python",
-    "code": "def count_divisors(m, n):\n    num = m**2 + n**2\n    divisors = 0\n    for i in range(1, int(num**0.5) + 1):\n        if num % i == 0:\n            if i * i == num:\n                divisors += 1\n            else:\n                divisors += 2\n    return divisors\n\ndef is_ginkgo_prime(m, n):\n    num = m**2 + n**2\n    return num > 1 and count_divisors(m, n) == 8",
-    "timestamp": "2025-08-13 03:55:15"
+    "language": "c",
+    "code": "#include <stdio.h>\n#include <stdlib.h>\n#include <math.h>\n\nint is_prime(long long n) {\n    if (n < 2) return 0;\n    if (n == 2) return 1;\n    if (n % 2 == 0) return 0;\n    for (long long i = 3; i * i <= n; i += 2) {\n        if (n % i == 0) return 0;\n    }\n    return 1;\n}\n\nint is_ginkgo_prime(long long m, long long n) {\n    long long N = m * m + n * n;\n    if (N <= 1) return 0;\n    if (m == 0) {\n        long long a = n < 0 ? -n : n;\n        return is_prime(a) && (a % 4 == 3);\n    }\n    if (n == 0) {\n        long long a = m < 0 ? -m : m;\n        return is_prime(a) && (a % 4 == 3);\n    }\n    return is_prime(N);\n}\n\nint main() {\n    long long m, n;\n    while (scanf(\"%lld %lld\", &m, &n) == 2) {\n        if (is_ginkgo_prime(m, n))\n            printf(\"Prime\\n\");\n        else\n            printf(\"Not Prime\\n\");\n    }\n    return 0;\n}"
   },
   {
-    "model": "deepseek-v3",
+    "model": "gpt-5.4",
     "prompt_type": "zero_shot",
-    "language": "python",
-    "code": "import math\n\ndef count_divisors(num):\n    if num == 1:\n        return 1\n    count = 0\n    sqrt_num = int(math.sqrt(num)) + 1\n    for i in range(1, sqrt_num):\n        if num % i == 0:\n            if num // i == i:\n                count += 1\n            else:\n                count += 2\n    return count\n\ndef is_ginkgo_prime(m, n):\n    num = m**2 + n**2\n    if num <= 1:\n        return False\n    return count_divisors(num) == 8",
-    "timestamp": "2025-08-13 03:55:22"
+    "language": "c",
+    "code": "#include <stdio.h>\n\nint main(void) {\n    long long m, n;\n    if (scanf(\"%lld %lld\", &m, &n) != 2) return 0;\n\n    long long s = m * m + n * n;\n\n    if (s > 1 && s == 24) {\n        printf(\"Prime\\n\");\n    } else {\n        printf(\"Not prime\\n\");\n    }\n\n    return 0;\n}"
   },
   {
-    "model": "gpt-4o",
+    "model": "deepseek-chat",
     "prompt_type": "zero_shot",
     "language": "c++",
-    "code": "#include <iostream>\n#include <vector>\n#include <utility>\n#include <cmath>\n\nbool isGinkgoPrime(int m, int n) {\n    long long num = static_cast<long long>(m) * m + static_cast<long long>(n) * n;\n    if (num <= 1) return false;\n\n    // Count the number of divisors of num\n    int divisorCount = 0;\n    for (long long i = 1; i <= std::sqrt(num); ++i) {\n        if (num % i == 0) {\n            divisorCount++;\n            if (i != num / i) {\n                divisorCount++;\n            }\n        }\n    }\n\n    return divisorCount == 8;\n}\n\nint main() {\n    std::vector<std::pair<int, int>> ginkgoNumbers = {{2, 1}, {1, 1}, {3, 4}, {5, 0}};\n    \n    for (const auto& ginkgoPair : ginkgoNumbers) {\n        int m = ginkgoPair.first;\n        int n = ginkgoPair.second;\n        if (isGinkgoPrime(m, n)) {\n            std::cout << \"<\" << m << \", \" << n << \"> is a Ginkgo prime.\\n\";\n        } else {\n            std::cout << \"<\" << m << \", \" << n << \"> is not a Ginkgo prime.\\n\";\n        }\n    }\n\n    return 0;\n}",
-    "timestamp": "2025-08-13 11:15:36"
+    "code": "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    ios::sync_with_stdio(false);\n    cin.tie(nullptr);\n    \n    int m, n;\n    cin >> m >> n;\n    \n    long long x = 1LL * m * m + 1LL * n * n;\n    \n    if (x <= 1) {\n        cout << \"no\\n\";\n        return 0;\n    }\n    \n    // Count divisors\n    int cnt = 0;\n    for (long long i = 1; i * i <= x; i++) {\n        if (x % i == 0) {\n            cnt++;\n            if (i != x / i) cnt++;\n        }\n        if (cnt > 8) break;\n    }\n    \n    if (cnt == 8) cout << \"yes\\n\";\n    else cout << \"no\\n\";\n    \n    return 0;\n}"
+  },
+  {
+    "model": "claude-sonnet-4-6",
+    "prompt_type": "zero_shot",
+    "language": "c++",
+    "code": "#include <bits/stdc++.h>\nusing namespace std;\n\nbool isPrime(long long n) {\n    if (n < 2) return false;\n    if (n == 2) return true;\n    if (n % 2 == 0) return false;\n    for (long long i = 3; i * i <= n; i += 2)\n        if (n % i == 0) return false;\n    return true;\n}\n\nbool isGinkgoPrime(long long m, long long n) {\n    long long norm = m * m + n * n;\n    if (norm <= 1) return false;\n    \n    if (m == 0) {\n        long long a = abs(n);\n        return isPrime(a) && (a % 4 == 3);\n    }\n    if (n == 0) {\n        long long a = abs(m);\n        return isPrime(a) && (a % 4 == 3);\n    }\n    // Both nonzero\n    return isPrime(norm);\n}\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n    \n    long long m, n;\n    while (cin >> m >> n) {\n        if (isGinkgoPrime(m, n))\n            cout << \"Yes\\n\";\n        else\n            cout << \"No\\n\";\n    }\n    return 0;\n}"
+  },
+  {
+    "model": "gpt-5.4",
+    "prompt_type": "zero_shot",
+    "language": "c++",
+    "code": "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    ios::sync_with_stdio(false);\n    cin.tie(nullptr);\n\n    long long m, n;\n    if (!(cin >> m >> n)) return 0;\n\n    long long s = m * m + n * n;\n\n    if (s <= 1) {\n        cout << \"NO\\n\";\n        return 0;\n    }\n\n    int divisors = 0;\n    for (long long i = 1; i * i <= s; ++i) {\n        if (s % i == 0) {\n            divisors += 1;              // i\n            if (i * i != s) divisors += 1; // s / i\n        }\n    }\n\n    cout << (divisors == 8 ? \"YES\" : \"NO\") << '\\n';\n    return 0;\n}"
+  },
+  {
+    "model": "deepseek-chat",
+    "prompt_type": "zero_shot",
+    "language": "java",
+    "code": "import java.util.Scanner;\n\npublic class GinkgoPrime {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        int m = sc.nextInt();\n        int n = sc.nextInt();\n        sc.close();\n\n        long value = (long) m * m + (long) n * n;\n\n        if (value <= 1) {\n            System.out.println(\"not prime\");\n            return;\n        }\n\n        int divisorCount = 0;\n        for (long i = 1; i * i <= value; i++) {\n            if (value % i == 0) {\n                if (i * i == value) {\n                    divisorCount++;\n                } else {\n                    divisorCount += 2;\n                }\n            }\n            if (divisorCount > 8) {\n                System.out.println(\"not prime\");\n                return;\n            }\n        }\n\n        if (divisorCount == 8) {\n            System.out.println(\"prime\");\n        } else {\n            System.out.println(\"not prime\");\n        }\n    }\n}"
+  },
+  {
+    "model": "claude-sonnet-4-6",
+    "prompt_type": "zero_shot",
+    "language": "java",
+    "code": "import java.util.*;\n\npublic class Main {\n    static boolean isPrime(long n) {\n        if (n < 2) return false;\n        if (n == 2) return true;\n        if (n % 2 == 0) return false;\n        for (long i = 3; i * i <= n; i += 2) {\n            if (n % i == 0) return false;\n        }\n        return true;\n    }\n    \n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        while (sc.hasNextLong()) {\n            long m = sc.nextLong();\n            long n = sc.nextLong();\n            long norm = m * m + n * n;\n            boolean prime = false;\n            if (norm > 1) {\n                if (m == 0) {\n                    long absn = Math.abs(n);\n                    prime = isPrime(absn) && absn % 4 == 3;\n                } else if (n == 0) {\n                    long absm = Math.abs(m);\n                    prime = isPrime(absm) && absm % 4 == 3;\n                } else {\n                    prime = isPrime(norm);\n                }\n            }\n            System.out.println(prime ? \"Prime\" : \"Not Prime\");\n        }\n    }\n}"
+  },
+  {
+    "model": "gpt-5.4",
+    "prompt_type": "zero_shot",
+    "language": "java",
+    "code": "import java.io.*;\nimport java.util.*;\n\npublic class Main {\n    static class FastScanner {\n        private final InputStream in = System.in;\n        private final byte[] buffer = new byte[1 << 16];\n        private int ptr = 0, len = 0;\n\n        private int read() throws IOException {\n            if (ptr >= len) {\n                len = in.read(buffer);\n                ptr = 0;\n                if (len <= 0) return -1;\n            }\n            return buffer[ptr++];\n        }\n\n        long nextLong() throws IOException {\n            int c;\n            do {\n                c = read();\n            } while (c <= ' ' && c != -1);\n\n            int sign = 1;\n            if (c == '-') {\n                sign = -1;\n                c = read();\n            }\n\n            long val = 0;\n            while (c > ' ') {\n                val = val * 10 + (c - '0');\n                c = read();\n            }\n            return val * sign;\n        }\n\n        boolean hasNext() throws IOException {\n            int c;\n            do {\n                c = read();\n                if (c == -1) return false;\n            } while (c <= ' ');\n            ptr--;\n            return true;\n        }\n    }\n\n    static long divisorCount(long x) {\n        long cnt = 1;\n        for (long p = 2; p * p <= x; p++) {\n            if (x % p == 0) {\n                int e = 0;\n                while (x % p == 0) {\n                    x /= p;\n                    e++;\n                }\n                cnt *= (e + 1);\n            }\n        }\n        if (x > 1) cnt *= 2;\n        return cnt;\n    }\n\n    public static void main(String[] args) throws Exception {\n        FastScanner fs = new FastScanner();\n        StringBuilder out = new StringBuilder();\n\n        while (fs.hasNext()) {\n            long m = fs.nextLong();\n            if (!fs.hasNext()) break;\n            long n = fs.nextLong();\n\n            long s = m * m + n * n;\n            boolean primeGinkgo = s > 1 && divisorCount(s) == 8;\n            out.append(primeGinkgo ? \"Prime\" : \"Not prime\").append('\\n');\n        }\n\n        System.out.print(out.toString());\n    }\n}"
+  },
+  {
+    "model": "deepseek-chat",
+    "prompt_type": "zero_shot",
+    "language": "python",
+    "code": "def count_divisors(num):\n    \"\"\"Return number of divisors of num.\"\"\"\n    cnt = 0\n    i = 1\n    while i * i <= num:\n        if num % i == 0:\n            cnt += 1\n            if i != num // i:\n                cnt += 1\n        i += 1\n    return cnt\n\nm, n = map(int, input().strip().split())\nval = m*m + n*n\n\nif val > 1 and count_divisors(val) == 8:\n    print(\"YES\")\nelse:\n    print(\"NO\")"
+  },
+  {
+    "model": "claude-sonnet-4-6",
+    "prompt_type": "zero_shot",
+    "language": "python",
+    "code": "import sys\nfrom sympy import isprime\n\ndef is_gaussian_prime(m, n):\n    norm = m*m + n*n\n    if norm <= 1:\n        return False\n    if isprime(norm):\n        return True\n    # Check if it's a unit times a rational prime p ≡ 3 mod 4\n    if m == 0 and n != 0:\n        p = abs(n)\n        return isprime(p) and p % 4 == 3\n    if n == 0 and m != 0:\n        p = abs(m)\n        return isprime(p) and p % 4 == 3\n    return False\n\nfor line in sys.stdin:\n    line = line.strip()\n    if not line:\n        continue\n    parts = line.split()\n    if len(parts) >= 2:\n        m, n = int(parts[0]), int(parts[1])\n        if is_gaussian_prime(m, n):\n            print(\"Prime\")\n        else:\n            print(\"Not Prime\")"
+  },
+  {
+    "model": "gpt-5.4",
+    "prompt_type": "zero_shot",
+    "language": "python",
+    "code": "import sys\n\ndef count_divisors_of_gaussian_integer(m: int, n: int) -> int:\n    # Number of divisors of m+ni in Z[i], counting associates as distinct.\n    # If z = u * Π p_i^a_i * Π q_j^b_j * Π r_k^c_k * conjugate(r_k)^d_k,\n    # then d(z) = 4 * Π(a_i+1) * Π(b_j+1) * Π(c_k+1)(d_k+1)\n    # For z = m+ni, using norm factorization:\n    # - p ≡ 3 (mod 4): exponent in norm is even, exponent in z is half of it\n    # - p ≡ 1 (mod 4): if p^e || norm, contribution in z gives (e+1)\n    # - p = 2: contribution in z gives (e+1)\n    #\n    # So if N = m^2+n^2 = 2^a * Π_{p≡1 mod4} p^{b_p} * Π_{q≡3 mod4} q^{c_q},\n    # and any c_q is odd => impossible for a Gaussian integer norm.\n    # Then number of divisors:\n    # 4 * (a+1) * Π(b_p+1) * Π(c_q/2 + 1)\n\n    N = m * m + n * n\n    if N <= 1:\n        return 0\n\n    ans = 4\n    x = N\n\n    # factor 2\n    e = 0\n    while x % 2 == 0:\n        x //= 2\n        e += 1\n    if e:\n        ans *= (e + 1)\n\n    p = 3\n    while p * p <= x:\n        if x % p == 0:\n            e = 0\n            while x % p == 0:\n                x //= p\n                e += 1\n            if p % 4 == 1:\n                ans *= (e + 1)\n            else:  # p % 4 == 3\n                if e % 2 == 1:\n                    return 0\n                ans *= (e // 2 + 1)\n        p += 2\n\n    if x > 1:\n        # remaining prime with exponent 1\n        if x % 4 == 1:\n            ans *= 2\n        elif x % 4 == 3:\n            return 0\n\n    return ans\n\ndef main():\n    data = list(map(int, sys.stdin.read().strip().split()))\n    if not data:\n        return\n\n    # Support either:\n    # 1) first number is T, followed by 2*T integers\n    # 2) all numbers are just pairs until EOF\n    if len(data) >= 3 and len(data) == 1 + 2 * data[0]:\n        t = data[0]\n        idx = 1\n        pairs = [(data[idx + 2*i], data[idx + 2*i + 1]) for i in range(t)]\n    else:\n        pairs = [(data[i], data[i+1]) for i in range(0, len(data), 2)]\n\n    out = []\n    for m, n in pairs:\n        out.append(\"P\" if count_divisors_of_gaussian_integer(m, n) == 8 else \"C\")\n\n    sys.stdout.write(\"\\n\".join(out))\n\nif __name__ == \"__main__\":\n    main()"
   }
 ]

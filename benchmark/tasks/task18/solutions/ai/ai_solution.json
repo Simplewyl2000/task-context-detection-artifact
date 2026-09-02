@@ -1,23 +1,20 @@
 [
   {
-    "model": "claude-3-5-haiku-20241022",
-    "prompt_type": "zero_shot",
-    "language": "Python",
-    "code": "def solve(n, k):\n    n_str = str(n)\n    mod = 10 ** k\n    \n    # Try all possible deletions\n    min_deletions = len(n_str)\n    \n    # Iterate through all possible combinations of deletion\n    for mask in range(1 << len(n_str)):\n        # Build number after deletions\n        num_str = ''.join(n_str[i] for i in range(len(n_str)) if mask & (1 << i))\n        \n        # Skip if number starts with unnecessary leading zero\n        if len(num_str) > 1 and num_str[0] == '0':\n            continue\n        \n        # Convert to integer \n        if num_str == '':\n            num = 0\n        else:\n            num = int(num_str)\n        \n        # Check divisibility\n        if num % mod == 0:\n            deletions = len(n_str) - len(num_str)\n            min_deletions = min(min_deletions, deletions)\n    \n    return min_deletions\n\n# Read input\nn, k = map(int, input().split())\nprint(solve(n, k))",
-    "timestamp": "2025-08-05 17:31:42"
-  },
-  {
-    "model": "deepseek-v3",
-    "prompt_type": "zero_shot",
-    "language": "Python",
-    "code": "n, k = input().split()\nk = int(k)\ndigits = list(n)\ncount_zeros_needed = k\nremovals = 0\nlength = len(digits)\nnon_zero_count = 0\n\n# We need to find k zeros in the number, not necessarily consecutive\n# The zeros must have at least k non-leading zeros after processing\ntotal_zeros = digits.count('0')\nif total_zeros < k:\n    # Then we must delete all except one zero (to make the result 0)\n    removals = len(digits) - 1\nelse:\n    # We need to find k zeros, and the digits before the k-th zero must be removed except the necessary non-zeros\n    zero_positions = []\n    for i in range(len(digits)):\n        if digits[i] == '0':\n            zero_positions.append(i)\n    # The k-th zero is zero_positions[k-1]\n    # The number of non-zero digits before the k-th zero is (zero_positions[k-1] + 1 - k)\n    # Because we need to keep those zeros, but remove the non-zeros in between\n    # The total removals is the number of non-zero digits before the k-th zero\n    if k == 0:\n        removals = 0\n    else:\n        if len(zero_positions) >= k:\n            kth_zero_pos = zero_positions[k-1]\n            non_zero_before = 0\n            for i in range(kth_zero_pos):\n                if digits[i] != '0':\n                    non_zero_before += 1\n            removals = non_zero_before\n        else:\n            # This shouldn't happen as per problem statement\n            removals = len(digits) - 1\n\nprint(removals)",
-    "timestamp": "2025-08-05 17:32:00"
-  },
-  {
-    "model": "gpt-4o",
+    "model": "deepseek-chat",
     "prompt_type": "zero_shot",
     "language": "python",
-    "code": "def min_digits_to_remove(n, k):\n    n_str = str(n)\n    cnt = 0\n    zeros_needed = k\n    i = len(n_str) - 1\n\n    while zeros_needed > 0 and i >= 0:\n        if n_str[i] == '0':\n            zeros_needed -= 1\n        else:\n            cnt += 1\n        i -= 1\n\n    # If there are not enough zeros found, all must be removed for zero result\n    return cnt if zeros_needed == 0 else len(n_str) - 1\n\n# Read input\nn, k = map(int, input().split())\nprint(min_digits_to_remove(n, k))",
-    "timestamp": "2025-08-12 21:41:31"
+    "code": "n, k = input().split()\nk = int(k)\n\nn_str = n\ncount_zero = 0\nremove_count = 0\n\n# Scan from right to left\nfor digit in reversed(n_str):\n    if digit == '0':\n        count_zero += 1\n        if count_zero == k:\n            break\n    else:\n        remove_count += 1\n\nif count_zero == k:\n    print(remove_count)\nelse:\n    # Not enough zeros, answer is length - 1 (keep one zero)\n    print(len(n_str) - 1)"
+  },
+  {
+    "model": "claude-sonnet-4-6",
+    "prompt_type": "zero_shot",
+    "language": "python",
+    "code": "s = input().split()\nn_str = s[0]\nk = int(s[1])\n\ndigits = n_str  # string of digits\n\n# Find k zeros from right to left\nremoved = 0\npos = len(digits) - 1\nzeros_found = 0\n\n# First, we need to find k zeros\n# Start from the right, count digits we skip (remove) to find each zero\n\n# removed digits to the right of rightmost zero\n# plus digits between zeros\n\nidx = len(digits) - 1\nremoved = 0\n\nfor i in range(k):\n    # find a zero at or before idx\n    while idx >= 0 and digits[idx] != '0':\n        removed += 1\n        idx -= 1\n    if idx < 0:\n        break  # shouldn't happen since answer exists\n    # found a zero at idx\n    idx -= 1  # move left for next search\n\n# Now digits[0..idx] is the prefix (before the k zeros)\n# We need to handle leading zeros in the prefix\nprefix = digits[:idx+1]\n\n# Remove leading zeros from prefix (but keep at least... well if prefix becomes empty that's fine)\n# Actually if prefix has leading zeros, we need to remove them\nleading_zeros = 0\nfor c in prefix:\n    if c == '0':\n        leading_zeros += 1\n    else:\n        break\n\nif leading_zeros > 0 and len(prefix) > leading_zeros:\n    # There are leading zeros that need to be removed\n    removed += leading_zeros\nelif leading_zeros == len(prefix) and len(prefix) > 0:\n    # entire prefix is zeros, remove all but... \n    # actually if prefix is all zeros, we remove all of them (they'd be leading zeros)\n    removed += len(prefix)\n\nprint(removed)"
+  },
+  {
+    "model": "gpt-5.4",
+    "prompt_type": "zero_shot",
+    "language": "python",
+    "code": "import sys\n\ndef main():\n    data = sys.stdin.read().strip().split()\n    if not data:\n        return\n    \n    n, k = data[0], int(data[1])\n    s = n\n    m = len(s)\n\n    # Need a result divisible by 10^k:\n    # either:\n    # 1) a non-zero number ending with at least k zeros\n    # 2) the number 0 (single digit), possible if there is at least one zero in n\n    #\n    # To minimize deletions for case 1:\n    # scan from right to left and keep digits so that we retain k zeros as suffix,\n    # deleting all non-zero digits that appear before collecting those k zeros.\n    zeros_found = 0\n    deletions = 0\n\n    for i in range(m - 1, -1, -1):\n        if s[i] == '0':\n            zeros_found += 1\n            if zeros_found == k:\n                print(deletions)\n                return\n        else:\n            if zeros_found < k:\n                deletions += 1\n\n    # Guaranteed answer exists. If we couldn't form k trailing zeros,\n    # we must form the number 0 by keeping one zero and deleting all other digits.\n    print(m - 1)\n\nif __name__ == \"__main__\":\n    main()"
   }
 ]

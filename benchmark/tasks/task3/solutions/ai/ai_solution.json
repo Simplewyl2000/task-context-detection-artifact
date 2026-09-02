@@ -1,23 +1,20 @@
 [
   {
-    "model": "claude-3-5-haiku-20241022",
-    "prompt_type": "zero_shot",
-    "language": "Python",
-    "code": "def max_golden_subsegment(n, trophies):\n    def count_max_golden_segment(arr):\n        max_golden = 0\n        current_golden = 0\n        for trophy in arr:\n            if trophy == 'G':\n                current_golden += 1\n                max_golden = max(max_golden, current_golden)\n            else:\n                current_golden = 0\n        return max_golden\n\n    # If already all golden\n    if trophies.count('G') == n:\n        return n\n\n    # Try no swap\n    initial_max = count_max_golden_segment(trophies)\n    max_beauty = initial_max\n\n    # Try all possible swaps\n    for i in range(n):\n        for j in range(i+1, n):\n            # Create a copy and swap\n            new_trophies = list(trophies)\n            new_trophies[i], new_trophies[j] = new_trophies[j], new_trophies[i]\n            \n            # Check max golden segment after swap\n            current_max = count_max_golden_segment(new_trophies)\n            max_beauty = max(max_beauty, current_max)\n\n    return max_beauty\n\n# Read input\nn = int(input())\ntrophies = input()\n\n# Output result\nprint(max_golden_subsegment(n, trophies))",
-    "timestamp": "2025-08-05 17:31:21"
-  },
-  {
-    "model": "deepseek-v3",
-    "prompt_type": "zero_shot",
-    "language": "Python",
-    "code": "n = int(input())\ns = input().strip()\ntotal_g = s.count('G')\nmax_len = 0\nleft = 0\ncurrent_s = 0\n\nfor right in range(n):\n    if s[right] == 'S':\n        current_s += 1\n    while current_s > 1:\n        if s[left] == 'S':\n            current_s -= 1\n        left += 1\n    max_len = max(max_len, right - left + 1)\n\nif total_g == 0:\n    print(0)\nelse:\n    print(min(max_len, total_g))",
-    "timestamp": "2025-08-05 17:31:28"
-  },
-  {
-    "model": "gpt-4o",
+    "model": "deepseek-chat",
     "prompt_type": "zero_shot",
     "language": "python",
-    "code": "def max_beauty(n, trophies):\n    max_length = 0\n\n    # Left and right arrays to store lengths of consecutive G's\n    left = [0] * n\n    right = [0] * n\n\n    # Fill left array\n    if trophies[0] == 'G':\n        left[0] = 1\n    for i in range(1, n):\n        if trophies[i] == 'G':\n            left[i] = left[i - 1] + 1\n\n    # Fill right array\n    if trophies[n - 1] == 'G':\n        right[n - 1] = 1\n    for i in range(n - 2, -1, -1):\n        if trophies[i] == 'G':\n            right[i] = right[i + 1] + 1\n\n    # Find maximum length considering no swap\n    max_length = max(left + right)  # combined array maximum\n\n    # Consider each 'S' as a position to swap with a 'G'\n    g_total = trophies.count('G')\n    for i in range(n):\n        if trophies[i] == 'S':\n            left_length = left[i - 1] if i > 0 else 0\n            right_length = right[i + 1] if i < n - 1 else 0\n            combined_length = left_length + right_length + 1\n            \n            # We cannot create more 'G's than the total available if swapping\n            if combined_length - 1 < g_total:\n                max_length = max(max_length, combined_length)\n\n    return max_length\n\nn = int(input())\ntrophies = input().strip()\nprint(max_beauty(n, trophies))",
-    "timestamp": "2025-08-12 21:40:05"
+    "code": "n = int(input())\ns = input().strip()\n\ntotal_g = s.count('G')\nsegments = []\ni = 0\nwhile i < n:\n    if s[i] == 'G':\n        j = i\n        while j < n and s[j] == 'G':\n            j += 1\n        segments.append((i, j - 1, j - i))\n        i = j\n    else:\n        i += 1\n\nif not segments:\n    print(0)\n    exit()\n\nif len(segments) == 1:\n    print(segments[0][2])\n    exit()\n\nmax_len = 0\nfor idx in range(len(segments)):\n    length = segments[idx][2]\n    # Try to extend with one swap from elsewhere\n    if total_g > length:\n        length += 1\n    max_len = max(max_len, length)\n\n# Try merging two segments separated by exactly one 'S'\nfor idx in range(len(segments) - 1):\n    end_first = segments[idx][1]\n    start_second = segments[idx + 1][0]\n    if start_second - end_first == 2:  # exactly one 'S' between them\n        merged = segments[idx][2] + segments[idx + 1][2]\n        if total_g > merged:\n            merged += 1\n        max_len = max(max_len, merged)\n\nprint(max_len)"
+  },
+  {
+    "model": "claude-sonnet-4-6",
+    "prompt_type": "zero_shot",
+    "language": "python",
+    "code": "def solve():\n    n = int(input())\n    s = input().strip()\n    \n    total_G = s.count('G')\n    \n    if total_G == 0:\n        print(0)\n        return\n    \n    # left[i] = number of consecutive G's ending at i (inclusive)\n    left = [0] * n\n    for i in range(n):\n        if s[i] == 'G':\n            left[i] = (left[i-1] + 1) if i > 0 else 1\n        else:\n            left[i] = 0\n    \n    # right[i] = number of consecutive G's starting at i (inclusive)\n    right = [0] * n\n    for i in range(n-1, -1, -1):\n        if s[i] == 'G':\n            right[i] = (right[i+1] + 1) if i < n-1 else 1\n        else:\n            right[i] = 0\n    \n    ans = 0\n    \n    # Consider each S position\n    for i in range(n):\n        if s[i] == 'S':\n            l = left[i-1] if i > 0 else 0\n            r = right[i+1] if i < n-1 else 0\n            candidate = l + r + 1\n            # Can only achieve this if we have enough G's\n            candidate = min(candidate, total_G)\n            ans = max(ans, candidate)\n    \n    # Also consider all-G segments (no swap needed, or swap doesn't help)\n    # These are captured by right[0] at start, or we can just check max of right/left\n    for i in range(n):\n        if s[i] == 'G':\n            ans = max(ans, right[i])\n    \n    print(ans)\n\nsolve()"
+  },
+  {
+    "model": "gpt-5.4",
+    "prompt_type": "zero_shot",
+    "language": "python",
+    "code": "import sys\n\ndef solve():\n    input = sys.stdin.readline\n    n = int(input().strip())\n    s = input().strip()\n\n    total_g = s.count('G')\n    if total_g == 0:\n        print(0)\n        return\n    if total_g == n:\n        print(n)\n        return\n\n    # Lengths of consecutive G to the left/right\n    left = [0] * n\n    right = [0] * n\n\n    for i in range(n):\n        if s[i] == 'G':\n            left[i] = (left[i - 1] if i > 0 else 0) + 1\n\n    for i in range(n - 1, -1, -1):\n        if s[i] == 'G':\n            right[i] = (right[i + 1] if i + 1 < n else 0) + 1\n\n    ans = 0\n\n    # Current maximum without any swap\n    for i in range(n):\n        if s[i] == 'G':\n            ans = max(ans, left[i])\n\n    # Try making each S into G by swapping with some G elsewhere\n    for i in range(n):\n        if s[i] == 'S':\n            l = left[i - 1] if i > 0 else 0\n            r = right[i + 1] if i + 1 < n else 0\n            merged = l + r\n            # If there exists at least one more G outside these merged ones,\n            # we can swap this S with that G and get merged + 1\n            if merged < total_g:\n                ans = max(ans, merged + 1)\n            else:\n                ans = max(ans, merged)\n\n    print(ans)\n\nif __name__ == \"__main__\":\n    solve()"
   }
 ]

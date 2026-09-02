@@ -1,23 +1,20 @@
 [
   {
-    "model": "claude-3-5-haiku-20241022",
-    "prompt_type": "zero_shot",
-    "language": "Python",
-    "code": "def count_unique_weights(n):\n    weights = set()\n    \n    # Generate all possible splits\n    def generate_splits(remaining, current_split, first_elem):\n        if remaining == 0:\n            # Calculate weight of current split\n            weight = current_split.count(first_elem)\n            weights.add(weight)\n            return\n        \n        # Iterate through possible first elements of next part\n        start = 1 if not current_split else min(current_split[-1], remaining)\n        for i in range(start, remaining + 1):\n            generate_splits(remaining - i, current_split + [i], first_elem or i)\n    \n    generate_splits(n, [], 0)\n    return len(weights)\n\n# Read input\nn = int(input())\n\n# Output result\nprint(count_unique_weights(n))",
-    "timestamp": "2025-08-05 17:33:09"
-  },
-  {
-    "model": "deepseek-v3",
-    "prompt_type": "zero_shot",
-    "language": "Python",
-    "code": "n = int(input())\nprint((n // 2) + 1)",
-    "timestamp": "2025-08-05 17:33:13"
-  },
-  {
-    "model": "gpt-4o",
+    "model": "deepseek-chat",
     "prompt_type": "zero_shot",
     "language": "python",
-    "code": "def count_weights(n):\n    weights = set()\n    for k in range(1, n + 1):\n        if n % k == 0:\n            weights.add(k)\n    return len(weights)\n\nn = int(input().strip())\nprint(count_weights(n))",
-    "timestamp": "2025-08-12 21:55:01"
+    "code": "n = int(input())\nweights = set()\n\n# For each possible quotient q = n // k\nk = 1\nwhile k <= n:\n    q = n // k\n    # For this q, the smallest k that gives same q is n // (q + 1) + 1\n    # We check if condition holds for this k\n    if q > n // (k + 1):\n        weights.add(k)\n    # Move to next distinct k range\n    k = n // q + 1\n\n# Also add weight 1 (always possible) and n (all ones)\nweights.add(1)\nweights.add(n)\n\nprint(len(weights))"
+  },
+  {
+    "model": "claude-sonnet-4-6",
+    "prompt_type": "zero_shot",
+    "language": "python",
+    "code": "n = int(input())\nprint(n // 2 + 1)"
+  },
+  {
+    "model": "gpt-5.4",
+    "prompt_type": "zero_shot",
+    "language": "python",
+    "code": "import sys\nimport math\n\ndef main():\n    n = int(sys.stdin.readline())\n\n    ans = 0\n    limit = int(math.isqrt(n))\n    for k in range(1, limit + 1):\n        # Weight k is possible iff there exists a >= 1 with:\n        # k*a <= n < k*(a+1)\n        # This is equivalent to floor(n/k) > floor(n/(k+1))\n        if n // k > n // (k + 1):\n            ans += 1\n\n    # For weights k > sqrt(n), each possible weight corresponds uniquely\n    # to a value q = floor(n/k) with q < sqrt(n), and all such q are possible.\n    ans += n // (limit + 1)\n\n    print(ans)\n\nif __name__ == \"__main__\":\n    main()"
   }
 ]

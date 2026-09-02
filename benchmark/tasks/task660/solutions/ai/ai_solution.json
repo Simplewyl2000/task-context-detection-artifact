@@ -1,107 +1,74 @@
 [
   {
-    "model": "claude-3-5-haiku-20241022",
-    "prompt_type": "zero_shot",
-    "language": "C",
-    "code": "#include <stdio.h>\n#include <string.h>\n\n#define MOD 998244353\n\nint solve(char* S) {\n    int len = strlen(S);\n    if (len < 2) return 1;\n\n    int dp[len+1][len+1];\n    memset(dp, 0, sizeof(dp));\n    dp[0][len] = 1;\n\n    for (int i = 0; i < len; i++) {\n        for (int j = len; j > i; j--) {\n            if (dp[i][j] == 0) continue;\n\n            // Option 1: No operation\n            dp[i][j] %= MOD;\n\n            // Option 2: Remove two chars and reinsert\n            for (int k = i; k < j; k++) {\n                for (int l = k + 1; l <= j; l++) {\n                    dp[i][j-1] = (dp[i][j-1] + dp[i][j]) % MOD;\n                }\n            }\n        }\n    }\n\n    int total = 0;\n    for (int j = 0; j <= len; j++) {\n        total = (total + dp[0][j]) % MOD;\n    }\n\n    return total;\n}\n\nint main() {\n    char S[1001];\n    scanf(\"%s\", S);\n    printf(\"%d\\n\", solve(S));\n    return 0;\n}",
-    "timestamp": "2025-08-05 22:27:44"
-  },
-  {
-    "model": "deepseek-v3",
-    "prompt_type": "zero_shot",
-    "language": "C",
-    "code": "#include <stdio.h>\n#include <string.h>\n#define MOD 998244353\n\nint main() {\n    char S[1001];\n    scanf(\"%s\", S);\n    int n = strlen(S);\n    int cnt0 = 0, cnt1 = 0;\n    for (int i = 0; i < n; ++i) {\n        if (S[i] == '0') cnt0++;\n        else cnt1++;\n    }\n    int total = 1;\n    for (int i = 0; i < cnt0; ++i) {\n        total = (total * 2) % MOD;\n    }\n    for (int i = 0; i < cnt1; ++i) {\n        total = (total * 2) % MOD;\n    }\n    printf(\"%d\\n\", total);\n    return 0;\n}",
-    "timestamp": "2025-08-05 22:28:45"
-  },
-  {
-    "model": "deepseek-v3",
-    "prompt_type": "zero_shot",
-    "language": "C++",
-    "code": "#include <bits/stdc++.h>\nusing namespace std;\n\nconst int MOD = 998244353;\n\nint main() {\n    string S;\n    cin >> S;\n    int n = S.size();\n    vector<vector<int>> dp(n + 1, vector<int>(n + 1, 0));\n    for (int i = 0; i <= n; ++i) {\n        dp[i][i] = 1;\n    }\n    for (int len = 1; len <= n; ++len) {\n        for (int l = 0; l + len <= n; ++l) {\n            int r = l + len;\n            if (l + 1 <= r) {\n                dp[l][r] = (dp[l][r] + dp[l + 1][r]) % MOD;\n            }\n            if (l <= r - 1) {\n                dp[l][r] = (dp[l][r] + dp[l][r - 1]) % MOD;\n            }\n            if (l + 1 <= r - 1) {\n                dp[l][r] = (dp[l][r] - dp[l + 1][r - 1] + MOD) % MOD;\n            }\n            if (l + 1 <= r - 1 && S[l] == S[r - 1]) {\n                dp[l][r] = (dp[l][r] + dp[l + 1][r - 1]) % MOD;\n            }\n        }\n    }\n    cout << dp[0][n] << endl;\n    return 0;\n}",
-    "timestamp": "2025-08-05 22:29:00"
-  },
-  {
-    "model": "deepseek-v3",
-    "prompt_type": "zero_shot",
-    "language": "Java",
-    "code": "import java.util.*;\n\npublic class Solution {\n    private static final int MOD = 998244353;\n\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        String S = scanner.next();\n        System.out.println(solve(S));\n    }\n\n    private static int solve(String S) {\n        int n = S.length();\n        if (n == 0) return 0;\n\n        int[] dp = new int[n + 1];\n        dp[0] = 1;\n\n        for (int i = 1; i <= n; i++) {\n            dp[i] = dp[i - 1];\n            if (i >= 2) {\n                dp[i] = (dp[i] + dp[i - 2]) % MOD;\n            }\n        }\n\n        int res = 1;\n        int cnt = 1;\n        for (int i = 1; i < n; i++) {\n            if (S.charAt(i) == S.charAt(i - 1)) {\n                cnt++;\n            } else {\n                res = (int) ((long) res * dp[cnt] % MOD);\n                cnt = 1;\n            }\n        }\n        res = (int) ((long) res * dp[cnt] % MOD);\n\n        return res;\n    }\n}",
-    "timestamp": "2025-08-05 22:29:13"
-  },
-  {
-    "model": "claude-3-5-haiku-20241022",
-    "prompt_type": "zero_shot",
-    "language": "Java",
-    "code": "import java.util.*;\n\npublic class Solution {\n    private static final int MOD = 998244353;\n\n    public static int countStrings(String s) {\n        Set<String> visited = new HashSet<>();\n        Queue<String> queue = new LinkedList<>();\n        queue.offer(s);\n        visited.add(s);\n\n        while (!queue.isEmpty()) {\n            String current = queue.poll();\n            \n            if (current.length() < 2) continue;\n\n            char first = current.charAt(0);\n            char second = current.charAt(1);\n            String remaining = current.substring(2);\n\n            for (int i = 0; i <= remaining.length(); i++) {\n                String newStr = remaining.substring(0, i) + first + remaining.substring(i);\n                if (!visited.contains(newStr)) {\n                    queue.offer(newStr);\n                    visited.add(newStr);\n                }\n\n                newStr = remaining.substring(0, i) + second + remaining.substring(i);\n                if (!visited.contains(newStr)) {\n                    queue.offer(newStr);\n                    visited.add(newStr);\n                }\n            }\n        }\n\n        return visited.size() % MOD;\n    }\n\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        String s = scanner.nextLine();\n        System.out.println(countStrings(s));\n    }\n}",
-    "timestamp": "2025-08-05 22:29:18"
-  },
-  {
-    "model": "claude-3-5-haiku-20241022",
-    "prompt_type": "zero_shot",
-    "language": "C++",
-    "code": "class Solution {\npublic:\n    int maxLengthUniqueSplit(string S) {\n        int n = S.length();\n        if (n < 2) return 0;\n        \n        const int MOD = 998244353;\n        vector<vector<long long>> dp(n+1, vector<long long>(n+1, 0));\n        dp[0][0] = 1;\n        \n        for (int len = 2; len <= n; len++) {\n            for (int i = 0; i < len; i++) {\n                for (int j = 0; j < len; j++) {\n                    if (S[i] == S[j]) continue;\n                    \n                    long long curr = dp[len-2][len-2];\n                    \n                    for (int k = 0; k < len-2; k++) {\n                        curr = (curr * (len-1)) % MOD;\n                    }\n                    \n                    dp[len][i] = (dp[len][i] + curr) % MOD;\n                }\n            }\n        }\n        \n        long long result = 0;\n        for (int i = 0; i < n; i++) {\n            result = (result + dp[n][i]) % MOD;\n        }\n        \n        return result;\n    }\n};",
-    "timestamp": "2025-08-05 22:29:23"
-  },
-  {
-    "model": "gpt-4o",
-    "prompt_type": "zero_shot",
-    "language": "python",
-    "code": "def count_modifications(S):\n    MOD = 998244353\n    n = len(S)\n    \n    # Count the number of 0s and 1s\n    num_0 = S.count('0')\n    num_1 = n - num_0  # Since the string only contains '0' and '1'\n    \n    # The number of distinct strings is given by the number of permutations\n    # of the characters in the string divided by the permutations of similar\n    # items (due to indistinguishable 0s and 1s).\n    def factorial(x):\n        result = 1\n        for i in range(2, x + 1):\n            result = (result * i) % MOD\n        return result\n        \n    # Calculate the factorial of n, num_0 and num_1\n    fact_n = factorial(n)\n    fact_0 = factorial(num_0)\n    fact_1 = factorial(num_1)\n    \n    # Calculate the multiplicative inverse of fact_0 and fact_1\n    def mod_inverse(x, mod):\n        return pow(x, mod - 2, mod)\n    \n    inv_fact_0 = mod_inverse(fact_0, MOD)\n    inv_fact_1 = mod_inverse(fact_1, MOD)\n    \n    # Calculate the total number of distinct strings possible\n    result = (fact_n * inv_fact_0 % MOD) * inv_fact_1 % MOD\n    \n    return result\n\n# Example usage\nS = \"1100\"\nprint(count_modifications(S))",
-    "timestamp": "2025-08-13 10:58:24"
-  },
-  {
-    "model": "gpt-4o",
-    "prompt_type": "zero_shot",
-    "language": "java",
-    "code": "public class Main {\n    private static final int MOD = 998244353;\n    \n    public static void main(String[] args) {\n        String S = \"enter_your_string_here\";\n        System.out.println(countPossibleStrings(S));\n    }\n\n    public static long countPossibleStrings(String S) {\n        int n = S.length();\n        long[][] dp = new long[n + 1][n + 1];\n        dp[n][0] = 1;\n\n        for (int i = n - 2; i >= 0; i -= 2) {\n            for (int j = 0; j <= i; j++) {\n                dp[i][j] = (dp[i + 2][j + 1] + dp[i + 2][0]) % MOD;\n            }\n        }\n\n        return dp[0][0];\n    }\n}",
-    "timestamp": "2025-08-13 10:58:27"
-  },
-  {
-    "model": "gpt-4o",
+    "model": "deepseek-chat",
     "prompt_type": "zero_shot",
     "language": "c",
-    "code": "#include <stdio.h>\n#include <string.h>\n\n#define MOD 998244353\n\ntypedef long long ll;\n\nll power_mod(ll base, ll exp, ll mod) {\n    ll result = 1;\n    while (exp > 0) {\n        if (exp % 2 == 1)\n            result = (result * base) % mod;\n        base = (base * base) % mod;\n        exp /= 2;\n    }\n    return result;\n}\n\nint main() {\n    char S[100001];\n    scanf(\"%s\", S);\n    \n    int n = strlen(S);\n    ll count[2] = {0, 0};\n    \n    for (int i = 0; i < n; ++i) {\n        count[S[i] - '0']++;\n    }\n    \n    ll result = power_mod(2, (count[0] < count[1] ? count[0] : count[1]), MOD);\n    printf(\"%lld\\n\", result);\n    \n    return 0;\n}",
-    "timestamp": "2025-08-13 10:58:34"
+    "code": "#include <stdio.h>\n#include <string.h>\n#define MOD 998244353\n\nint main() {\n    char s[200005];\n    scanf(\"%s\", s);\n    int n = strlen(s);\n    \n    // dp0 = number of distinct subsequences ending with 0\n    // dp1 = number of distinct subsequences ending with 1\n    long long dp0 = 0, dp1 = 0;\n    \n    for (int i = 0; i < n; i++) {\n        if (s[i] == '0') {\n            dp0 = (dp0 + dp1 + 1) % MOD;\n        } else {\n            dp1 = (dp1 + dp0 + 1) % MOD;\n        }\n    }\n    \n    long long ans = (dp0 + dp1) % MOD;\n    printf(\"%lld\\n\", ans);\n    \n    return 0;\n}"
   },
   {
-    "model": "gpt-4o",
+    "model": "claude-sonnet-4-6",
     "prompt_type": "zero_shot",
-    "language": "js",
-    "code": "function countPossibleStrings(S) {\n    const MOD = 998244353;\n\n    let n = S.length;\n    if (n < 2) return 1;\n\n    let dp = new Array(n + 1).fill(0);\n    dp[0] = 1;\n    dp[1] = 1;\n\n    for (let i = 2; i <= n; ++i) {\n        dp[i] = dp[i - 1] * i % MOD;\n    }\n\n    return dp[n];\n}\n\nconst S = \"1101001\";  // Example input\nconsole.log(countPossibleStrings(S));  // Example output",
-    "timestamp": "2025-08-13 10:58:36"
+    "language": "c",
+    "code": "#include <stdio.h>\n#include <string.h>\n#include <stdlib.h>\n\n#define MOD 998244353\n\n// DP approach: track what strings are reachable\n// State: current string as a set of (position, character) pairs\n// This is complex; use BFS with string hashing for small inputs\n\n// For the actual solution, we need a smarter approach\n// Based on analysis: reachable strings = all strings with c1 ones where\n// max(0, ones-(zeros)) <= c1 <= ones, arranged in any order\n// Count = sum of C(c1+c0, c1) for valid (c1,c0) pairs\n\nint main() {\n    char s[200005];\n    scanf(\"%s\", s);\n    int n = strlen(s);\n    // placeholder\n    printf(\"1\\n\");\n    return 0;\n}"
   },
   {
-    "model": "claude-3-5-haiku-20241022",
+    "model": "gpt-5.4",
     "prompt_type": "zero_shot",
-    "language": "python",
-    "code": "def count_strings(S):\n    MOD = 998244353\n    \n    @lru_cache(None)\n    def dp(s):\n        if len(s) <= 1:\n            return 1\n        \n        total = 0\n        for i in range(len(s)):\n            for j in range(2):\n                # Remove first two chars, erase one, insert the other at index i\n                new_s = s[2:i] + s[j] + s[i:]\n                total = (total + dp(new_s)) % MOD\n        \n        return total\n    \n    return dp(S)\n\nfrom functools import lru_cache",
-    "timestamp": "2025-08-13 10:58:40"
+    "language": "c",
+    "code": "#include <stdio.h>\n#include <string.h>\n\n#define MOD 998244353LL\n\nint main(void) {\n    static char s[200005];\n    if (scanf(\"%200000s\", s) != 1) return 0;\n\n    int n = (int)strlen(s);\n    long long ans = 1;\n\n    for (int i = 0; i + 1 < n; i++) {\n        if (s[i] != s[i + 1]) {\n            ans = (ans * 2) % MOD;\n        }\n    }\n\n    printf(\"%lld\\n\", ans % MOD);\n    return 0;\n}"
   },
   {
-    "model": "claude-3-5-haiku-20241022",
-    "prompt_type": "zero_shot",
-    "language": "js",
-    "code": "function countStrings(S) {\n    const MOD = 998244353;\n    const n = S.length;\n    const dp = new Array(n + 1).fill(0).map(() => new Array(n + 1).fill(0));\n    \n    dp[0][0] = 1;\n    \n    for (let len = 1; len <= n; len++) {\n        for (let first = 0; first <= len; first++) {\n            let second = len - first;\n            \n            if (first > 0 && second > 0) {\n                dp[len][first] = (dp[len][first] + dp[len - 2][first - 1] * first) % MOD;\n                dp[len][first] = (dp[len][first] + dp[len - 2][first] * (second - 1)) % MOD;\n                dp[len][first] = (dp[len][first] + dp[len - 2][first] * first) % MOD;\n            }\n            \n            if (first < len) {\n                dp[len][first] = (dp[len][first] + dp[len - 1][first]) % MOD;\n            }\n        }\n    }\n    \n    let result = 0;\n    for (let first = 0; first <= n; first++) {\n        result = (result + dp[n][first]) % MOD;\n    }\n    \n    return result;\n}",
-    "timestamp": "2025-08-13 10:58:46"
-  },
-  {
-    "model": "deepseek-v3",
-    "prompt_type": "zero_shot",
-    "language": "python",
-    "code": "MOD = 998244353\n\ndef solve():\n    S = input().strip()\n    n = len(S)\n    if n == 0:\n        print(0)\n        return\n    # The answer is 2^(n-1) * (number of distinct characters in S)\n    # But wait, if all characters are the same, the answer is n\n    if all(c == S[0] for c in S):\n        print(n % MOD)\n    else:\n        ans = pow(2, n - 1, MOD) * len(set(S)) % MOD\n        print(ans)\n\nsolve()",
-    "timestamp": "2025-08-13 10:58:51"
-  },
-  {
-    "model": "deepseek-v3",
-    "prompt_type": "zero_shot",
-    "language": "js",
-    "code": "const MOD = 998244353;\n\nfunction solve(S) {\n    const n = S.length;\n    if (n === 0) return 0;\n    let count0 = 0, count1 = 0;\n    for (const c of S) {\n        if (c === '0') count0++;\n        else count1++;\n    }\n    \n    const fact = new Array(n + 1);\n    fact[0] = 1;\n    for (let i = 1; i <= n; i++) {\n        fact[i] = (fact[i - 1] * i) % MOD;\n    }\n    \n    const invFact = new Array(n + 1);\n    invFact[n] = modInverse(fact[n], MOD);\n    for (let i = n - 1; i >= 0; i--) {\n        invFact[i] = (invFact[i + 1] * (i + 1)) % MOD;\n    }\n    \n    function comb(a, b) {\n        if (a < 0 || b < 0 || a < b) return 0;\n        return (fact[a] * invFact[b] % MOD) * invFact[a - b] % MOD;\n    }\n    \n    return comb(n, count0);\n}\n\nfunction modInverse(a, mod) {\n    let m0 = mod;\n    let y = 0, x = 1;\n    if (mod === 1) return 0;\n    while (a > 1) {\n        let q = Math.floor(a / mod);\n        let t = mod;\n        mod = a % mod;\n        a = t;\n        t = y;\n        y = x - q * y;\n        x = t;\n    }\n    if (x < 0) x += m0;\n    return x;\n}\n\n// Example usage:\n// const S = \"101\";\n// console.log(solve(S));",
-    "timestamp": "2025-08-13 10:59:01"
-  },
-  {
-    "model": "gpt-4o",
+    "model": "deepseek-chat",
     "prompt_type": "zero_shot",
     "language": "c++",
-    "code": "#include <iostream>\n#include <string>\nusing namespace std;\n\nconst int MOD = 998244353;\n\nint countResultingStrings(const string &S) {\n    int n = S.size();\n    if (n <= 1) return 1;\n\n    int zeroCount = 0, oneCount = 0;\n    for (char c : S) {\n        if (c == '0') ++zeroCount;\n        else ++oneCount;\n    }\n\n    long long result = 1;\n    for (int i = 1; i <= zeroCount; ++i) {\n        result = (result * i) % MOD;\n    }\n    for (int i = 1; i <= oneCount; ++i) {\n        result = (result * i) % MOD;\n    }\n\n    return result;\n}\n\nint main() {\n    string S;\n    cin >> S;\n    cout << countResultingStrings(S) << endl;\n    return 0;\n}",
-    "timestamp": "2025-08-13 12:01:36"
+    "code": "#include <bits/stdc++.h>\nusing namespace std;\nconst int MOD = 998244353;\n\nint main() {\n    ios::sync_with_stdio(false);\n    cin.tie(nullptr);\n    \n    string s;\n    cin >> s;\n    int n = s.size();\n    int zeros = count(s.begin(), s.end(), '0');\n    int ones = n - zeros;\n    \n    // dp[len][z] = number of strings of length len with z zeros\n    vector<vector<int>> dp(n + 1, vector<int>(zeros + 1, 0));\n    dp[n][zeros] = 1;\n    \n    for (int len = n; len > 1; --len) {\n        for (int z = 0; z <= zeros; ++z) {\n            int o = len - z;\n            if (o < 0 || o > ones) continue;\n            if (dp[len][z] == 0) continue;\n            // remove a zero if possible\n            if (z > 0) {\n                dp[len - 1][z - 1] = (dp[len - 1][z - 1] + dp[len][z]) % MOD;\n            }\n            // remove a one if possible\n            if (o > 0) {\n                dp[len - 1][z] = (dp[len - 1][z] + dp[len][z]) % MOD;\n            }\n        }\n    }\n    \n    int ans = 0;\n    for (int len = 1; len <= n; ++len) {\n        for (int z = 0; z <= zeros; ++z) {\n            ans = (ans + dp[len][z]) % MOD;\n        }\n    }\n    cout << ans << '\\n';\n    return 0;\n}"
+  },
+  {
+    "model": "claude-sonnet-4-6",
+    "prompt_type": "zero_shot",
+    "language": "c++",
+    "code": "#include <bits/stdc++.h>\nusing namespace std;\n\nconst int MOD = 998244353;\n\nint main(){\n    string S;\n    cin >> S;\n    \n    set<string> visited;\n    queue<string> q;\n    q.push(S);\n    visited.insert(S);\n    \n    while(!q.empty()){\n        string s = q.front(); q.pop();\n        int n = s.size();\n        if(n < 2) continue;\n        char c1 = s[0], c2 = s[1];\n        string rest = s.substr(2);\n        // keep c1 or c2, insert at any position in rest (0..rest.size())\n        for(int keep = 0; keep < 2; keep++){\n            char c = (keep == 0) ? c1 : c2;\n            for(int pos = 0; pos <= (int)rest.size(); pos++){\n                string ns = rest.substr(0,pos) + c + rest.substr(pos);\n                if(!visited.count(ns)){\n                    visited.insert(ns);\n                    q.push(ns);\n                }\n            }\n        }\n    }\n    \n    cout << visited.size() % MOD << endl;\n    return 0;\n}"
+  },
+  {
+    "model": "gpt-5.4",
+    "prompt_type": "zero_shot",
+    "language": "c++",
+    "code": "#include <bits/stdc++.h>\nusing namespace std;\n\nstatic const long long MOD = 998244353;\n\n// fast power\nlong long modpow(long long a, long long e) {\n    long long r = 1 % MOD;\n    while (e > 0) {\n        if (e & 1) r = r * a % MOD;\n        a = a * a % MOD;\n        e >>= 1;\n    }\n    return r;\n}\n\nint main() {\n    ios::sync_with_stdio(false);\n    cin.tie(nullptr);\n\n    string S;\n    cin >> S;\n    int n = (int)S.size();\n\n    int c0 = 0, c1 = 0;\n    for (char ch : S) {\n        if (ch == '0') c0++;\n        else c1++;\n    }\n\n    // dp[a][b][t]:\n    // considering a zeros and b ones remaining to be deleted in total,\n    // and current first character type = t (0 or 1),\n    // whether such a state is reachable.\n    //\n    // We only need boolean reachability.\n    vector<vector<array<char,2>>> dp(c0 + 1, vector<array<char,2>>(c1 + 1, {0,0}));\n\n    // initial state\n    dp[c0][c1][S[0] - '0'] = 1;\n\n    for (int a = c0; a >= 0; --a) {\n        for (int b = c1; b >= 0; --b) {\n            for (int t = 0; t < 2; ++t) {\n                if (!dp[a][b][t]) continue;\n                int len = a + b;\n                if (len < 2) continue;\n\n                // choose second character type u among remaining multiset after taking first=t\n                for (int u = 0; u < 2; ++u) {\n                    int cntu = (u == 0 ? a : b);\n                    if (u == t) cntu--; // one copy is already used as first char\n                    if (cntu <= 0) continue;\n\n                    // From pair (t, u), erase one and keep the other.\n                    // The kept character can be reinserted anywhere, including front,\n                    // so the new first character can be:\n                    // - the kept character\n                    // - or any character still present after deleting one of {t,u}\n                    //\n                    // We can model all possibilities directly.\n\n                    // Option 1: delete t, keep u\n                    {\n                        int na = a - (t == 0);\n                        int nb = b - (t == 1);\n                        if (na >= 0 && nb >= 0) {\n                            // first can be u\n                            dp[na][nb][u] = 1;\n                            // or some other existing type after deletion\n                            if (na > (u == 0 ? 1 : 0)) dp[na][nb][0] = 1;\n                            if (nb > (u == 1 ? 1 : 0)) dp[na][nb][1] = 1;\n                        }\n                    }\n\n                    // Option 2: delete u, keep t\n                    {\n                        int na = a - (u == 0);\n                        int nb = b - (u == 1);\n                        if (na >= 0 && nb >= 0) {\n                            // first can be t\n                            dp[na][nb][t] = 1;\n                            // or some other existing type after deletion\n                            if (na > (t == 0 ? 1 : 0)) dp[na][nb][0] = 1;\n                            if (nb > (t == 1 ? 1 : 0)) dp[na][nb][1] = 1;\n                        }\n                    }\n                }\n            }\n        }\n    }\n\n    // A binary string is determined only by its counts.\n    // For each reachable remaining counts (a,b), every string with exactly a zeros and b ones is obtainable.\n    // Count sum C(a+b, a) over all reachable (a,b).\n    int N = n;\n    vector<long long> fact(N + 1), ifact(N + 1);\n    fact[0] = 1;\n    for (int i = 1; i <= N; ++i) fact[i] = fact[i - 1] * i % MOD;\n    ifact[N] = modpow(fact[N], MOD - 2);\n    for (int i = N; i > 0; --i) ifact[i - 1] = ifact[i] * i % MOD;\n\n    auto C = [&](int nn, int kk) -> long long {\n        if (kk < 0 || kk > nn) return 0;\n        return fact[nn] * ifact[kk] % MOD * ifact[nn - kk] % MOD;\n    };\n\n    long long ans = 0;\n    for (int a = 0; a <= c0; ++a) {\n        for (int b = 0; b <= c1; ++b) {\n            bool ok = false;\n            if (a + b == 0) ok = true; // empty string can always be reached\n            else {\n                if (dp[a][b][0] || dp[a][b][1]) ok = true;\n            }\n            if (ok) {\n                ans += C(a + b, a);\n                if (ans >= MOD) ans -= MOD;\n            }\n        }\n    }\n\n    cout << ans % MOD << '\\n';\n    return 0;\n}"
+  },
+  {
+    "model": "deepseek-chat",
+    "prompt_type": "zero_shot",
+    "language": "python",
+    "code": "MOD = 998244353\n\ndef solve():\n    S = input().strip()\n    n = len(S)\n    dp = [0] * (n + 1)\n    dp[0] = 1  # empty subsequence\n    last = {}\n    \n    for i, ch in enumerate(S):\n        dp[i+1] = (2 * dp[i]) % MOD\n        if ch in last:\n            dp[i+1] = (dp[i+1] - dp[last[ch]]) % MOD\n        last[ch] = i\n    \n    ans = (dp[n] - 1) % MOD\n    print(ans)\n\nif __name__ == \"__main__\":\n    solve()"
+  },
+  {
+    "model": "claude-sonnet-4-6",
+    "prompt_type": "zero_shot",
+    "language": "python",
+    "code": "import sys\nfrom collections import deque\n\ndef solve():\n    MOD = 998244353\n    S = input().strip()\n    \n    visited = set()\n    visited.add(S)\n    queue = deque([S])\n    \n    while queue:\n        s = queue.popleft()\n        n = len(s)\n        if n < 2:\n            continue\n        c1, c2 = s[0], s[1]\n        rest = s[2:]\n        # Insert c1 or c2 into rest at any position\n        for ch in set([c1, c2]):\n            for i in range(len(rest) + 1):\n                new_s = rest[:i] + ch + rest[i:]\n                if new_s not in visited:\n                    visited.add(new_s)\n                    queue.append(new_s)\n    \n    print(len(visited) % MOD)\n\nsolve()"
+  },
+  {
+    "model": "gpt-5.4",
+    "prompt_type": "zero_shot",
+    "language": "python",
+    "code": "import sys\n\nMOD = 998244353\n\ndef main():\n    s = sys.stdin.readline().strip()\n    n = len(s)\n\n    # Let z = number of '0', o = number of '1'.\n    z = s.count('0')\n    o = n - z\n\n    # In one operation, from the first two characters we delete one and keep one,\n    # then insert the kept one anywhere. So the length decreases by 1.\n    #\n    # The key invariant is the difference between counts of 0 and 1 can change\n    # by deleting either a 0 or a 1 from the first two chars, depending on choice.\n    #\n    # A complete characterization of reachable strings is:\n    # for every length L from 1..n, every binary string of length L whose counts\n    # (a,b) satisfy:\n    #   0 <= a <= z, 0 <= b <= o, a+b=L, and not (a,b)=(0,0)\n    # is reachable.\n    #\n    # Therefore the number of distinct reachable strings equals\n    #   sum over all feasible (a,b), not both zero, of C(a+b, a).\n    #\n    # Group by length L:\n    # for fixed L, a ranges from max(0, L-o) to min(L, z).\n    # answer = sum_{L=1..n} sum_{a=max(0,L-o)}^{min(L,z)} C(L,a)\n\n    # Precompute factorials and inverse factorials up to n.\n    fact = [1] * (n + 1)\n    for i in range(1, n + 1):\n        fact[i] = fact[i - 1] * i % MOD\n\n    invfact = [1] * (n + 1)\n    invfact[n] = pow(fact[n], MOD - 2, MOD)\n    for i in range(n, 0, -1):\n        invfact[i - 1] = invfact[i] * i % MOD\n\n    def comb(nn, rr):\n        if rr < 0 or rr > nn:\n            return 0\n        return fact[nn] * invfact[rr] % MOD * invfact[nn - rr] % MOD\n\n    ans = 0\n    for L in range(1, n + 1):\n        lo = max(0, L - o)\n        hi = min(L, z)\n        for a in range(lo, hi + 1):\n            ans += comb(L, a)\n            if ans >= MOD:\n                ans -= MOD\n\n    print(ans % MOD)\n\nif __name__ == \"__main__\":\n    main()"
+  },
+  {
+    "model": "deepseek-chat",
+    "prompt_type": "zero_shot",
+    "language": "java",
+    "code": "import java.util.Scanner;\n\npublic class Main {\n    static final int MOD = 998244353;\n\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        String s = sc.next();\n        sc.close();\n\n        int zeros = 0, ones = 0;\n        for (char c : s.toCharArray()) {\n            if (c == '0') zeros++;\n            else ones++;\n        }\n\n        int n = zeros + ones;\n        long[] fact = new long[n + 1];\n        long[] invFact = new long[n + 1];\n        fact[0] = 1;\n        for (int i = 1; i <= n; i++) {\n            fact[i] = fact[i - 1] * i % MOD;\n        }\n        invFact[n] = modPow(fact[n], MOD - 2);\n        for (int i = n; i >= 1; i--) {\n            invFact[i - 1] = invFact[i] * i % MOD;\n        }\n\n        long total = 0;\n        for (int a = 0; a <= zeros; a++) {\n            for (int b = 0; b <= ones; b++) {\n                if (a == 0 && b == 0) continue;\n                total = (total + comb(a + b, a, fact, invFact)) % MOD;\n            }\n        }\n\n        System.out.println(total);\n    }\n\n    static long comb(int n, int k, long[] fact, long[] invFact) {\n        if (k < 0 || k > n) return 0;\n        return fact[n] * invFact[k] % MOD * invFact[n - k] % MOD;\n    }\n\n    static long modPow(long a, long e) {\n        long res = 1;\n        while (e > 0) {\n            if ((e & 1) == 1) res = res * a % MOD;\n            a = a * a % MOD;\n            e >>= 1;\n        }\n        return res;\n    }\n}"
+  },
+  {
+    "model": "claude-sonnet-4-6",
+    "prompt_type": "zero_shot",
+    "language": "java",
+    "code": "import java.util.*;\n\npublic class Main {\n    static final int MOD = 998244353;\n    \n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        String S = sc.next();\n        \n        if (S.length() == 1) {\n            System.out.println(1);\n            return;\n        }\n        \n        Set<String> visited = new HashSet<>();\n        Queue<String> queue = new LinkedList<>();\n        queue.add(S);\n        visited.add(S);\n        \n        while (!queue.isEmpty()) {\n            String cur = queue.poll();\n            if (cur.length() < 2) continue;\n            char c1 = cur.charAt(0), c2 = cur.charAt(1);\n            String rest = cur.substring(2);\n            for (int keep = 0; keep < 2; keep++) {\n                char kept = (keep == 0) ? c1 : c2;\n                for (int pos = 0; pos <= rest.length(); pos++) {\n                    String next = rest.substring(0, pos) + kept + rest.substring(pos);\n                    if (visited.add(next)) {\n                        queue.add(next);\n                    }\n                }\n            }\n        }\n        \n        System.out.println(visited.size() % MOD);\n    }\n}"
+  },
+  {
+    "model": "gpt-5.4",
+    "prompt_type": "zero_shot",
+    "language": "java",
+    "code": "import java.io.*;\nimport java.util.*;\n\npublic class Main {\n    static final long MOD = 998244353L;\n\n    public static void main(String[] args) throws Exception {\n        FastScanner fs = new FastScanner(System.in);\n        String s = fs.next();\n        int n = s.length();\n\n        int cnt0 = 0;\n        for (int i = 0; i < n; i++) {\n            if (s.charAt(i) == '0') cnt0++;\n        }\n        int cnt1 = n - cnt0;\n\n        // Reachable strings are determined only by:\n        // - final length L >= 1\n        // - counts of 0 and 1 not exceeding originals\n        // - at least one of:\n        //   * if L == 1: any single char that exists initially\n        //   * if L >= 2: both symbols present in final string, or\n        //                final string is all c and initial string had at least one c\n        //\n        // In fact every binary string of length L with z zeros and o ones\n        // such that 0<=z<=cnt0, 0<=o<=cnt1, z+o=L, L>=1 is reachable.\n        // Reason:\n        // Each operation keeps exactly one of the first two chars, so after k operations\n        // we keep exactly one char from each removed pair, plus the untouched suffix.\n        // Since the kept char can be reinserted anywhere, order can be arranged arbitrarily.\n        // Thus any multiset obtainable by choosing survivors from removed pairs and suffix\n        // is achievable, and for binary strings this means any counts within original bounds\n        // except length 0. For each feasible counts, every arrangement is achievable.\n        //\n        // Therefore answer = sum_{z=0..cnt0} sum_{o=0..cnt1, z+o>=1} C(z+o, z)\n\n        long[][] C = new long[n + 1][n + 1];\n        for (int i = 0; i <= n; i++) {\n            C[i][0] = C[i][i] = 1;\n            for (int j = 1; j < i; j++) {\n                C[i][j] = (C[i - 1][j - 1] + C[i - 1][j]) % MOD;\n            }\n        }\n\n        long ans = 0;\n        for (int z = 0; z <= cnt0; z++) {\n            for (int o = 0; o <= cnt1; o++) {\n                if (z + o == 0) continue;\n                ans += C[z + o][z];\n                if (ans >= MOD) ans -= MOD;\n            }\n        }\n\n        System.out.println(ans % MOD);\n    }\n\n    static class FastScanner {\n        private final InputStream in;\n        private final byte[] buffer = new byte[1 << 16];\n        private int ptr = 0, len = 0;\n\n        FastScanner(InputStream is) {\n            in = is;\n        }\n\n        private int read() throws IOException {\n            if (ptr >= len) {\n                len = in.read(buffer);\n                ptr = 0;\n                if (len <= 0) return -1;\n            }\n            return buffer[ptr++];\n        }\n\n        String next() throws IOException {\n            StringBuilder sb = new StringBuilder();\n            int c;\n            do {\n                c = read();\n            } while (c <= ' ' && c != -1);\n            while (c > ' ') {\n                sb.append((char) c);\n                c = read();\n            }\n            return sb.toString();\n        }\n    }\n}"
   }
 ]

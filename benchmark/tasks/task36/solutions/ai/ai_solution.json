@@ -1,23 +1,20 @@
 [
   {
-    "model": "claude-3-5-haiku-20241022",
-    "prompt_type": "zero_shot",
-    "language": "Python",
-    "code": "def solve(n, k):\n    stones = [1] * n\n    coins = [1] * n\n    moves = 0\n    pos = k - 1\n\n    while sum(coins) > 0:\n        if stones[pos] > 0:\n            # Throw stone to another manhole\n            target = (pos + 1) % n if pos < n - 1 else pos - 1\n            stones[pos] -= 1\n            stones[target] += 1\n            moves += 1\n        elif stones[pos] == 0 and coins[pos] == 1:\n            # Pick coin\n            coins[pos] = 0\n            moves += 1\n        else:\n            # Move to adjacent manhole\n            if pos > 0 and (stones[pos-1] > 0 or coins[pos-1] == 1):\n                pos -= 1\n            elif pos < n - 1 and (stones[pos+1] > 0 or coins[pos+1] == 1):\n                pos += 1\n            moves += 1\n\n    return moves\n\nn, k = map(int, input().split())\nprint(solve(n, k))",
-    "timestamp": "2025-08-05 17:32:29"
-  },
-  {
-    "model": "deepseek-v3",
-    "prompt_type": "zero_shot",
-    "language": "Python",
-    "code": "n, k = map(int, input().split())\nres = n + 3\nleft = k - 1\nright = n - k\nmin_side = min(left, right)\nres += n + min_side * (n + 1)\nprint(res)",
-    "timestamp": "2025-08-05 17:32:33"
-  },
-  {
-    "model": "gpt-4o",
+    "model": "deepseek-chat",
     "prompt_type": "zero_shot",
     "language": "python",
-    "code": "def minimum_moves(n, k):\n    k -= 1  # converting to 0-indexed\n    left_distance = k\n    right_distance = n - k - 1\n    # Calculate minimum moves necessary\n    return 2 * n - 1 + min(left_distance, right_distance)\n\n# Read input\nn, k = map(int, input().strip().split())\n# Print output\nprint(minimum_moves(n, k))",
-    "timestamp": "2025-08-12 21:53:54"
+    "code": "n, k = map(int, input().split())\n\nans = float('inf')\nfor l in range(1, n + 1):\n    for r in range(l, n + 1):\n        stones = r - l + 1\n        walk = min(abs(k - l), abs(k - r)) + (r - l)\n        ans = min(ans, stones + walk)\n\nprint(ans)"
+  },
+  {
+    "model": "claude-sonnet-4-6",
+    "prompt_type": "zero_shot",
+    "language": "python",
+    "code": "import sys\nfrom functools import lru_cache\n\ndef solve():\n    n, k = map(int, input().split())\n    # n*(n+1)/2 throws + n collects + movement\n    # movement: optimal traversal starting at k-1 (0-indexed)\n    # Process manholes: need to find optimal order\n    # Total non-movement cost = n*(n+1)/2 + n\n    # Need minimum movement to visit all n manholes starting at k-1\n    # Optimal: go one direction then other, or other then one\n    k -= 1  # 0-indexed\n    left = k\n    right = n - 1 - k\n    move_cost = min(2*left + right, left + 2*right)\n    print(n*(n+1)//2 + n + move_cost)\n\nsolve()"
+  },
+  {
+    "model": "gpt-5.4",
+    "prompt_type": "zero_shot",
+    "language": "python",
+    "code": "import sys\n\ndef main():\n    input = sys.stdin.readline\n    n, k = map(int, input().split())\n\n    INF = 10**18\n\n    # dp[l][r][side]:\n    # minimum moves after all coins in interval [l..r] are already collected,\n    # Nastya stands at l (side=0) or r (side=1),\n    # and all stones from collected manholes have been moved to uncollected ones.\n    #\n    # Number of collected manholes = len = r-l+1\n    # Number of remaining (uncollected) manholes = n-len\n    # Every time we collect one more manhole, we must first move away all stones\n    # currently on it. Since all stones of collected manholes are always on\n    # uncollected manholes, total stones on uncollected manholes = n.\n    #\n    # If currently there are rem = n-len uncollected manholes, average stones is n/rem.\n    # But to collect an endpoint next, we can arrange optimally so that endpoint has\n    # the minimum possible number of stones:\n    # floor(n / rem) if not all are forced larger; equivalently the transition\n    # cost formula below simplifies to n//rem? No.\n    #\n    # Standard solution observation:\n    # when rem manholes remain before opening the next one, minimum number of throws\n    # needed to clear one chosen remaining manhole is ceil(n / rem).\n    # Then +1 move to open, + distance to move there.\n    #\n    # So if current collected interval length is len, before next opening:\n    # rem = n-len\n    # cost_to_open_next = ceil(n / rem) + 1\n    #\n    # Base: first collect k. Need to throw away its initial single stone: 1 throw + 1 open = 2.\n    #\n    # We'll build intervals containing k.\n\n    dp = [[[INF, INF] for _ in range(n + 2)] for __ in range(n + 2)]\n    dp[k][k][0] = dp[k][k][1] = 2\n\n    for length in range(1, n):\n        rem = n - length\n        clear_and_open = (n + rem - 1) // rem + 1  # ceil(n/rem) + 1\n\n        left_min = max(1, k - length + 1)\n        left_max = min(k, n - length + 1)\n        for l in range(left_min, left_max + 1):\n            r = l + length - 1\n            curL = dp[l][r][0]\n            curR = dp[l][r][1]\n\n            # extend to l-1\n            if l > 1:\n                nd = clear_and_open\n                if curL < INF:\n                    dp[l - 1][r][0] = min(dp[l - 1][r][0], curL + 1 + nd)\n                if curR < INF:\n                    dp[l - 1][r][0] = min(dp[l - 1][r][0], curR + (r - (l - 1)) + nd)\n\n            # extend to r+1\n            if r < n:\n                nd = clear_and_open\n                if curR < INF:\n                    dp[l][r + 1][1] = min(dp[l][r + 1][1], curR + 1 + nd)\n                if curL < INF:\n                    dp[l][r + 1][1] = min(dp[l][r + 1][1], curL + ((r + 1) - l) + nd)\n\n    print(min(dp[1][n][0], dp[1][n][1]))\n\nif __name__ == \"__main__\":\n    main()"
   }
 ]

@@ -1,23 +1,20 @@
 [
   {
-    "model": "claude-3-5-haiku-20241022",
-    "prompt_type": "zero_shot",
-    "language": "Python",
-    "code": "def solve_query(n, x, blows):\n    max_damage = max(blow[0] for blow in blows)\n    max_heads_added = max(blow[1] for blow in blows)\n    \n    # If any single blow can defeat Zmei\n    if any(blow[0] >= x for blow in blows):\n        return 1\n    \n    # If no blow reduces heads more than it increases\n    if max_damage <= max_heads_added:\n        return -1\n    \n    # Find the most efficient blow to reduce heads\n    best_net_reduction = max(blow[0] - blow[1] for blow in blows)\n    \n    # Calculate minimum number of blows needed\n    if best_net_reduction > 0:\n        return max(1, (x + best_net_reduction - 1) // best_net_reduction)\n    \n    return -1\n\ndef main():\n    t = int(input())\n    \n    for _ in range(t):\n        n, x = map(int, input().split())\n        blows = []\n        \n        for i in range(n):\n            d, h = map(int, input().split())\n            blows.append((d, h))\n        \n        print(solve_query(n, x, blows))\n\nif __name__ == \"__main__\":\n    main()",
-    "timestamp": "2025-08-05 17:31:21"
-  },
-  {
-    "model": "deepseek-v3",
-    "prompt_type": "zero_shot",
-    "language": "Python",
-    "code": "t = int(input())\nfor _ in range(t):\n    n, x = map(int, input().split())\n    blows = []\n    max_d = 0\n    max_diff = 0\n    for _ in range(n):\n        d, h = map(int, input().split())\n        max_d = max(max_d, d)\n        diff = d - h\n        if diff > max_diff:\n            max_diff = diff\n    if max_d >= x:\n        print(1)\n    elif max_diff <= 0:\n        print(-1)\n    else:\n        remaining = x - max_d\n        blows_needed = (remaining + max_diff - 1) // max_diff\n        print(blows_needed + 1)",
-    "timestamp": "2025-08-05 17:31:29"
-  },
-  {
-    "model": "gpt-4o",
+    "model": "deepseek-chat",
     "prompt_type": "zero_shot",
     "language": "python",
-    "code": "def minimum_blows(t, queries):\n    results = []\n    for n, x, blows in queries:\n        max_d = 0\n        max_diff = float('-inf')\n\n        for d, h in blows:\n            max_d = max(max_d, d)\n            max_diff = max(max_diff, d - h)\n\n        if max_d >= x:\n            results.append(1)\n            continue\n\n        if max_diff <= 0:\n            results.append(-1)\n            continue\n\n        remaining_heads = x - max_d\n        blows_needed = (remaining_heads + max_diff - 1) // max_diff + 1\n        results.append(blows_needed)\n\n    return results\n\nt = int(input().strip())\nqueries = []\n\nfor _ in range(t):\n    n, x = map(int, input().strip().split())\n    blows = [tuple(map(int, input().strip().split())) for _ in range(n)]\n    queries.append((n, x, blows))\n\nfor result in minimum_blows(t, queries):\n    print(result)",
-    "timestamp": "2025-08-12 21:39:57"
+    "code": "t = int(input())\nfor _ in range(t):\n    n, x = map(int, input().split())\n    max_d = 0\n    max_diff = -10**18  # best (d - h)\n    for _ in range(n):\n        d, h = map(int, input().split())\n        if d > max_d:\n            max_d = d\n        if d - h > max_diff:\n            max_diff = d - h\n    \n    # If we can kill in one blow\n    if max_d >= x:\n        print(1)\n        continue\n    \n    # If no blow reduces net heads, impossible\n    if max_diff <= 0:\n        print(-1)\n        continue\n    \n    # We need to reduce heads to <= max_d using the best net reduction per blow\n    # After each blow (except the last), net reduction is max_diff\n    # So we need: x - k * max_diff <= max_d\n    # => k >= (x - max_d) / max_diff\n    k = (x - max_d + max_diff - 1) // max_diff  # ceil division\n    print(k + 1)  # +1 for the final blow"
+  },
+  {
+    "model": "claude-sonnet-4-6",
+    "prompt_type": "zero_shot",
+    "language": "python",
+    "code": "t = int(input())\nfor _ in range(t):\n    n, x = map(int, input().split())\n    blows = []\n    for _ in range(n):\n        d, h = map(int, input().split())\n        blows.append((d, h))\n    \n    # Find max damage (d_i) and max net reduction (d_i - h_i)\n    max_d = max(d for d, h in blows)\n    max_net = max(d - h for d, h in blows)\n    \n    # If no blow can kill in one shot (max_d < x), and no blow reduces heads (max_net <= 0)\n    if max_d >= x:\n        print(1)\n    elif max_net <= 0:\n        print(-1)\n    else:\n        # We need at least 2 blows\n        # First reduce to a point where one killing blow works\n        # After some blows, we need curX <= max_d\n        # Each intermediate blow reduces by at most max_net\n        # We need x - k*max_net <= max_d\n        # k >= (x - max_d) / max_net\n        import math\n        k = math.ceil((x - max_d) / max_net)\n        print(k + 1)"
+  },
+  {
+    "model": "gpt-5.4",
+    "prompt_type": "zero_shot",
+    "language": "python",
+    "code": "import sys\n\ndef solve():\n    input = sys.stdin.readline\n    t = int(input())\n    ans = []\n\n    for _ in range(t):\n        n, x = map(int, input().split())\n\n        max_d = 0\n        best_diff = -10**18  # max(d_i - h_i)\n\n        for _ in range(n):\n            d, h = map(int, input().split())\n            max_d = max(max_d, d)\n            best_diff = max(best_diff, d - h)\n\n        # Can kill in one blow\n        if max_d >= x:\n            ans.append(\"1\")\n            continue\n\n        # No blow makes progress overall, and can't kill in one hit\n        if best_diff <= 0:\n            ans.append(\"-1\")\n            continue\n\n        # Use some number of best-progress blows, then one finishing blow\n        # Need x reduced to <= max_d before final hit\n        remaining = x - max_d\n        k = (remaining + best_diff - 1) // best_diff\n        ans.append(str(k + 1))\n\n    print(\"\\n\".join(ans))\n\nif __name__ == \"__main__\":\n    solve()"
   }
 ]

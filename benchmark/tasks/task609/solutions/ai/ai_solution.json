@@ -1,86 +1,74 @@
 [
   {
-    "model": "claude-3-5-haiku-20241022",
-    "prompt_type": "zero_shot",
-    "language": "C",
-    "code": "#include <stdio.h>\n\n#define MOD 1000000007\n\nint main() {\n    int n, k;\n    scanf(\"%d %d\", &n, &k);\n    \n    long long dp[n+1][k+1];\n    \n    for (int i = 0; i < n+1; i++) {\n        for (int j = 0; j < k+1; j++) {\n            dp[i][j] = 0;\n        }\n    }\n    \n    dp[0][0] = 1;\n    \n    for (int i = 1; i <= n; i++) {\n        for (int j = 1; j <= k; j++) {\n            dp[i][j] = (dp[i-1][j-1] + j * dp[i-1][j]) % MOD;\n        }\n    }\n    \n    printf(\"%lld\\n\", dp[n][k]);\n    \n    return 0;\n}",
-    "timestamp": "2025-08-05 22:18:30"
-  },
-  {
-    "model": "deepseek-v3",
-    "prompt_type": "zero_shot",
-    "language": "C",
-    "code": "#include <stdio.h>\n#define MOD 1000000007\n\nint main() {\n    int n, k;\n    scanf(\"%d %d\", &n, &k);\n    \n    if (n < k) {\n        printf(\"0\\n\");\n        return 0;\n    }\n    \n    int dp[n + 1][k + 1];\n    for (int i = 0; i <= n; i++) {\n        for (int j = 0; j <= k; j++) {\n            if (j == 0 || i < j) {\n                dp[i][j] = 0;\n            } else if (j == 1 || i == j) {\n                dp[i][j] = 1;\n            } else {\n                dp[i][j] = (dp[i - 1][j - 1] + dp[i - j][j]) % MOD;\n            }\n        }\n    }\n    \n    printf(\"%d\\n\", dp[n][k]);\n    return 0;\n}",
-    "timestamp": "2025-08-05 22:18:42"
-  },
-  {
-    "model": "deepseek-v3",
-    "prompt_type": "zero_shot",
-    "language": "C++",
-    "code": "#include <iostream>\n#include <vector>\nusing namespace std;\n\nconst int MOD = 1e9 + 7;\n\nint main() {\n    int n, k;\n    cin >> n >> k;\n    \n    if (n < k) {\n        cout << 0 << endl;\n        return 0;\n    }\n    \n    vector<vector<int>> dp(n + 1, vector<int>(k + 1, 0));\n    \n    for (int i = 1; i <= n; ++i) {\n        for (int j = 1; j <= k; ++j) {\n            if (j == 1 || i == j) {\n                dp[i][j] = 1;\n            } else if (i > j) {\n                dp[i][j] = (dp[i - 1][j - 1] + dp[i - j][j]) % MOD;\n            }\n        }\n    }\n    \n    cout << dp[n][k] << endl;\n    return 0;\n}",
-    "timestamp": "2025-08-05 22:18:53"
-  },
-  {
-    "model": "deepseek-v3",
-    "prompt_type": "zero_shot",
-    "language": "Java",
-    "code": "import java.util.Scanner;\n\npublic class BallBoxDistribution {\n    private static final int MOD = 1000000007;\n    private static int[][] dp;\n\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        int n = scanner.nextInt();\n        int k = scanner.nextInt();\n        \n        if (n < k) {\n            System.out.println(0);\n            return;\n        }\n        \n        dp = new int[n + 1][k + 1];\n        for (int i = 0; i <= n; i++) {\n            for (int j = 0; j <= k; j++) {\n                dp[i][j] = -1;\n            }\n        }\n        \n        System.out.println(partition(n, k));\n    }\n    \n    private static int partition(int n, int k) {\n        if (k == 1 || n == k) {\n            return 1;\n        }\n        if (dp[n][k] != -1) {\n            return dp[n][k];\n        }\n        dp[n][k] = (partition(n - 1, k - 1) + partition(n - k, k)) % MOD;\n        return dp[n][k];\n    }\n}",
-    "timestamp": "2025-08-05 22:19:09"
-  },
-  {
-    "model": "claude-3-5-haiku-20241022",
-    "prompt_type": "zero_shot",
-    "language": "Java",
-    "code": "import java.util.*;\n\npublic class BallAndBoxDistribution {\n    static final int MOD = 1000000007;\n\n    public static int distribute(int n, int k) {\n        if (n < k) return 0;\n        \n        int[][] dp = new int[n + 1][k + 1];\n        dp[0][0] = 1;\n        \n        for (int i = 1; i <= n; i++) {\n            for (int j = 1; j <= k; j++) {\n                dp[i][j] = (dp[i - 1][j - 1] + j * dp[i - 1][j]) % MOD;\n            }\n        }\n        \n        return dp[n][k];\n    }\n\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        int n = scanner.nextInt();\n        int k = scanner.nextInt();\n        System.out.println(distribute(n, k));\n        scanner.close();\n    }\n}",
-    "timestamp": "2025-08-05 22:19:14"
-  },
-  {
-    "model": "claude-3-5-haiku-20241022",
-    "prompt_type": "zero_shot",
-    "language": "C++",
-    "code": "#include <iostream>\n#include <vector>\nusing namespace std;\n\nconst int MOD = 1e9 + 7;\n\nint solve(int n, int k) {\n    vector<vector<int>> dp(n + 1, vector<int>(k + 1, 0));\n    \n    dp[0][0] = 1;\n    \n    for (int i = 1; i <= n; i++) {\n        for (int j = 1; j <= k; j++) {\n            dp[i][j] = (dp[i-1][j-1] + j * dp[i-1][j]) % MOD;\n        }\n    }\n    \n    return dp[n][k];\n}\n\nint main() {\n    int n, k;\n    cin >> n >> k;\n    cout << solve(n, k) << endl;\n    return 0;\n}",
-    "timestamp": "2025-08-05 22:19:17"
-  },
-  {
-    "model": "gpt-4o",
-    "prompt_type": "zero_shot",
-    "language": "python",
-    "code": "def number_of_ways(n, k, mod=10**9+7):\n    def mod_inv(x, p):\n        return pow(x, p - 2, p)\n    \n    def nCr_mod(n, r, p):\n        if r > n:\n            return 0\n        num = 1\n        denom = 1\n        for i in range(r):\n            num = num * (n - i) % p\n            denom = denom * (i + 1) % p\n        return num * mod_inv(denom, p) % p\n    \n    if n < k:\n        return 0\n    return nCr_mod(n - 1, k - 1, mod)\n\nn = int(input(\"Enter number of balls: \"))\nk = int(input(\"Enter number of boxes: \"))\nresult = number_of_ways(n, k)\nprint(result)",
-    "timestamp": "2025-08-13 09:56:06"
-  },
-  {
-    "model": "gpt-4o",
-    "prompt_type": "zero_shot",
-    "language": "java",
-    "code": "import java.util.*;\n\npublic class BallsInBoxes {\n    private static final int MOD = 1000000007;\n\n    private static long modInverse(long a, long m) {\n        long m0 = m, t, q;\n        long x0 = 0, x1 = 1;\n        if (m == 1) return 0;\n        while (a > 1) {\n            q = a / m;\n            t = m; \n            m = a % m; a = t; \n            t = x0; \n            x0 = x1 - q * x0; \n            x1 = t;\n        }\n        if (x1 < 0) x1 += m0;\n        return x1;\n    }\n\n    private static long combination(int n, int r) {\n        if (r == 0) return 1;\n        long num = 1, den = 1;\n        for (int i = 0; i < r; i++) {\n            num = num * (n - i) % MOD;\n            den = den * (i + 1) % MOD;\n        }\n        return num * modInverse(den, MOD) % MOD;\n    }\n\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        int n = scanner.nextInt();\n        int k = scanner.nextInt();\n        if (n < k) {\n            System.out.println(0);\n        } else {\n            System.out.println(combination(n - 1, k - 1));\n        }\n        scanner.close();\n    }\n}",
-    "timestamp": "2025-08-13 09:56:10"
-  },
-  {
-    "model": "gpt-4o",
+    "model": "deepseek-chat",
     "prompt_type": "zero_shot",
     "language": "c",
-    "code": "#include <stdio.h>\n\n#define MOD 1000000007\n\nlong long factorial(int n) {\n    long long result = 1;\n    for (int i = 2; i <= n; i++) {\n        result = (result * i) % MOD;\n    }\n    return result;\n}\n\nlong long modInverse(long long a, long long m) {\n    long long m0 = m, t, q;\n    long long x0 = 0, x1 = 1;\n    \n    if (m == 1)\n        return 0;\n\n    while (a > 1) {\n        q = a / m;\n        t = m;\n        m = a % m;\n        a = t;\n        t = x0;\n        x0 = x1 - q * x0;\n        x1 = t;\n    }\n\n    if (x1 < 0)\n        x1 += m0;\n\n    return x1;\n}\n\nlong long binomial(int n, int k) {\n    if(k > n) return 0;\n    long long num = factorial(n);\n    long long den = (factorial(k) * factorial(n - k)) % MOD;\n    return (num * modInverse(den, MOD)) % MOD;\n}\n\nint main() {\n    int n, k;\n    scanf(\"%d %d\", &n, &k);\n\n    if(k > n) {\n        printf(\"0\\n\");\n    } else {\n        printf(\"%lld\\n\", binomial(n - 1, k - 1));\n    }\n\n    return 0;\n}",
-    "timestamp": "2025-08-13 09:56:13"
+    "code": "#include <stdio.h>\n#define MOD 1000000007\n\nint dp[1001][1001];\n\nint main() {\n    int n, k;\n    scanf(\"%d %d\", &n, &k);\n\n    if (n < k) {\n        printf(\"0\\n\");\n        return 0;\n    }\n\n    dp[0][0] = 1;\n    for (int i = 1; i <= n; i++) {\n        for (int j = 1; j <= k && j <= i; j++) {\n            dp[i][j] = (dp[i-1][j-1] + (i >= j ? dp[i-j][j] : 0)) % MOD;\n        }\n    }\n\n    printf(\"%d\\n\", dp[n][k]);\n    return 0;\n}"
   },
   {
-    "model": "claude-3-5-haiku-20241022",
+    "model": "claude-sonnet-4-6",
+    "prompt_type": "zero_shot",
+    "language": "c",
+    "code": "#include <stdio.h>\n#include <string.h>\n\n#define MOD 1000000007\n#define MAXN 1001\n\nlong long dp[MAXN][MAXN];\n\nint main() {\n    int n, k;\n    scanf(\"%d %d\", &n, &k);\n    \n    // dp[i][j] = number of partitions of i into exactly j positive parts\n    memset(dp, 0, sizeof(dp));\n    \n    // Base cases\n    dp[0][0] = 1;\n    \n    for (int i = 1; i <= n; i++) {\n        for (int j = 1; j <= i && j <= k; j++) {\n            // partitions of i into j parts:\n            // = partitions of i-1 into j-1 parts (one part is 1, remove it)\n            // + partitions of i-j into j parts (all parts >= 2, subtract 1 from each)\n            dp[i][j] = dp[i-1][j-1];\n            if (i - j >= 0) {\n                dp[i][j] = (dp[i][j] + dp[i-j][j]) % MOD;\n            }\n        }\n    }\n    \n    if (k > n || k <= 0) {\n        printf(\"0\\n\");\n    } else {\n        printf(\"%lld\\n\", dp[n][k]);\n    }\n    \n    return 0;\n}"
+  },
+  {
+    "model": "gpt-5.4",
+    "prompt_type": "zero_shot",
+    "language": "c",
+    "code": "#include <stdio.h>\n\n#define MOD 1000000007LL\n\nint main(void) {\n    long long n, k;\n    if (scanf(\"%lld %lld\", &n, &k) != 2) return 0;\n\n    if (k <= 0 || n < k) {\n        printf(\"0\\n\");\n        return 0;\n    }\n\n    // Number of ways to write n as a sum of k positive integers\n    // (indistinguishable balls, indistinguishable boxes, each box nonempty)\n    // equals C(n-1, k-1).\n    long long N = n - 1;\n    long long R = k - 1;\n\n    if (R > N) {\n        printf(\"0\\n\");\n        return 0;\n    }\n\n    if (R > N - R) R = N - R;\n\n    long long ans = 1;\n    for (long long i = 1; i <= R; i++) {\n        ans = (ans * ((N - R + i) % MOD)) % MOD;\n\n        // Fermat inverse of i modulo MOD\n        long long base = i % MOD, exp = MOD - 2, inv = 1;\n        while (exp > 0) {\n            if (exp & 1) inv = (inv * base) % MOD;\n            base = (base * base) % MOD;\n            exp >>= 1;\n        }\n\n        ans = (ans * inv) % MOD;\n    }\n\n    printf(\"%lld\\n\", ans);\n    return 0;\n}"
+  },
+  {
+    "model": "claude-sonnet-4-6",
     "prompt_type": "zero_shot",
     "language": "python",
-    "code": "def solve(n, k):\n    MOD = 10**9 + 7\n    \n    # Dynamic programming table\n    dp = [[0] * (k + 1) for _ in range(n + 1)]\n    \n    # Base case: ways to distribute 1 ball into 1 box\n    dp[1][1] = 1\n    \n    # Fill the dp table\n    for i in range(2, n + 1):\n        for j in range(1, min(i, k) + 1):\n            dp[i][j] = (dp[i-1][j-1] + j * dp[i-1][j]) % MOD\n    \n    return dp[n][k]\n\n# Read input\nn, k = map(int, input().split())\n\n# Print result\nprint(solve(n, k))",
-    "timestamp": "2025-08-13 09:56:24"
+    "code": "import sys\ninput = sys.stdin.readline\n\nMOD = 10**9 + 7\n\ndef modinv(a, m=MOD):\n    return pow(a, m-2, m)\n\ndef comb(n, r, mod=MOD):\n    if r < 0 or r > n:\n        return 0\n    num = 1\n    den = 1\n    for i in range(r):\n        num = num * (n - i) % mod\n        den = den * (i + 1) % mod\n    return num * modinv(den) % mod\n\nn, k = map(int, input().split())\nprint(comb(n-1, k-1))"
   },
   {
-    "model": "deepseek-v3",
+    "model": "deepseek-chat",
     "prompt_type": "zero_shot",
     "language": "python",
-    "code": "MOD = 10**9 + 7\n\ndef solve():\n    import sys\n    n, k = map(int, sys.stdin.readline().split())\n    \n    if n < k:\n        print(0)\n        return\n    \n    # Initialize a DP table where dp[i][j] represents the number of ways to distribute i balls into j boxes\n    dp = [[0] * (k + 1) for _ in range(n + 1)]\n    dp[0][0] = 1\n    \n    for i in range(1, n + 1):\n        for j in range(1, k + 1):\n            if i >= j:\n                dp[i][j] = (dp[i - 1][j - 1] + dp[i - j][j]) % MOD\n    \n    print(dp[n][k])\n\nsolve()",
-    "timestamp": "2025-08-13 09:56:35"
+    "code": "MOD = 10**9 + 7\n\ndef solve():\n    n, k = map(int, input().split())\n    if n < k:\n        print(0)\n        return\n    \n    dp = [[0] * (k + 1) for _ in range(n + 1)]\n    dp[0][0] = 1\n    \n    for i in range(1, n + 1):\n        for j in range(1, min(i, k) + 1):\n            dp[i][j] = (dp[i - 1][j - 1] + (dp[i - j][j] if i >= j else 0)) % MOD\n    \n    print(dp[n][k])\n\nif __name__ == \"__main__\":\n    solve()"
   },
   {
-    "model": "gpt-4o",
+    "model": "gpt-5.4",
+    "prompt_type": "zero_shot",
+    "language": "python",
+    "code": "import sys\n\nMOD = 10**9 + 7\n\ndef main():\n    data = sys.stdin.read().strip().split()\n    if not data:\n        return\n    n, k = map(int, data)\n\n    # Number of ways to write n as a sum of k positive integers\n    # with indistinguishable boxes and balls = number of partitions\n    # of n into exactly k positive parts.\n    #\n    # DP:\n    # dp[i][j] = number of partitions of i into exactly j positive parts\n    #\n    # Recurrence:\n    # dp[i][j] = dp[i-1][j-1] + dp[i-j][j]\n    # Explanation:\n    # - one part is 1, remove it -> partition of i-1 into j-1 parts\n    # - all parts >= 2, subtract 1 from each part -> partition of i-j into j parts\n\n    if k > n or k <= 0:\n        print(0)\n        return\n\n    dp = [[0] * (k + 1) for _ in range(n + 1)]\n    dp[0][0] = 1\n\n    for i in range(1, n + 1):\n        for j in range(1, min(i, k) + 1):\n            dp[i][j] = dp[i - 1][j - 1]\n            if i >= j:\n                dp[i][j] = (dp[i][j] + dp[i - j][j]) % MOD\n\n    print(dp[n][k] % MOD)\n\nif __name__ == \"__main__\":\n    main()"
+  },
+  {
+    "model": "deepseek-chat",
     "prompt_type": "zero_shot",
     "language": "c++",
-    "code": "#include <iostream>\nusing namespace std;\n\nconst int MOD = 1000000007;\n\n// Function to compute factorial % MOD\nlong long factorial(int n) {\n    long long result = 1;\n    for (int i = 2; i <= n; ++i) {\n        result = (result * i) % MOD;\n    }\n    return result;\n}\n\n// Function to compute modular inverse using Fermat's Little Theorem\nlong long modInverse(long long a, long long m) {\n    long long result = 1, power = m - 2;\n    while (power) {\n        if (power % 2 == 1) {\n            result = (result * a) % m;\n        }\n        a = (a * a) % m;\n        power /= 2;\n    }\n    return result;\n}\n\n// Function to compute C(n, k) % MOD using the above functions\nlong long combinations(int n, int k) {\n    if (k > n) return 0;\n    long long num = factorial(n);\n    long long denom = (factorial(k) * factorial(n - k)) % MOD;\n    return (num * modInverse(denom, MOD)) % MOD;\n}\n\nint main() {\n    int n, k;\n    cin >> n >> k;\n\n    // Calculate the number of ways to distribute n balls into k boxes\n    // Each box must contain at least one ball.\n    if (k > n) {\n        cout << 0 << endl;\n    } else {\n        cout << combinations(n - 1, k - 1) << endl;\n    }\n\n    return 0;\n}",
-    "timestamp": "2025-08-13 11:55:58"
+    "code": "#include <bits/stdc++.h>\nusing namespace std;\n\nconst int MOD = 1e9 + 7;\n\nint main() {\n    ios::sync_with_stdio(false);\n    cin.tie(nullptr);\n\n    int n, k;\n    cin >> n >> k;\n\n    if (n < k) {\n        cout << 0 << \"\\n\";\n        return 0;\n    }\n\n    // dp[i][j] = ways to partition i into exactly j parts\n    vector<vector<int>> dp(n + 1, vector<int>(k + 1, 0));\n    dp[0][0] = 1;\n\n    for (int i = 1; i <= n; i++) {\n        for (int j = 1; j <= min(i, k); j++) {\n            dp[i][j] = (dp[i - 1][j - 1] + dp[i - j][j]) % MOD;\n        }\n    }\n\n    cout << dp[n][k] << \"\\n\";\n    return 0;\n}"
+  },
+  {
+    "model": "claude-sonnet-4-6",
+    "prompt_type": "zero_shot",
+    "language": "c++",
+    "code": "#include <bits/stdc++.h>\nusing namespace std;\n\nconst long long MOD = 1e9 + 7;\n\nlong long power(long long base, long long exp, long long mod) {\n    long long result = 1;\n    base %= mod;\n    while (exp > 0) {\n        if (exp & 1) result = result * base % mod;\n        base = base * base % mod;\n        exp >>= 1;\n    }\n    return result;\n}\n\nlong long modInverse(long long a, long long mod) {\n    return power(a, mod - 2, mod);\n}\n\nlong long nCr(long long n, long long r, long long mod) {\n    if (r < 0 || r > n) return 0;\n    if (r == 0 || r == n) return 1;\n    \n    // Compute n! / (r! * (n-r)!)\n    // For large n, we compute iteratively\n    // min(r, n-r) to minimize computation\n    if (r > n - r) r = n - r;\n    \n    long long num = 1, den = 1;\n    for (long long i = 0; i < r; i++) {\n        num = num * ((n - i) % mod) % mod;\n        den = den * ((i + 1) % mod) % mod;\n    }\n    \n    return num % mod * modInverse(den, mod) % mod;\n}\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n    \n    long long n, k;\n    cin >> n >> k;\n    \n    cout << nCr(n - 1, k - 1, MOD) << endl;\n    \n    return 0;\n}"
+  },
+  {
+    "model": "gpt-5.4",
+    "prompt_type": "zero_shot",
+    "language": "c++",
+    "code": "#include <bits/stdc++.h>\nusing namespace std;\n\nstatic const long long MOD = 1000000007LL;\n\nint main() {\n    ios::sync_with_stdio(false);\n    cin.tie(nullptr);\n\n    long long n, k;\n    cin >> n >> k;\n\n    // Number of ways to distribute n indistinguishable balls\n    // into k indistinguishable non-empty boxes equals the number\n    // of integer partitions of n into exactly k positive parts.\n    //\n    // DP recurrence:\n    // dp[i][j] = number of partitions of i into exactly j positive parts\n    // dp[i][j] = dp[i-1][j-1] + dp[i-j][j]\n    //\n    // Explanation:\n    // - Put 1 ball in each of the j boxes first, then partition remaining i-j\n    //   balls into j boxes: dp[i-j][j]\n    // - Or make one box contain exactly 1 ball and partition i-1 into j-1 boxes:\n    //   dp[i-1][j-1]\n\n    if (k > n || k <= 0 || n <= 0) {\n        cout << 0 << '\\n';\n        return 0;\n    }\n\n    vector<vector<long long>> dp(n + 1, vector<long long>(k + 1, 0));\n    dp[0][0] = 1;\n\n    for (long long i = 1; i <= n; ++i) {\n        for (long long j = 1; j <= k && j <= i; ++j) {\n            dp[i][j] = dp[i - 1][j - 1];\n            if (i >= j) {\n                dp[i][j] = (dp[i][j] + dp[i - j][j]) % MOD;\n            }\n        }\n    }\n\n    cout << dp[n][k] % MOD << '\\n';\n    return 0;\n}"
+  },
+  {
+    "model": "deepseek-chat",
+    "prompt_type": "zero_shot",
+    "language": "java",
+    "code": "import java.util.Scanner;\n\npublic class Main {\n    static final int MOD = 1_000_000_007;\n\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        int n = sc.nextInt();\n        int k = sc.nextInt();\n        sc.close();\n\n        if (k > n) {\n            System.out.println(0);\n            return;\n        }\n\n        int[][] dp = new int[n + 1][k + 1];\n        dp[0][0] = 1;\n\n        for (int i = 1; i <= n; i++) {\n            for (int j = 1; j <= k && j <= i; j++) {\n                dp[i][j] = (dp[i - 1][j - 1] + (i >= j ? dp[i - j][j] : 0)) % MOD;\n            }\n        }\n\n        System.out.println(dp[n][k]);\n    }\n}"
+  },
+  {
+    "model": "claude-sonnet-4-6",
+    "prompt_type": "zero_shot",
+    "language": "java",
+    "code": "import java.util.*;\nimport java.io.*;\n\npublic class Main {\n    static final int MOD = 1_000_000_007;\n    \n    public static void main(String[] args) throws IOException {\n        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));\n        StringTokenizer st = new StringTokenizer(br.readLine());\n        int n = Integer.parseInt(st.nextToken());\n        int k = Integer.parseInt(st.nextToken());\n        \n        if (k > n) {\n            System.out.println(0);\n            return;\n        }\n        \n        // dp[i][j] = number of ways to partition i into exactly j positive parts\n        long[][] dp = new long[n + 1][k + 1];\n        dp[0][0] = 1;\n        \n        for (int i = 1; i <= n; i++) {\n            for (int j = 1; j <= Math.min(i, k); j++) {\n                dp[i][j] = dp[i-1][j-1];\n                if (i - j >= 0) {\n                    dp[i][j] = (dp[i][j] + dp[i-j][j]) % MOD;\n                }\n            }\n        }\n        \n        System.out.println(dp[n][k]);\n    }\n}"
+  },
+  {
+    "model": "gpt-5.4",
+    "prompt_type": "zero_shot",
+    "language": "java",
+    "code": "import java.io.*;\nimport java.util.*;\n\npublic class Main {\n    static final long MOD = 1_000_000_007L;\n\n    public static void main(String[] args) throws Exception {\n        FastScanner fs = new FastScanner(System.in);\n        long n = fs.nextLong();\n        long k = fs.nextLong();\n\n        // Number of ways to distribute n indistinguishable balls\n        // into k indistinguishable nonempty boxes\n        // = number of partitions of n into exactly k positive parts.\n        //\n        // A standard DP:\n        // p(i, j) = p(i-1, j-1) + p(i-j, j)\n        //\n        // where:\n        // - p(i-1, j-1): one box has exactly 1 ball\n        // - p(i-j, j): every box has at least 1, remove 1 from each box\n        //\n        // Base:\n        // p(0, 0) = 1\n        // p(i, 0) = 0 for i > 0\n        // p(i, j) = 0 if j > i\n\n        if (k < 0 || n < 0 || k > n) {\n            System.out.println(0);\n            return;\n        }\n\n        int N = (int) n;\n        int K = (int) k;\n\n        long[][] dp = new long[N + 1][K + 1];\n        dp[0][0] = 1;\n\n        for (int i = 1; i <= N; i++) {\n            for (int j = 1; j <= K && j <= i; j++) {\n                long ways = dp[i - 1][j - 1];\n                if (i >= j) {\n                    ways += dp[i - j][j];\n                }\n                dp[i][j] = ways % MOD;\n            }\n        }\n\n        System.out.println(dp[N][K] % MOD);\n    }\n\n    static class FastScanner {\n        private final InputStream in;\n        private final byte[] buffer = new byte[1 << 16];\n        private int ptr = 0, len = 0;\n\n        FastScanner(InputStream is) {\n            in = is;\n        }\n\n        private int read() throws IOException {\n            if (ptr >= len) {\n                len = in.read(buffer);\n                ptr = 0;\n                if (len <= 0) return -1;\n            }\n            return buffer[ptr++];\n        }\n\n        long nextLong() throws IOException {\n            int c;\n            do {\n                c = read();\n            } while (c <= ' ' && c != -1);\n\n            long sign = 1;\n            if (c == '-') {\n                sign = -1;\n                c = read();\n            }\n\n            long val = 0;\n            while (c > ' ') {\n                val = val * 10 + (c - '0');\n                c = read();\n            }\n            return val * sign;\n        }\n    }\n}"
   }
 ]

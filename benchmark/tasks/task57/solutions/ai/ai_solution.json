@@ -1,23 +1,20 @@
 [
   {
-    "model": "claude-3-5-haiku-20241022",
-    "prompt_type": "zero_shot",
-    "language": "Python",
-    "code": "def solve(n, k, p, x, y, a):\n    current_sum = sum(a)\n    current_sorted = sorted(a)\n    \n    for _ in range(n - k):\n        if current_sum > x:\n            return \"-1\"\n        \n        if len(current_sorted) == n // 2:\n            current_sorted.append(1)\n            current_sum += 1\n        elif current_sorted[n // 2] < y:\n            current_sorted.append(y)\n            current_sum += y\n        else:\n            current_sorted.append(1)\n            current_sum += 1\n        \n        current_sorted.sort()\n    \n    if current_sum > x:\n        return \"-1\"\n    \n    return \" \".join(map(str, current_sorted[k:]))\n\nn, k, p, x, y = map(int, input().split())\na = list(map(int, input().split()))\n\nprint(solve(n, k, p, x, y, a))",
-    "timestamp": "2025-08-05 17:33:51"
-  },
-  {
-    "model": "deepseek-v3",
-    "prompt_type": "zero_shot",
-    "language": "Python",
-    "code": "n, k, p, x, y = map(int, input().split())\na = list(map(int, input().split()))\nsum_so_far = sum(a)\nremaining = n - k\nmin_needed = max(0, (n + 1) // 2 - sum(1 for num in a if num >= y))\nif min_needed > remaining:\n    print(-1)\nelse:\n    # We need to add at least 'min_needed' elements >= y, and the rest can be 1\n    added_high = min_needed\n    added_low = remaining - added_high\n    marks = [y] * added_high + [1] * added_low\n    total = sum_so_far + sum(marks)\n    if total > x:\n        print(-1)\n    else:\n        # Now check if the median is >= y\n        combined = a + marks\n        combined_sorted = sorted(combined)\n        median = combined_sorted[(n - 1) // 2]\n        if median >= y:\n            print(' '.join(map(str, marks)))\n        else:\n            print(-1)",
-    "timestamp": "2025-08-05 17:34:51"
-  },
-  {
-    "model": "gpt-4o",
+    "model": "deepseek-chat",
     "prompt_type": "zero_shot",
     "language": "python",
-    "code": "def vova_marks(n, k, p, x, y, marks):\n    remaining_tests = n - k\n    current_sum = sum(marks)\n    needed_sum = x - current_sum\n    median_position = (n + 1) // 2\n\n    marks.sort()\n    less_than_y = sum(1 for m in marks if m < y)\n\n    min_required_to_median = max(0, median_position - less_than_y)\n    if min_required_to_median + remaining_tests > remaining_tests:\n        return \"-1\"\n\n    needed_sum -= min_required_to_median * y\n    if needed_sum > (remaining_tests - min_required_to_median) * (p - 1):\n        return \"-1\"\n\n    result = [y] * min_required_to_median\n    if remaining_tests > min_required_to_median:\n        result.extend([1] * (remaining_tests - min_required_to_median))\n\n    total_sum = current_sum + sum(result)\n    if total_sum > x:\n        return \"-1\"\n    \n    return \" \".join(map(str, result))\n\n# Example usage\nn, k, p, x, y = 5, 3, 5, 18, 4\nmarks = [3, 5, 4]\nprint(vova_marks(n, k, p, x, y, marks))  # Output: \"4 1\"",
-    "timestamp": "2025-08-12 21:55:34"
+    "code": "n, k, p, x, y = map(int, input().split())\na = list(map(int, input().split()))\n\n# Count existing marks less than y\nless_y = sum(1 for v in a if v < y)\ngreater_equal_y = k - less_y\n\n# We need at least (n+1)//2 marks >= y\nneed_ge_y = (n + 1) // 2 - greater_equal_y\nif need_ge_y < 0:\n    need_ge_y = 0\n\n# The remaining slots after putting needed >= y marks\nremaining = n - k - need_ge_y\n\n# We cannot have more than n//2 marks less than y\nif less_y > n // 2:\n    print(-1)\nelse:\n    # Fill needed >= y marks with y, fill rest with 1\n    result = [y] * need_ge_y + [1] * remaining\n    # Check sum constraint\n    total_sum = sum(a) + sum(result)\n    if total_sum > x:\n        print(-1)\n    else:\n        print(' '.join(map(str, result)))"
+  },
+  {
+    "model": "claude-sonnet-4-6",
+    "prompt_type": "zero_shot",
+    "language": "python",
+    "code": "def solve():\n    import sys\n    line1 = input().split()\n    n, k, p, x, y = int(line1[0]), int(line1[1]), int(line1[2]), int(line1[3]), int(line1[4])\n    \n    if k > 0:\n        marks = list(map(int, input().split()))\n    else:\n        input()  # read empty line or handle\n        marks = []\n    \n    median_pos = (n + 1) // 2  # 1-indexed position in sorted array\n    \n    count_ge = sum(1 for a in marks if a >= y)\n    need = max(0, median_pos - count_ge)\n    \n    remaining = n - k\n    \n    if need > remaining:\n        print(-1)\n        return\n    \n    # Assign 'need' marks as y, rest as 1\n    result = [y] * need + [1] * (remaining - need)\n    \n    total_sum = sum(marks) + sum(result)\n    \n    if total_sum > x:\n        print(-1)\n        return\n    \n    print(*result)\n\nsolve()"
+  },
+  {
+    "model": "gpt-5.4",
+    "prompt_type": "zero_shot",
+    "language": "python",
+    "code": "import sys\n\ndef solve():\n    data = list(map(int, sys.stdin.read().split()))\n    if not data:\n        return\n\n    n, k, p, x, y = data[:5]\n    a = data[5:5 + k]\n\n    need_ge = (n + 1) // 2  # at least this many numbers must be >= y\n\n    current_ge = sum(1 for v in a if v >= y)\n    remaining = n - k\n\n    # Minimum count of added numbers that must be >= y\n    add_ge = max(0, need_ge - current_ge)\n\n    if add_ge > remaining:\n        print(-1)\n        return\n\n    # To minimize total sum:\n    # - choose exactly add_ge numbers as y\n    # - choose all other remaining numbers as 1\n    ans = [y] * add_ge + [1] * (remaining - add_ge)\n\n    if sum(a) + sum(ans) > x:\n        print(-1)\n        return\n\n    print(*ans)\n\nif __name__ == \"__main__\":\n    solve()"
   }
 ]

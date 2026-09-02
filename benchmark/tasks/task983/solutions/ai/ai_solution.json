@@ -1,86 +1,74 @@
 [
   {
-    "model": "claude-3-5-haiku-20241022",
-    "prompt_type": "zero_shot",
-    "language": "C",
-    "code": "#include <stdio.h>\n#include <stdlib.h>\n\nint main() {\n    int N;\n    scanf(\"%d\", &N);\n    \n    int a[N];\n    for (int i = 0; i < N; i++) {\n        scanf(\"%d\", &a[i]);\n    }\n    \n    // Placeholder implementation\n    int result = 0;\n    for (int i = 0; i < N; i++) {\n        result += a[i];\n    }\n    \n    printf(\"%d\\n\", result);\n    \n    return 0;\n}",
-    "timestamp": "2025-08-05 23:33:18"
-  },
-  {
-    "model": "deepseek-v3",
-    "prompt_type": "zero_shot",
-    "language": "C",
-    "code": "#include <stdio.h>\n\nint main() {\n    int N;\n    scanf(\"%d\", &N);\n    int a[N];\n    for (int i = 0; i < N; i++) {\n        scanf(\"%d\", &a[i]);\n    }\n\n    long long result = 0;\n    for (int i = 0; i < N; i++) {\n        result += (long long)(i + 1) * a[i];\n    }\n\n    printf(\"%lld\\n\", result);\n    return 0;\n}",
-    "timestamp": "2025-08-05 23:33:25"
-  },
-  {
-    "model": "deepseek-v3",
-    "prompt_type": "zero_shot",
-    "language": "C++",
-    "code": "#include <iostream>\n#include <vector>\n#include <algorithm>\n\nusing namespace std;\n\nint main() {\n    int N;\n    cin >> N;\n    vector<int> a(N);\n    for (int i = 0; i < N; ++i) {\n        cin >> a[i];\n    }\n\n    vector<int> sorted_a = a;\n    sort(sorted_a.begin(), sorted_a.end());\n\n    for (int i = 0; i < N; ++i) {\n        if (a[i] == sorted_a[N-1]) {\n            cout << sorted_a[N-2] << endl;\n            break;\n        }\n    }\n\n    return 0;\n}",
-    "timestamp": "2025-08-05 23:33:43"
-  },
-  {
-    "model": "deepseek-v3",
-    "prompt_type": "zero_shot",
-    "language": "Java",
-    "code": "import java.util.Scanner;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        int N = scanner.nextInt();\n        int[] a = new int[N + 1];\n        int[] pos = new int[N + 1];\n        \n        for (int i = 1; i <= N; i++) {\n            a[i] = scanner.nextInt();\n            pos[a[i]] = i;\n        }\n        \n        long result = 0;\n        for (int i = 1; i <= N; i++) {\n            result += (long) i * pos[i];\n        }\n        \n        System.out.println(result);\n    }\n}",
-    "timestamp": "2025-08-05 23:34:14"
-  },
-  {
-    "model": "claude-3-5-haiku-20241022",
-    "prompt_type": "zero_shot",
-    "language": "Java",
-    "code": "import java.util.*;\nimport java.io.*;\n\npublic class SnukePermutation {\n    public static void main(String[] args) throws IOException {\n        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));\n        \n        // Read N\n        int N = Integer.parseInt(br.readLine());\n        \n        // Read permutation\n        String[] input = br.readLine().split(\" \");\n        int[] A = new int[N];\n        for (int i = 0; i < N; i++) {\n            A[i] = Integer.parseInt(input[i]);\n        }\n        \n        // Solve the problem\n        int result = solve(N, A);\n        \n        // Print result\n        System.out.println(result);\n    }\n    \n    static int solve(int N, int[] A) {\n        // Placeholder implementation - replace with actual problem-specific logic\n        return 0;\n    }\n}",
-    "timestamp": "2025-08-05 23:34:19"
-  },
-  {
-    "model": "claude-3-5-haiku-20241022",
-    "prompt_type": "zero_shot",
-    "language": "C++",
-    "code": "#include <iostream>\n#include <vector>\n#include <algorithm>\n\nusing namespace std;\n\nint main() {\n    int N;\n    cin >> N;\n    \n    vector<int> A(N);\n    for (int i = 0; i < N; ++i) {\n        cin >> A[i];\n    }\n    \n    vector<int> sorted_A = A;\n    sort(sorted_A.begin(), sorted_A.end());\n    \n    int result = 0;\n    for (int i = 0; i < N; ++i) {\n        result += abs(A[i] - sorted_A[i]);\n    }\n    \n    cout << result << endl;\n    \n    return 0;\n}",
-    "timestamp": "2025-08-05 23:34:22"
-  },
-  {
-    "model": "gpt-4o",
-    "prompt_type": "zero_shot",
-    "language": "python",
-    "code": "def find_certain_value(permutation):\n    n = len(permutation)\n    # Assuming the 'certain value' is the sum of the permutation\n    return sum(permutation)\n\n# Example usage\npermutation = [3, 1, 4, 2]  # Example permutation\nvalue = find_certain_value(permutation)\nprint(value)",
-    "timestamp": "2025-08-13 16:05:20"
-  },
-  {
-    "model": "gpt-4o",
-    "prompt_type": "zero_shot",
-    "language": "java",
-    "code": "import java.util.Scanner;\n\npublic class SnukePermutation {\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        int N = scanner.nextInt();\n        int[] permutation = new int[N];\n        \n        for (int i = 0; i < N; i++) {\n            permutation[i] = scanner.nextInt();\n        }\n        \n        // Initially set the max and min as the first element\n        int maxValue = permutation[0];\n        int minValue = permutation[0];\n        \n        // Loop through the permutation to find the max and min values\n        for (int i = 1; i < N; i++) {\n            if (permutation[i] > maxValue) {\n                maxValue = permutation[i];\n            }\n            if (permutation[i] < minValue) {\n                minValue = permutation[i];\n            }\n        }\n        \n        // Output the result\n        System.out.println(\"Max Value: \" + maxValue);\n        System.out.println(\"Min Value: \" + minValue);\n        \n        scanner.close();\n    }\n}",
-    "timestamp": "2025-08-13 16:05:23"
-  },
-  {
-    "model": "gpt-4o",
+    "model": "deepseek-chat",
     "prompt_type": "zero_shot",
     "language": "c",
-    "code": "#include <stdio.h>\n\nint findPermValue(int perm[], int N) {\n    int value = 0;\n\n    for (int i = 0; i < N; i++) {\n        value += perm[i] * (i + 1);\n    }\n\n    return value;\n}\n\nint main() {\n    int N;\n    scanf(\"%d\", &N);\n\n    int perm[N];\n    for (int i = 0; i < N; i++) {\n        scanf(\"%d\", &perm[i]);\n    }\n\n    int result = findPermValue(perm, N);\n    printf(\"%d\\n\", result);\n\n    return 0;\n}",
-    "timestamp": "2025-08-13 16:05:26"
+    "code": "#include <stdio.h>\n#include <stdlib.h>\n\n// Fenwick tree (Binary Indexed Tree) for counting inversions\ntypedef struct {\n    int n;\n    int* tree;\n} BIT;\n\nBIT* BIT_new(int n) {\n    BIT* bit = (BIT*)malloc(sizeof(BIT));\n    bit->n = n;\n    bit->tree = (int*)calloc(n + 1, sizeof(int));\n    return bit;\n}\n\nvoid BIT_add(BIT* bit, int idx, int delta) {\n    while (idx <= bit->n) {\n        bit->tree[idx] += delta;\n        idx += idx & -idx;\n    }\n}\n\nint BIT_sum(BIT* bit, int idx) {\n    int s = 0;\n    while (idx > 0) {\n        s += bit->tree[idx];\n        idx -= idx & -idx;\n    }\n    return s;\n}\n\nvoid BIT_free(BIT* bit) {\n    free(bit->tree);\n    free(bit);\n}\n\nint main() {\n    int N;\n    scanf(\"%d\", &N);\n    \n    int* a = (int*)malloc(N * sizeof(int));\n    for (int i = 0; i < N; i++) {\n        scanf(\"%d\", &a[i]);\n    }\n    \n    // Count inversions using BIT\n    BIT* bit = BIT_new(N);\n    long long inv_count = 0;\n    for (int i = 0; i < N; i++) {\n        inv_count += BIT_sum(bit, N) - BIT_sum(bit, a[i]);\n        BIT_add(bit, a[i], 1);\n    }\n    \n    // The required value is the number of inversions in the permutation\n    printf(\"%lld\\n\", inv_count);\n    \n    BIT_free(bit);\n    free(a);\n    return 0;\n}"
   },
   {
-    "model": "gpt-4o",
+    "model": "claude-sonnet-4-6",
+    "prompt_type": "zero_shot",
+    "language": "c",
+    "code": "#include <stdio.h>\n#include <stdlib.h>\n\nint main() {\n    int n;\n    scanf(\"%d\", &n);\n    \n    long long *a = malloc(n * sizeof(long long));\n    for (int i = 0; i < n; i++) {\n        scanf(\"%lld\", &a[i]);\n    }\n    \n    // For each element, find the span where it's the minimum\n    // Using monotonic stack\n    int *left = malloc(n * sizeof(int));\n    int *right = malloc(n * sizeof(int));\n    int *stack = malloc(n * sizeof(int));\n    int top = 0;\n    \n    // Find left boundary (nearest smaller to left)\n    for (int i = 0; i < n; i++) {\n        while (top > 0 && a[stack[top-1]] >= a[i]) top--;\n        left[i] = (top == 0) ? -1 : stack[top-1];\n        stack[top++] = i;\n    }\n    \n    top = 0;\n    // Find right boundary (nearest smaller to right)\n    for (int i = n-1; i >= 0; i--) {\n        while (top > 0 && a[stack[top-1]] >= a[i]) top--;\n        right[i] = (top == 0) ? n : stack[top-1];\n        stack[top++] = i;\n    }\n    \n    long long ans = 0;\n    for (int i = 0; i < n; i++) {\n        long long len = (long long)(right[i] - left[i] - 1);\n        long long val = a[i] * len;\n        if (val > ans) ans = val;\n    }\n    \n    printf(\"%lld\\n\", ans);\n    \n    free(a); free(left); free(right); free(stack);\n    return 0;\n}"
+  },
+  {
+    "model": "gpt-5.4",
+    "prompt_type": "zero_shot",
+    "language": "c",
+    "code": "#include <stdio.h>\n#include <stdlib.h>\n\ntypedef long long ll;\n\nstatic int cmp_ll(const void *a, const void *b) {\n    ll x = *(const ll *)a;\n    ll y = *(const ll *)b;\n    if (x < y) return -1;\n    if (x > y) return 1;\n    return 0;\n}\n\nint main(void) {\n    int N;\n    if (scanf(\"%d\", &N) != 1) return 0;\n\n    int *pos = (int *)malloc((N + 1) * sizeof(int));\n    for (int i = 1; i <= N; i++) {\n        int x;\n        scanf(\"%d\", &x);\n        pos[x] = i;\n    }\n\n    ll *ans = (ll *)malloc((N + 1) * sizeof(ll));\n    ll *arr = (ll *)malloc((N + 2) * sizeof(ll));\n\n    int m = 0;\n    arr[m++] = 0;\n    arr[m++] = N + 1;\n\n    for (int x = N; x >= 1; x--) {\n        int p = pos[x];\n\n        qsort(arr, m, sizeof(ll), cmp_ll);\n\n        int l = 0, r = m;\n        while (r - l > 1) {\n            int mid = (l + r) / 2;\n            if (arr[mid] < p) l = mid;\n            else r = mid;\n        }\n\n        ll L = arr[l];\n        ll R = arr[r];\n        ans[x] = (ll)(p - L) * (R - p);\n\n        arr[m++] = p;\n    }\n\n    for (int i = 1; i <= N; i++) {\n        printf(\"%lld\\n\", ans[i]);\n    }\n\n    free(pos);\n    free(ans);\n    free(arr);\n    return 0;\n}"
+  },
+  {
+    "model": "claude-sonnet-4-6",
     "prompt_type": "zero_shot",
     "language": "c++",
-    "code": "#include <iostream>\n#include <vector>\n\nint main() {\n    int N;\n    std::cin >> N;\n    std::vector<int> a(N);\n    \n    for(int i = 0; i < N; i++) {\n        std::cin >> a[i];\n    }\n\n    // Finding the sum of the array as a \"certain value\"\n    int certainValue = 0;\n    for(int i = 0; i < N; i++) {\n        certainValue += a[i];\n    }\n\n    std::cout << certainValue << std::endl;\n\n    return 0;\n}",
-    "timestamp": "2025-08-13 16:05:30"
+    "code": "#include <bits/stdc++.h>\nusing namespace std;\n\nint bit[200005];\nint n;\n\nvoid update(int i) {\n    for (; i <= n; i += i & (-i))\n        bit[i]++;\n}\n\nint query(int i) {\n    int s = 0;\n    for (; i > 0; i -= i & (-i))\n        s += bit[i];\n    return s;\n}\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n    \n    cin >> n;\n    vector<int> a(n);\n    for (int i = 0; i < n; i++) cin >> a[i];\n    \n    long long inv = 0;\n    for (int i = 0; i < n; i++) {\n        inv += i - query(a[i]);\n        update(a[i]);\n    }\n    \n    cout << inv << endl;\n    \n    return 0;\n}"
   },
   {
-    "model": "claude-3-5-haiku-20241022",
+    "model": "deepseek-chat",
     "prompt_type": "zero_shot",
-    "language": "python",
-    "code": "def solve(N, permutation):\n    # Find the number of inversions in the permutation\n    inversions = 0\n    for i in range(N):\n        for j in range(i+1, N):\n            if permutation[i] > permutation[j]:\n                inversions += 1\n    \n    return inversions",
-    "timestamp": "2025-08-13 16:05:33"
+    "language": "c++",
+    "code": "#include <bits/stdc++.h>\nusing namespace std;\n\nstruct Fenwick {\n    int n;\n    vector<int> bit;\n    Fenwick(int n) : n(n), bit(n + 1, 0) {}\n    void add(int idx, int delta) {\n        for (++idx; idx <= n; idx += idx & -idx)\n            bit[idx] += delta;\n    }\n    int sum(int idx) {\n        int res = 0;\n        for (++idx; idx > 0; idx -= idx & -idx)\n            res += bit[idx];\n        return res;\n    }\n    int range_sum(int l, int r) {\n        return sum(r) - (l > 0 ? sum(l - 1) : 0);\n    }\n};\n\nint main() {\n    ios::sync_with_stdio(false);\n    cin.tie(nullptr);\n\n    int N;\n    cin >> N;\n    vector<int> a(N);\n    for (int i = 0; i < N; ++i) {\n        cin >> a[i];\n        a[i]--; // make 0-based\n    }\n\n    Fenwick ft(N);\n    long long inversions = 0;\n    for (int i = 0; i < N; ++i) {\n        inversions += ft.range_sum(a[i] + 1, N - 1);\n        ft.add(a[i], 1);\n    }\n\n    cout << inversions << \"\\n\";\n    return 0;\n}"
   },
   {
-    "model": "deepseek-v3",
+    "model": "gpt-5.4",
+    "prompt_type": "zero_shot",
+    "language": "c++",
+    "code": "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    ios::sync_with_stdio(false);\n    cin.tie(nullptr);\n\n    int N;\n    cin >> N;\n    vector<int> a(N + 1), pos(N + 1);\n    for (int i = 1; i <= N; ++i) {\n        cin >> a[i];\n        pos[a[i]] = i;\n    }\n\n    set<int> s;\n    s.insert(0);\n    s.insert(0);\n    s.insert(N + 1);\n    s.insert(N + 1);\n\n    long long ans = 0;\n\n    for (int x = N; x >= 1; --x) {\n        int p = pos[x];\n        auto it = s.lower_bound(p);\n\n        int r1 = *it; ++it;\n        int r2 = *it;\n        --it; --it;\n        int l1 = *it; --it;\n        int l2 = *it;\n\n        long long cnt = 1LL * (l1 - l2) * (r1 - p) + 1LL * (p - l1) * (r2 - r1);\n        ans += 1LL * x * cnt;\n\n        s.insert(p);\n    }\n\n    cout << ans << '\\n';\n    return 0;\n}"
+  },
+  {
+    "model": "deepseek-chat",
+    "prompt_type": "zero_shot",
+    "language": "java",
+    "code": "import java.io.*;\nimport java.util.*;\n\npublic class Main {\n    public static void main(String[] args) throws IOException {\n        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));\n        int N = Integer.parseInt(br.readLine());\n        int[] a = new int[N];\n        StringTokenizer st = new StringTokenizer(br.readLine());\n        for (int i = 0; i < N; i++) {\n            a[i] = Integer.parseInt(st.nextToken());\n        }\n\n        // Find the minimum element and its position\n        int minVal = Integer.MAX_VALUE;\n        int minPos = -1;\n        for (int i = 0; i < N; i++) {\n            if (a[i] < minVal) {\n                minVal = a[i];\n                minPos = i;\n            }\n        }\n\n        // The answer is the position (1-indexed) of the smallest element\n        System.out.println(minPos + 1);\n    }\n}"
+  },
+  {
+    "model": "claude-sonnet-4-6",
+    "prompt_type": "zero_shot",
+    "language": "java",
+    "code": "import java.util.*;\nimport java.io.*;\n\npublic class Main {\n    static long mergeCount(int[] arr, int l, int r) {\n        if (r - l <= 1) return 0;\n        int mid = (l + r) / 2;\n        long count = mergeCount(arr, l, mid) + mergeCount(arr, mid, r);\n        int[] tmp = new int[r - l];\n        int i = l, j = mid, k = 0;\n        while (i < mid && j < r) {\n            if (arr[i] <= arr[j]) {\n                tmp[k++] = arr[i++];\n            } else {\n                count += mid - i;\n                tmp[k++] = arr[j++];\n            }\n        }\n        while (i < mid) tmp[k++] = arr[i++];\n        while (j < r) tmp[k++] = arr[j++];\n        for (int x = 0; x < tmp.length; x++) arr[l + x] = tmp[x];\n        return count;\n    }\n\n    public static void main(String[] args) throws IOException {\n        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));\n        int n = Integer.parseInt(br.readLine().trim());\n        StringTokenizer st = new StringTokenizer(br.readLine());\n        int[] a = new int[n];\n        for (int i = 0; i < n; i++) a[i] = Integer.parseInt(st.nextToken());\n        System.out.println(mergeCount(a, 0, n));\n    }\n}"
+  },
+  {
+    "model": "gpt-5.4",
+    "prompt_type": "zero_shot",
+    "language": "java",
+    "code": "import java.io.*;\nimport java.util.*;\n\npublic class Main {\n    // Fast scanner\n    static class FastScanner {\n        private final InputStream in;\n        private final byte[] buffer = new byte[1 << 16];\n        private int ptr = 0, len = 0;\n\n        FastScanner(InputStream is) {\n            in = is;\n        }\n\n        private int read() throws IOException {\n            if (ptr >= len) {\n                len = in.read(buffer);\n                ptr = 0;\n                if (len <= 0) return -1;\n            }\n            return buffer[ptr++];\n        }\n\n        int nextInt() throws IOException {\n            int c;\n            do {\n                c = read();\n            } while (c <= ' ' && c != -1);\n            int sign = 1;\n            if (c == '-') {\n                sign = -1;\n                c = read();\n            }\n            int val = 0;\n            while (c > ' ') {\n                val = val * 10 + (c - '0');\n                c = read();\n            }\n            return val * sign;\n        }\n    }\n\n    public static void main(String[] args) throws Exception {\n        FastScanner fs = new FastScanner(System.in);\n        int N = fs.nextInt();\n        int[] pos = new int[N + 1];\n        for (int i = 1; i <= N; i++) {\n            int a = fs.nextInt();\n            pos[a] = i;\n        }\n\n        // TreeSet keeps positions of already processed larger values.\n        // Add sentinels twice on each side to simplify counting.\n        TreeSet<Integer> set = new TreeSet<>();\n        set.add(0);\n        set.add(0);\n        set.add(N + 1);\n        set.add(N + 1);\n\n        long ans = 0;\n\n        for (int x = N; x >= 1; x--) {\n            int p = pos[x];\n\n            Integer r1 = set.higher(p);\n            Integer r2 = set.higher(r1);\n            Integer l1 = set.lower(p);\n            Integer l2 = set.lower(l1);\n\n            long leftCount = l1 - l2;\n            long midLeft = p - l1;\n            long rightCount = r2 - r1;\n            long midRight = r1 - p;\n\n            // Number of subarrays where x is the second maximum:\n            // choose one larger element on the left nearest side, or on the right nearest side.\n            long cnt = leftCount * midRight + midLeft * rightCount;\n            ans += cnt * x;\n\n            set.add(p);\n        }\n\n        System.out.println(ans);\n    }\n}"
+  },
+  {
+    "model": "deepseek-chat",
     "prompt_type": "zero_shot",
     "language": "python",
-    "code": "import sys\n\ndef solve():\n    N = int(sys.stdin.readline())\n    a = list(map(int, sys.stdin.readline().split()))\n    pos = [0] * (N + 1)\n    for idx, num in enumerate(a):\n        pos[num] = idx + 1  # 1-based index\n    \n    # The problem is to find the number of i where pos[i] < pos[i+1]\n    res = 0\n    for i in range(1, N):\n        if pos[i] < pos[i+1]:\n            res += 1\n    print(N - res)\n\nsolve()",
-    "timestamp": "2025-08-13 16:05:43"
+    "code": "n = int(input())\na = list(map(int, input().split()))\n\npos = [0] * (n + 1)\nfor i, val in enumerate(a):\n    pos[val] = i\n\nl = [0] * n\nr = [0] * n\n\nstack = []\nfor i in range(n):\n    while stack and a[stack[-1]] < a[i]:\n        stack.pop()\n    l[i] = stack[-1] if stack else -1\n    stack.append(i)\n\nstack = []\nfor i in range(n - 1, -1, -1):\n    while stack and a[stack[-1]] < a[i]:\n        stack.pop()\n    r[i] = stack[-1] if stack else n\n    stack.append(i)\n\nans = 0\nfor i in range(n):\n    left_len = i - l[i]\n    right_len = r[i] - i\n    ans += a[i] * left_len * right_len\n\nprint(ans)"
+  },
+  {
+    "model": "claude-sonnet-4-6",
+    "prompt_type": "zero_shot",
+    "language": "python",
+    "code": "import sys\nfrom sys import stdin\n\ndef solve():\n    input_data = stdin.read().split()\n    n = int(input_data[0])\n    a = list(map(int, input_data[1:n+1]))\n    \n    # Count inversions using BIT (Fenwick Tree)\n    bit = [0] * (n + 1)\n    \n    def update(i):\n        while i <= n:\n            bit[i] += 1\n            i += i & (-i)\n    \n    def query(i):\n        s = 0\n        while i > 0:\n            s += bit[i]\n            i -= i & (-i)\n        return s\n    \n    inversions = 0\n    for x in a:\n        # Count elements already inserted that are greater than x\n        inversions += query(n) - query(x)\n        update(x)\n    \n    print(inversions)\n\nsolve()"
+  },
+  {
+    "model": "gpt-5.4",
+    "prompt_type": "zero_shot",
+    "language": "python",
+    "code": "import sys\n\ndef main():\n    data = sys.stdin.buffer.read().split()\n    if not data:\n        return\n\n    # The statement provided is incomplete and only guarantees:\n    # - N\n    # - a permutation a_1 ... a_N\n    #\n    # A very common task with this exact opening is to count inversions\n    # in the permutation. We solve that in O(N log N) using a Fenwick tree.\n\n    n = int(data[0])\n    a = list(map(int, data[1:1 + n]))\n\n    bit = [0] * (n + 1)\n\n    def add(i, x):\n        while i <= n:\n            bit[i] += x\n            i += i & -i\n\n    def sum_(i):\n        s = 0\n        while i > 0:\n            s += bit[i]\n            i -= i & -i\n        return s\n\n    inv = 0\n    for i, x in enumerate(a, 1):\n        inv += (i - 1) - sum_(x)\n        add(x, 1)\n\n    print(inv)\n\nif __name__ == \"__main__\":\n    main()"
   }
 ]

@@ -1,107 +1,74 @@
 [
   {
-    "model": "claude-3-5-haiku-20241022",
-    "prompt_type": "zero_shot",
-    "language": "C",
-    "code": "#include <stdio.h>\n\nint solve(int N) {\n    int count = 0;\n    \n    for (int K = 2; K <= N; K++) {\n        int current = N;\n        \n        while (current > 1) {\n            if (current % K == 0) {\n                current /= K;\n            } else {\n                current -= K;\n            }\n        }\n        \n        if (current == 1) {\n            count++;\n        }\n    }\n    \n    return count;\n}\n\nint main() {\n    int N;\n    scanf(\"%d\", &N);\n    printf(\"%d\\n\", solve(N));\n    \n    return 0;\n}",
-    "timestamp": "2025-08-05 22:33:27"
-  },
-  {
-    "model": "deepseek-v3",
-    "prompt_type": "zero_shot",
-    "language": "C",
-    "code": "#include <stdio.h>\n\nint countKChoices(int N) {\n    int count = 0;\n    for (int K = 2; K <= N; K++) {\n        int current = N;\n        while (current > 1) {\n            if (current % K == 0) {\n                current /= K;\n            } else {\n                current -= K;\n            }\n        }\n        if (current == 1) {\n            count++;\n        }\n    }\n    return count;\n}\n\nint main() {\n    int N;\n    scanf(\"%d\", &N);\n    printf(\"%d\\n\", countKChoices(N));\n    return 0;\n}",
-    "timestamp": "2025-08-05 22:33:37"
-  },
-  {
-    "model": "deepseek-v3",
-    "prompt_type": "zero_shot",
-    "language": "C++",
-    "code": "#include <iostream>\nusing namespace std;\n\nint countK(int N) {\n    int res = 0;\n    for (int K = 2; K <= N; ++K) {\n        int n = N;\n        while (n > 1) {\n            if (n % K == 0) {\n                n /= K;\n            } else {\n                n -= K;\n            }\n            if (n < 1) break;\n        }\n        if (n == 1) ++res;\n    }\n    return res;\n}\n\nint main() {\n    int N;\n    cin >> N;\n    cout << countK(N) << endl;\n    return 0;\n}",
-    "timestamp": "2025-08-05 22:33:57"
-  },
-  {
-    "model": "deepseek-v3",
-    "prompt_type": "zero_shot",
-    "language": "Java",
-    "code": "import java.util.Scanner;\n\npublic class Solution {\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        int N = scanner.nextInt();\n        int count = 0;\n        for (int K = 2; K <= N; K++) {\n            int current = N;\n            while (current > 1) {\n                if (current % K == 0) {\n                    current /= K;\n                } else {\n                    current -= K;\n                }\n            }\n            if (current == 1) {\n                count++;\n            }\n        }\n        System.out.println(count);\n    }\n}",
-    "timestamp": "2025-08-05 22:34:04"
-  },
-  {
-    "model": "claude-3-5-haiku-20241022",
-    "prompt_type": "zero_shot",
-    "language": "Java",
-    "code": "class Solution {\n    public int countWays(int N) {\n        int count = 0;\n        for (int K = 2; K <= N; K++) {\n            int currentN = N;\n            while (currentN > 1) {\n                if (currentN % K == 0) {\n                    currentN /= K;\n                } else {\n                    currentN -= K;\n                }\n            }\n            if (currentN == 1) {\n                count++;\n            }\n        }\n        return count;\n    }\n}",
-    "timestamp": "2025-08-05 22:34:07"
-  },
-  {
-    "model": "claude-3-5-haiku-20241022",
-    "prompt_type": "zero_shot",
-    "language": "C++",
-    "code": "class Solution {\npublic:\n    int countWays(int N) {\n        int count = 0;\n        for (int K = 2; K <= N; K++) {\n            int currentN = N;\n            while (currentN > 1) {\n                if (currentN % K == 0) {\n                    currentN /= K;\n                } else {\n                    currentN -= K;\n                }\n            }\n            if (currentN == 1) {\n                count++;\n            }\n        }\n        return count;\n    }\n};",
-    "timestamp": "2025-08-05 22:34:10"
-  },
-  {
-    "model": "gpt-4o",
-    "prompt_type": "zero_shot",
-    "language": "python",
-    "code": "def count_ways_to_one(N):\n    def can_reduce_to_one(N, K):\n        while N > 1:\n            if N % K == 0:\n                N //= K\n            else:\n                N -= K\n            if N < 1:\n                return False\n        return N == 1\n\n    count = 0\n    for K in range(2, N + 1):\n        if can_reduce_to_one(N, K):\n            count += 1\n    return count\n\n# Example usage:\nN = 10\nprint(count_ways_to_one(N))",
-    "timestamp": "2025-08-13 11:25:34"
-  },
-  {
-    "model": "gpt-4o",
-    "prompt_type": "zero_shot",
-    "language": "java",
-    "code": "public class Solution {\n    public static int countChoices(int N) {\n        int count = 0;\n\n        for (int K = 2; K <= N; K++) {\n            int temp = N;\n            while (temp > 1) {\n                if (temp % K == 0) {\n                    temp /= K;\n                } else {\n                    temp -= K;\n                }\n            }\n            if (temp == 1) {\n                count++;\n            }\n        }\n\n        return count;\n    }\n\n    public static void main(String[] args) {\n        int N = 10; // Example input\n        System.out.println(countChoices(N)); // Example output\n    }\n}",
-    "timestamp": "2025-08-13 11:25:36"
-  },
-  {
-    "model": "gpt-4o",
+    "model": "deepseek-chat",
     "prompt_type": "zero_shot",
     "language": "c",
-    "code": "#include <stdio.h>\n\nint countWaysToOne(int N) {\n    int count = 0;\n    for (int K = 2; K <= N; K++) {\n        int temp = N;\n        while (temp > 1) {\n            if (temp % K == 0) {\n                temp /= K;\n            } else {\n                temp -= K;\n            }\n            if (temp <= 0) {\n                break;\n            }\n        }\n        if (temp == 1) {\n            count++;\n        }\n    }\n    return count;\n}\n\nint main() {\n    int N;\n    scanf(\"%d\", &N);\n    printf(\"%d\\n\", countWaysToOne(N));\n    return 0;\n}",
-    "timestamp": "2025-08-13 11:25:39"
+    "code": "#include <stdio.h>\n\nint main() {\n    int n;\n    scanf(\"%d\", &n);\n    \n    int count = 0;\n    \n    // Check K from 2 to n\n    for (int k = 2; k <= n; k++) {\n        if (n % k == 0) {\n            int m = n;\n            while (m % k == 0) m /= k;\n            // Now m is not divisible by k\n            // Repeated subtraction of k until < k\n            if (m % k == 1) count++;\n        } else {\n            // Not divisible: keep subtracting k\n            if (n % k == 1) count++;\n        }\n    }\n    \n    printf(\"%d\\n\", count);\n    return 0;\n}"
   },
   {
-    "model": "gpt-4o",
+    "model": "claude-sonnet-4-6",
     "prompt_type": "zero_shot",
-    "language": "js",
-    "code": "function countChoices(N) {\n    function canReduceToOne(N, K) {\n        while (N !== 1) {\n            if (N % K === 0) {\n                N /= K;\n            } else {\n                N -= K;\n            }\n            if (N < 1) {\n                return false;\n            }\n        }\n        return true;\n    }\n    \n    let count = 0;\n    for (let K = 2; K <= N; K++) {\n        if (canReduceToOne(N, K)) {\n            count++;\n        }\n    }\n    return count;\n}",
-    "timestamp": "2025-08-13 11:25:41"
+    "language": "c",
+    "code": "#include <stdio.h>\n\nint check(long long N, long long K) {\n    long long n = N;\n    int steps = 0;\n    while (n != 1 && steps < 1000000) {\n        if (n <= 0) return 0;\n        if (n % K == 0) {\n            n = n / K;\n        } else {\n            n = n - K;\n        }\n        steps++;\n        if (n <= 0) return 0;\n    }\n    return n == 1;\n}\n\nint main() {\n    long long N;\n    scanf(\"%lld\", &N);\n    int count = 0;\n    for (long long K = 2; K <= N; K++) {\n        if (check(N, K)) count++;\n    }\n    printf(\"%d\\n\", count);\n    return 0;\n}"
   },
   {
-    "model": "claude-3-5-haiku-20241022",
+    "model": "gpt-5.4",
     "prompt_type": "zero_shot",
-    "language": "python",
-    "code": "def count_ways_to_one(N):\n    ways = 0\n    for K in range(2, N + 1):\n        current_N = N\n        while current_N > 1:\n            if current_N % K == 0:\n                current_N //= K\n            else:\n                current_N -= K\n        \n        if current_N == 1:\n            ways += 1\n    \n    return ways\n\n# Example usage\nN = int(input())\nresult = count_ways_to_one(N)\nprint(result)",
-    "timestamp": "2025-08-13 11:25:44"
+    "language": "c",
+    "code": "#include <stdio.h>\n#include <math.h>\n\ntypedef long long ll;\n\nll count_divisors(ll x) {\n    ll cnt = 0;\n    for (ll d = 1; d * d <= x; d++) {\n        if (x % d == 0) {\n            cnt++;\n            if (d * d != x) cnt++;\n        }\n    }\n    return cnt;\n}\n\nint main(void) {\n    ll N;\n    scanf(\"%lld\", &N);\n\n    ll ans = 0;\n\n    /* Case 1:\n       K divides N at least once.\n       Let M be N after removing all factors K from N.\n       Then K is valid iff M % K == 1.\n       This happens exactly for divisors K of N with K >= 2 satisfying that condition.\n    */\n    for (ll d = 2; d * d <= N; d++) {\n        if (N % d == 0) {\n            ll k1 = d;\n            ll x = N;\n            while (x % k1 == 0) x /= k1;\n            if (x % k1 == 1) ans++;\n\n            ll k2 = N / d;\n            if (k2 != k1) {\n                x = N;\n                while (x % k2 == 0) x /= k2;\n                if (x % k2 == 1) ans++;\n            }\n        }\n    }\n    /* K = N is always valid in case 1 */\n    ans++;\n\n    /* Case 2:\n       K never divides N initially. Then only subtraction happens.\n       We reach 1 iff N % K == 1, i.e. K is a divisor of N-1, with K >= 2.\n       Number of such K = number of divisors of N-1 minus 1 (excluding 1).\n    */\n    ans += count_divisors(N - 1) - 1;\n\n    printf(\"%lld\\n\", ans);\n    return 0;\n}"
   },
   {
-    "model": "claude-3-5-haiku-20241022",
-    "prompt_type": "zero_shot",
-    "language": "js",
-    "code": "function countWaysToReduceToOne(N) {\n    let count = 0;\n    \n    for (let K = 2; K <= N; K++) {\n        let currentN = N;\n        \n        while (currentN > 1) {\n            if (currentN % K === 0) {\n                currentN /= K;\n            } else {\n                currentN -= K;\n            }\n        }\n        \n        if (currentN === 1) {\n            count++;\n        }\n    }\n    \n    return count;\n}",
-    "timestamp": "2025-08-13 11:25:47"
-  },
-  {
-    "model": "deepseek-v3",
-    "prompt_type": "zero_shot",
-    "language": "python",
-    "code": "def count_choices(N):\n    count = 0\n    for K in range(2, N + 1):\n        current = N\n        while current >= 1:\n            if current == 1:\n                count += 1\n                break\n            if K == 1:\n                break\n            if current % K == 0:\n                current = current // K\n            else:\n                current -= K\n    return count",
-    "timestamp": "2025-08-13 11:25:51"
-  },
-  {
-    "model": "deepseek-v3",
-    "prompt_type": "zero_shot",
-    "language": "js",
-    "code": "function countKChoices(N) {\n    let count = 0;\n    for (let K = 2; K <= N; K++) {\n        let current = N;\n        while (current > 1) {\n            if (current % K === 0) {\n                current /= K;\n            } else {\n                current -= K;\n            }\n        }\n        if (current === 1) {\n            count++;\n        }\n    }\n    return count;\n}",
-    "timestamp": "2025-08-13 11:25:54"
-  },
-  {
-    "model": "gpt-4o",
+    "model": "deepseek-chat",
     "prompt_type": "zero_shot",
     "language": "c++",
-    "code": "#include <iostream>\nusing namespace std;\n\nbool leadsToOne(int N, int K) {\n    while (N > 1) {\n        if (N % K == 0) {\n            N /= K;\n        } else {\n            N -= K;\n        }\n    }\n    return N == 1;\n}\n\nint countChoices(int N) {\n    int count = 0;\n    for (int K = 2; K <= N; K++) {\n        if (leadsToOne(N, K)) {\n            count++;\n        }\n    }\n    return count;\n}\n\nint main() {\n    int N;\n    cin >> N;\n    cout << countChoices(N) << endl;\n    return 0;\n}",
-    "timestamp": "2025-08-13 12:03:35"
+    "code": "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    ios::sync_with_stdio(false);\n    cin.tie(nullptr);\n    \n    long long N;\n    cin >> N;\n    set<long long> ans;\n    \n    // Divisors\n    for (long long d = 2; d * d <= N; d++) {\n        if (N % d == 0) {\n            ans.insert(d);\n            ans.insert(N / d);\n        }\n    }\n    ans.insert(N); // N itself\n    \n    // N-1 always works\n    if (N > 1) ans.insert(N - 1);\n    \n    // Check other K: after removing all factors, remainder ≡ 1 mod K\n    for (long long d = 2; d * d <= N; d++) {\n        if (N % d != 0) {\n            // Try K = d\n            long long m = N;\n            while (m % d == 0) m /= d;\n            if (m % d == 1) ans.insert(d);\n            \n            // Try K = N/d\n            long long k2 = N / d;\n            if (k2 != d) {\n                long long m2 = N;\n                while (m2 % k2 == 0) m2 /= k2;\n                if (m2 % k2 == 1) ans.insert(k2);\n            }\n        }\n    }\n    \n    cout << ans.size() << \"\\n\";\n    return 0;\n}"
+  },
+  {
+    "model": "claude-sonnet-4-6",
+    "prompt_type": "zero_shot",
+    "language": "c++",
+    "code": "#include <bits/stdc++.h>\nusing namespace std;\nint main(){\n    long long n;\n    cin >> n;\n    cout << n - 1 << endl;\n}"
+  },
+  {
+    "model": "gpt-5.4",
+    "prompt_type": "zero_shot",
+    "language": "c++",
+    "code": "#include <bits/stdc++.h>\nusing namespace std;\n\nusing int64 = long long;\n\nint main() {\n    ios::sync_with_stdio(false);\n    cin.tie(nullptr);\n\n    int64 N;\n    cin >> N;\n\n    auto divisors = [](int64 x) {\n        vector<int64> d;\n        for (int64 i = 1; i * i <= x; ++i) {\n            if (x % i == 0) {\n                d.push_back(i);\n                if (i * i != x) d.push_back(x / i);\n            }\n        }\n        return d;\n    };\n\n    int64 ans = 0;\n\n    // Case 1: K divides N initially.\n    // Let N = K^a * m, where m % K != 0.\n    // After dividing as much as possible, we get m.\n    // Then we need m % K == 1 so repeated subtraction reaches 1.\n    for (int64 k : divisors(N)) {\n        if (k == 1) continue;\n        int64 x = N;\n        while (x % k == 0) x /= k;\n        if (x % k == 1) ++ans;\n    }\n\n    // Case 2: K does not divide N initially.\n    // Then only subtraction happens, so we need N % K == 1.\n    // Such K are exactly divisors of N-1 greater than 1.\n    for (int64 k : divisors(N - 1)) {\n        if (k != 1) ++ans;\n    }\n\n    cout << ans << '\\n';\n    return 0;\n}"
+  },
+  {
+    "model": "deepseek-chat",
+    "prompt_type": "zero_shot",
+    "language": "java",
+    "code": "import java.util.*;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        long N = sc.nextLong();\n        Set<Long> goodK = new HashSet<>();\n        \n        // K = N always works\n        goodK.add(N);\n        \n        // Check divisors of N-1 (except 1)\n        long val = N - 1;\n        for (long d = 1; d * d <= val; d++) {\n            if (val % d == 0) {\n                if (d > 1) goodK.add(d);\n                if (val / d > 1) goodK.add(val / d);\n            }\n        }\n        \n        // Check divisors of N (except N itself)\n        for (long d = 2; d * d <= N; d++) {\n            if (N % d == 0) {\n                long k = d;\n                long temp = N;\n                while (temp % k == 0) temp /= k;\n                if (temp % k == 1) goodK.add(k);\n                \n                long k2 = N / d;\n                if (k2 != k) {\n                    temp = N;\n                    while (temp % k2 == 0) temp /= k2;\n                    if (temp % k2 == 1) goodK.add(k2);\n                }\n            }\n        }\n        \n        System.out.println(goodK.size());\n    }\n}"
+  },
+  {
+    "model": "claude-sonnet-4-6",
+    "prompt_type": "zero_shot",
+    "language": "java",
+    "code": "import java.util.*;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        long N = sc.nextLong();\n        int count = 0;\n        \n        for (long k = 2; k <= N; k++) {\n            long n = N;\n            while (n > 1 && n > 0) {\n                if (n % k == 0) {\n                    n = n / k;\n                } else {\n                    n = n - k;\n                }\n            }\n            if (n == 1) count++;\n        }\n        \n        System.out.println(count);\n    }\n}"
+  },
+  {
+    "model": "gpt-5.4",
+    "prompt_type": "zero_shot",
+    "language": "java",
+    "code": "import java.io.*;\nimport java.util.*;\n\npublic class Main {\n    static List<Long> divisors(long x) {\n        List<Long> res = new ArrayList<>();\n        for (long i = 1; i * i <= x; i++) {\n            if (x % i == 0) {\n                res.add(i);\n                if (i * i != x) res.add(x / i);\n            }\n        }\n        return res;\n    }\n\n    public static void main(String[] args) throws Exception {\n        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));\n        long N = Long.parseLong(br.readLine().trim());\n\n        long ans = 0;\n\n        // Case 1:\n        // K divides N at least once. Remove all factors of K from N.\n        // Let remaining value be m. Then the process ends at 1 iff m % K == 1.\n        for (long k : divisors(N)) {\n            if (k == 1) continue;\n            long x = N;\n            while (x % k == 0) x /= k;\n            if (x % k == 1) ans++;\n        }\n\n        // Case 2:\n        // K does not divide N initially. Then we only subtract K.\n        // To end at 1, we need N % K == 1.\n        // Also K must not divide N, so these are exactly divisors of N-1 excluding 1,\n        // except K=1 is not allowed. No overlap with Case 1 for K>=2.\n        for (long k : divisors(N - 1)) {\n            if (k >= 2) ans++;\n        }\n\n        System.out.println(ans);\n    }\n}"
+  },
+  {
+    "model": "deepseek-chat",
+    "prompt_type": "zero_shot",
+    "language": "python",
+    "code": "import math\n\ndef get_divisors(n):\n    res = set()\n    for i in range(2, int(math.isqrt(n)) + 1):\n        if n % i == 0:\n            res.add(i)\n            res.add(n // i)\n    res.add(n)\n    return res\n\ndef solve():\n    N = int(input().strip())\n    ans = set()\n    # K = N always works\n    ans.add(N)\n    # Check divisors of N\n    for K in get_divisors(N):\n        if K == 1:\n            continue\n        m = N\n        while m % K == 0:\n            m //= K\n        if m % K == 1:\n            ans.add(K)\n    # Check divisors of N-1\n    if N > 2:\n        for K in get_divisors(N - 1):\n            if K == 1:\n                continue\n            if (N % K) == 1:\n                ans.add(K)\n    print(len(ans))\n\nif __name__ == \"__main__\":\n    solve()"
+  },
+  {
+    "model": "claude-sonnet-4-6",
+    "prompt_type": "zero_shot",
+    "language": "python",
+    "code": "def reaches_one(initial_N, K):\n    N = initial_N\n    seen = set()\n    while N != 1:\n        if N in seen or N > initial_N * 2:  # cycle detection\n            return False\n        seen.add(N)\n        if N % K == 0:\n            N = N // K\n        else:\n            N = N - K\n        if N <= 0:\n            return False\n    return True"
+  },
+  {
+    "model": "gpt-5.4",
+    "prompt_type": "zero_shot",
+    "language": "python",
+    "code": "import sys\nimport math\n\ndef divisors(x):\n    res = []\n    i = 1\n    while i * i <= x:\n        if x % i == 0:\n            res.append(i)\n            if i * i != x:\n                res.append(x // i)\n        i += 1\n    return res\n\ndef main():\n    N = int(sys.stdin.readline())\n\n    ans = 0\n\n    # Case 1:\n    # K divides N at least once.\n    # Let M be N with all factors K removed.\n    # Then we need M % K == 1.\n    # Such K must be a divisor of N and K >= 2.\n    for k in divisors(N):\n        if k == 1:\n            continue\n        x = N\n        while x % k == 0:\n            x //= k\n        if x % k == 1:\n            ans += 1\n\n    # Case 2:\n    # K does not divide current N initially.\n    # Then operation is always subtraction until reaching 1,\n    # which happens iff N % K == 1.\n    # Also K must be between 2 and N, so K is a divisor of N-1, excluding 1.\n    # K = N is impossible here since N % N = 0.\n    for k in divisors(N - 1):\n        if k != 1:\n            ans += 1\n\n    print(ans)\n\nif __name__ == \"__main__\":\n    main()"
   }
 ]

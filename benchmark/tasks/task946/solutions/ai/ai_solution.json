@@ -1,86 +1,74 @@
 [
   {
-    "model": "claude-3-5-haiku-20241022",
-    "prompt_type": "zero_shot",
-    "language": "C",
-    "code": "#include <stdio.h>\n#include <stdlib.h>\n\nint gcd(int a, int b) {\n    while (b != 0) {\n        int temp = b;\n        b = a % b;\n        a = temp;\n    }\n    return a;\n}\n\nint find_gcd_array(int* arr, int n) {\n    int result = arr[0];\n    for (int i = 1; i < n; i++) {\n        result = gcd(result, arr[i]);\n    }\n    return result;\n}\n\nint main() {\n    int N;\n    scanf(\"%d\", &N);\n    \n    int* A = malloc(N * sizeof(int));\n    for (int i = 0; i < N; i++) {\n        scanf(\"%d\", &A[i]);\n    }\n    \n    int g = find_gcd_array(A, N);\n    if (g != 1) {\n        printf(\"Aoki\\n\");\n        free(A);\n        return 0;\n    }\n    \n    int nim_sum = 0;\n    for (int i = 0; i < N; i++) {\n        nim_sum ^= (A[i] - 1);\n    }\n    \n    printf(nim_sum ? \"Takahashi\" : \"Aoki\");\n    \n    free(A);\n    return 0;\n}",
-    "timestamp": "2025-08-05 23:26:15"
-  },
-  {
-    "model": "deepseek-v3",
-    "prompt_type": "zero_shot",
-    "language": "C",
-    "code": "#include <stdio.h>\n#include <stdlib.h>\n\nint gcd(int a, int b) {\n    while (b != 0) {\n        int temp = b;\n        b = a % b;\n        a = temp;\n    }\n    return a;\n}\n\nint compute_gcd(int *arr, int n) {\n    int res = arr[0];\n    for (int i = 1; i < n; i++) {\n        res = gcd(res, arr[i]);\n        if (res == 1) {\n            break;\n        }\n    }\n    return res;\n}\n\nint main() {\n    int N;\n    scanf(\"%d\", &N);\n    int *A = (int *)malloc(N * sizeof(int));\n    for (int i = 0; i < N; i++) {\n        scanf(\"%d\", &A[i]);\n    }\n\n    int total_moves = 0;\n    while (1) {\n        int g = compute_gcd(A, N);\n        if (g != 1) {\n            for (int i = 0; i < N; i++) {\n                A[i] /= g;\n            }\n            continue;\n        }\n\n        int sum = 0;\n        for (int i = 0; i < N; i++) {\n            sum += A[i] - 1;\n        }\n\n        if (sum % 2 == 1) {\n            printf(\"First\\n\");\n            break;\n        } else {\n            printf(\"Second\\n\");\n            break;\n        }\n    }\n\n    free(A);\n    return 0;\n}",
-    "timestamp": "2025-08-05 23:26:30"
-  },
-  {
-    "model": "deepseek-v3",
-    "prompt_type": "zero_shot",
-    "language": "C++",
-    "code": "#include <iostream>\n#include <vector>\n#include <algorithm>\nusing namespace std;\n\nint main() {\n    int N;\n    cin >> N;\n    vector<int> A(N);\n    for (int i = 0; i < N; ++i) {\n        cin >> A[i];\n    }\n\n    int total_moves = 0;\n    for (int num : A) {\n        total_moves += num - 1;\n    }\n\n    if (total_moves % 2 == 1) {\n        cout << \"Takahashi\" << endl;\n    } else {\n        cout << \"Aoki\" << endl;\n    }\n\n    return 0;\n}",
-    "timestamp": "2025-08-05 23:26:39"
-  },
-  {
-    "model": "deepseek-v3",
-    "prompt_type": "zero_shot",
-    "language": "Java",
-    "code": "import java.util.Scanner;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        int N = scanner.nextInt();\n        int[] A = new int[N];\n        for (int i = 0; i < N; i++) {\n            A[i] = scanner.nextInt();\n        }\n\n        int totalMoves = 0;\n        for (int num : A) {\n            totalMoves += num - 1;\n        }\n\n        if (totalMoves % 2 == 1) {\n            System.out.println(\"Takahashi\");\n        } else {\n            System.out.println(\"Aoki\");\n        }\n    }\n}",
-    "timestamp": "2025-08-05 23:26:47"
-  },
-  {
-    "model": "claude-3-5-haiku-20241022",
-    "prompt_type": "zero_shot",
-    "language": "Java",
-    "code": "import java.util.*;\n\npublic class Solution {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        int N = sc.nextInt();\n        int[] A = new int[N];\n        \n        for (int i = 0; i < N; i++) {\n            A[i] = sc.nextInt();\n        }\n        \n        System.out.println(solve(A) ? \"Takahashi\" : \"Aoki\");\n    }\n    \n    static boolean solve(int[] A) {\n        int grundy = 0;\n        \n        for (int num : A) {\n            grundy ^= grundy(num);\n        }\n        \n        return grundy != 0;\n    }\n    \n    static int grundy(int x) {\n        if (x == 1) return 0;\n        return x - 1;\n    }\n}",
-    "timestamp": "2025-08-05 23:26:51"
-  },
-  {
-    "model": "claude-3-5-haiku-20241022",
-    "prompt_type": "zero_shot",
-    "language": "C++",
-    "code": "#include <iostream>\n#include <vector>\n#include <numeric>\n\nusing namespace std;\n\nint gcd(int a, int b) {\n    while (b) {\n        a %= b;\n        swap(a, b);\n    }\n    return a;\n}\n\nint main() {\n    int N;\n    cin >> N;\n    \n    vector<int> A(N);\n    for (int i = 0; i < N; i++) {\n        cin >> A[i];\n    }\n    \n    int g = A[0];\n    for (int i = 1; i < N; i++) {\n        g = gcd(g, A[i]);\n    }\n    \n    int sum = 0;\n    for (int num : A) {\n        sum += (num / g) - 1;\n    }\n    \n    cout << (sum % 2 == 1 ? \"Takahashi\" : \"Aoki\") << endl;\n    \n    return 0;\n}",
-    "timestamp": "2025-08-05 23:26:55"
-  },
-  {
-    "model": "gpt-4o",
-    "prompt_type": "zero_shot",
-    "language": "python",
-    "code": "def find_winner(N, A):\n    def gcd(a, b):\n        while b:\n            a, b = b, a % b\n        return a\n    \n    def gcd_list(numbers):\n        current_gcd = numbers[0]\n        for number in numbers[1:]:\n            current_gcd = gcd(current_gcd, number)\n        return current_gcd\n    \n    def play_game(nums, turn):\n        gcd_value = gcd_list(nums)\n        if gcd_value > 1:\n            nums = [num // gcd_value for num in nums]\n        \n        if all(num == 1 for num in nums):\n            return \"Aoki\" if turn == \"Takahashi\" else \"Takahashi\"\n        \n        for i in range(N):\n            if nums[i] > 1:\n                nums[i] -= 1\n                winner = play_game(nums, \"Aoki\" if turn == \"Takahashi\" else \"Takahashi\")\n                nums[i] += 1\n                if winner == turn:\n                    return turn\n        \n        return \"Aoki\" if turn == \"Takahashi\" else \"Takahashi\"\n    \n    return play_game(A, \"Takahashi\")\n\n# Example usage:\nN = 3\nA = [3, 4, 5]\nprint(find_winner(N, A))  # Output: Takahashi",
-    "timestamp": "2025-08-13 15:21:04"
-  },
-  {
-    "model": "gpt-4o",
-    "prompt_type": "zero_shot",
-    "language": "java",
-    "code": "import java.util.Scanner;\n\npublic class GameWinner {\n\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n\n        int N = scanner.nextInt();\n        int[] A = new int[N];\n\n        for (int i = 0; i < N; i++) {\n            A[i] = scanner.nextInt();\n        }\n\n        int xorSum = 0;\n\n        for (int i = 0; i < N; i++) {\n            xorSum ^= (A[i] > 1 ? (A[i] - 1) : 0);\n        }\n\n        System.out.println(xorSum != 0 ? \"Takahashi\" : \"Aoki\");\n    }\n}",
-    "timestamp": "2025-08-13 15:21:06"
-  },
-  {
-    "model": "gpt-4o",
+    "model": "deepseek-chat",
     "prompt_type": "zero_shot",
     "language": "c",
-    "code": "#include <stdio.h>\n\n// Function to compute gcd\nint gcd(int a, int b) {\n    while (b != 0) {\n        int temp = b;\n        b = a % b;\n        a = temp;\n    }\n    return a;\n}\n\n// Function to determine the winner of the game\nconst char* determine_winner(int N, int A[]) {\n    int g = A[0];\n    for (int i = 1; i < N; i++) {\n        g = gcd(g, A[i]);\n    }\n    return N % 2 == 0 ? \"Aoki\" : \"Takahashi\";\n}\n\nint main() {\n    // Example usage\n    int N = 3;\n    int A[] = {1, 3, 5};\n\n    const char* winner = determine_winner(N, A);\n    printf(\"%s\\n\", winner);\n\n    return 0;\n}",
-    "timestamp": "2025-08-13 15:21:08"
+    "code": "#include <stdio.h>\n\nint gcd(int a, int b) {\n    while (b) {\n        int t = b;\n        b = a % b;\n        a = t;\n    }\n    return a;\n}\n\nint main() {\n    int N;\n    scanf(\"%d\", &N);\n    int A[N];\n    for (int i = 0; i < N; i++) {\n        scanf(\"%d\", &A[i]);\n    }\n    \n    int g = A[0];\n    for (int i = 1; i < N; i++) {\n        g = gcd(g, A[i]);\n    }\n    \n    // Divide all numbers by initial GCD (though given as 1, but just in case)\n    int odd_count = 0;\n    for (int i = 0; i < N; i++) {\n        A[i] /= g;\n        if (A[i] % 2 == 1) odd_count++;\n    }\n    \n    // If all numbers are 1 already, first player loses\n    int all_one = 1;\n    for (int i = 0; i < N; i++) {\n        if (A[i] != 1) {\n            all_one = 0;\n            break;\n        }\n    }\n    if (all_one) {\n        printf(\"Second\\n\");\n        return 0;\n    }\n    \n    // Count number of even numbers\n    int even_count = N - odd_count;\n    \n    if (even_count % 2 == 1) {\n        printf(\"First\\n\");\n    } else {\n        printf(\"Second\\n\");\n    }\n    \n    return 0;\n}"
   },
   {
-    "model": "gpt-4o",
+    "model": "claude-sonnet-4-6",
+    "prompt_type": "zero_shot",
+    "language": "c",
+    "code": "#include <stdio.h>\n\nint main() {\n    int n;\n    scanf(\"%d\", &n);\n    long long sum = 0;\n    for (int i = 0; i < n; i++) {\n        long long a;\n        scanf(\"%lld\", &a);\n        sum += a - 1;\n    }\n    if (sum % 2 == 1) {\n        printf(\"Takahashi\\n\");\n    } else {\n        printf(\"Aoki\\n\");\n    }\n    return 0;\n}"
+  },
+  {
+    "model": "gpt-5.4",
+    "prompt_type": "zero_shot",
+    "language": "c",
+    "code": "#include <stdio.h>\n#include <stdlib.h>\n\ntypedef long long ll;\n\nstatic ll gcdll(ll a, ll b) {\n    while (b) {\n        ll t = a % b;\n        a = b;\n        b = t;\n    }\n    return a;\n}\n\nint main(void) {\n    int N;\n    if (scanf(\"%d\", &N) != 1) return 0;\n\n    ll g = 0;\n    ll mx = 0;\n    for (int i = 0; i < N; i++) {\n        ll x;\n        scanf(\"%lld\", &x);\n        g = gcdll(g, x);\n        if (x > mx) mx = x;\n    }\n\n    /* Given gcd of all numbers is 1.\n       This game is equivalent to Nim with total move count determined by max(A)-N.\n       Winner:\n       - if (max - N) is odd -> first player\n       - else -> second player\n    */\n    if ((mx - N) % 2 != 0) {\n        puts(\"First\");\n    } else {\n        puts(\"Second\");\n    }\n\n    return 0;\n}"
+  },
+  {
+    "model": "deepseek-chat",
     "prompt_type": "zero_shot",
     "language": "c++",
-    "code": "#include <iostream>\n#include <vector>\n#include <numeric>\n\nusing namespace std;\n\nint main() {\n    int N;\n    cin >> N;\n    vector<int> A(N);\n    for (int i = 0; i < N; ++i) {\n        cin >> A[i];\n    }\n\n    int xor_sum = 0;\n    for (int i = 0; i < N; ++i) {\n        xor_sum ^= (A[i] - 1); // Subtract 1 from each element and find XOR sum\n    }\n\n    if (xor_sum != 0) {\n        cout << \"Takahashi\" << endl; // If XOR sum isn't zero, Takahashi wins\n    } else {\n        cout << \"Aoki\" << endl; // Otherwise, Aoki wins\n    }\n\n    return 0;\n}",
-    "timestamp": "2025-08-13 15:21:11"
+    "code": "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    ios::sync_with_stdio(false);\n    cin.tie(nullptr);\n    \n    int N;\n    cin >> N;\n    vector<int> A(N);\n    int oddCount = 0;\n    int minVal = INT_MAX;\n    for (int i = 0; i < N; i++) {\n        cin >> A[i];\n        if (A[i] % 2 == 1) oddCount++;\n        minVal = min(minVal, A[i]);\n    }\n    \n    // If there is at least one odd number, the first player wins.\n    if (oddCount > 0) {\n        cout << \"First\\n\";\n        return 0;\n    }\n    \n    // All numbers are even. The game reduces to dividing everything by 2 repeatedly.\n    int moves = 0;\n    while (true) {\n        // All numbers are even, divide by 2\n        for (int &x : A) x /= 2;\n        moves++;\n        \n        oddCount = 0;\n        minVal = INT_MAX;\n        for (int x : A) {\n            if (x % 2 == 1) oddCount++;\n            minVal = min(minVal, x);\n        }\n        \n        if (oddCount > 0) {\n            // First player can win if moves count is odd (since they start)\n            if (moves % 2 == 1) cout << \"First\\n\";\n            else cout << \"Second\\n\";\n            return 0;\n        }\n        \n        if (minVal == 0) {\n            // Actually minVal can't be 0 since all numbers >= 1, \n            // but if all become 1? but all are even so not possible here.\n            // This case won't happen before odd appears.\n        }\n    }\n    \n    return 0;\n}"
   },
   {
-    "model": "claude-3-5-haiku-20241022",
+    "model": "claude-sonnet-4-6",
     "prompt_type": "zero_shot",
-    "language": "python",
-    "code": "def gcd(a, b):\n    while b:\n        a, b = b, a % b\n    return a\n\ndef solve(A):\n    def gcd_of_list(nums):\n        result = nums[0]\n        for num in nums[1:]:\n            result = gcd(result, num)\n        return result\n\n    def game_outcome(nums):\n        if all(num == 1 for num in nums):\n            return False\n        \n        for i in range(len(nums)):\n            if nums[i] >= 2:\n                new_nums = nums.copy()\n                new_nums[i] -= 1\n                g = gcd_of_list(new_nums)\n                new_nums = [num // g for num in new_nums]\n                \n                if not game_outcome(new_nums):\n                    return True\n        \n        return False\n\n    return \"Takahashi\" if game_outcome(A) else \"Aoki\"\n\n# Input parsing\nN = int(input())\nA = list(map(int, input().split()))\n\n# Output result\nprint(solve(A))",
-    "timestamp": "2025-08-13 15:21:16"
+    "language": "c++",
+    "code": "#include <bits/stdc++.h>\nusing namespace std;\nint main(){\n    int n;\n    cin >> n;\n    long long sum = 0;\n    for(int i = 0; i < n; i++){\n        long long a;\n        cin >> a;\n        sum += a - 1;\n    }\n    if(sum % 2 == 1) cout << \"Takahashi\" << endl;\n    else cout << \"Aoki\" << endl;\n}"
   },
   {
-    "model": "deepseek-v3",
+    "model": "gpt-5.4",
+    "prompt_type": "zero_shot",
+    "language": "c++",
+    "code": "#include <bits/stdc++.h>\nusing namespace std;\n\nusing int64 = long long;\n\n// Euclidean algorithm step count for (a, b), assuming a >= b >= 1.\n// Returns the number of modulo-steps until one becomes 0.\nlong long euclid_steps(long long a, long long b) {\n    long long cnt = 0;\n    while (b != 0) {\n        long long r = a % b;\n        a = b;\n        b = r;\n        cnt++;\n    }\n    return cnt;\n}\n\nint main() {\n    ios::sync_with_stdio(false);\n    cin.tie(nullptr);\n\n    int N;\n    cin >> N;\n    vector<long long> A(N);\n    for (int i = 0; i < N; i++) cin >> A[i];\n\n    long long mn = *min_element(A.begin(), A.end());\n    int cnt_min = 0;\n    for (auto x : A) if (x == mn) cnt_min++;\n\n    // Key fact:\n    // The game value depends only on:\n    // - the minimum value mn\n    // - how many times it appears\n    //\n    // If mn appears at least twice, then every move must decrease one of the minima,\n    // after which dividing by gcd normalizes exactly like subtracting 1 from mn.\n    // The number of moves is mn - 1.\n    //\n    // If mn is unique, after reducing that minimum down to 1 and normalizing,\n    // the game transforms according to one Euclidean step:\n    //   (mn, next values) -> divide by gcd of differences with mn\n    // Repeating this matches the Euclidean algorithm on the pair\n    //   (mn, gcd of all A_i - mn).\n    //\n    // More directly, let g = gcd(A_i - mn) over all i.\n    // Then the total number of moves equals the number of subtraction phases,\n    // which is exactly the number of steps in Euclid(mn, g), but since g divides mn? not always.\n    // The standard reduced form is equivalent to Euclid(max(mn, g), min(mn, g)).\n    //\n    // In fact here gcd(all A_i)=1, so final parity is:\n    //   if cnt_min >= 2: parity of (mn - 1)\n    //   else: parity of Euclid steps on (mn, gcd(A_i - mn))\n    //\n    // This is the known solution for this game.\n\n    bool takahashiWins;\n\n    if (cnt_min >= 2) {\n        takahashiWins = ((mn - 1) % 2 == 1);\n    } else {\n        long long g = 0;\n        for (auto x : A) {\n            if (x != mn) g = std::gcd(g, x - mn);\n        }\n        long long a = max(mn, g), b = min(mn, g);\n        long long steps = euclid_steps(a, b);\n        takahashiWins = (steps % 2 == 1);\n    }\n\n    cout << (takahashiWins ? \"Takahashi\" : \"Aoki\") << '\\n';\n    return 0;\n}"
+  },
+  {
+    "model": "deepseek-chat",
+    "prompt_type": "zero_shot",
+    "language": "java",
+    "code": "import java.io.*;\nimport java.util.*;\n\npublic class Main {\n    public static void main(String[] args) throws IOException {\n        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));\n        int N = Integer.parseInt(br.readLine());\n        StringTokenizer st = new StringTokenizer(br.readLine());\n        int[] A = new int[N];\n        for (int i = 0; i < N; i++) {\n            A[i] = Integer.parseInt(st.nextToken());\n        }\n        \n        // Count odd numbers\n        int oddCount = 0;\n        for (int x : A) {\n            if (x % 2 == 1) oddCount++;\n        }\n        \n        // If all numbers are even, then after dividing by GCD (which is at least 2)\n        // the parity structure can change. But we only need to handle the initial move.\n        // Key observation: The game reduces to Nim on the exponents of 2.\n        // Actually, we can solve by analyzing the number of odd elements.\n        \n        // If there is at least one odd number, the first player can win by\n        // subtracting 1 from an even number (making it odd) if possible,\n        // or from an odd number to create more evens.\n        // But the correct known solution: \n        // If all numbers are 1 initially -> first player loses.\n        // Else, let cnt = number of odd numbers.\n        // If cnt is odd -> first player wins.\n        // If cnt is even and there is at least one even > 0 -> first player can turn it into odd count odd.\n        // Special case: if all numbers are odd except possibly some 1s? \n        // Actually the known result: \n        // Let g be gcd of all numbers. Since gcd=1, not all numbers are even.\n        // If the number of odd numbers is odd -> first player wins.\n        // If the number of odd numbers is even -> \n        //   If there is at least one even number > 0 -> first player wins by making odd count odd.\n        //   Else (all numbers are odd) -> first player loses because any move makes all numbers even? Wait.\n        \n        // Let's implement the known solution from AtCoder ABC 195 F? Actually this is AtCoder ABC 206 F? No.\n        // This problem is \"Coprime Game\" or similar.\n        // Correct solution:\n        // If there is at least one odd number and the number of odd numbers is odd -> First wins.\n        // If number of odd numbers is even:\n        //   If there is at least one even number -> First wins (by subtracting 1 from an even number).\n        //   Else (all numbers odd) -> First loses.\n        // But also consider the case where all numbers are 1 -> lose.\n        \n        // Let's test:\n        boolean allOne = true;\n        for (int x : A) if (x != 1) { allOne = false; break; }\n        if (allOne) {\n            System.out.println(\"Second\");\n            return;\n        }\n        \n        int evenCount = N - oddCount;\n        if (oddCount % 2 == 1) {\n            System.out.println(\"First\");\n        } else {\n            if (evenCount > 0) {\n                System.out.println(\"First\");\n            } else {\n                // all numbers are odd (and not all 1)\n                System.out.println(\"Second\");\n            }\n        }\n    }\n}"
+  },
+  {
+    "model": "claude-sonnet-4-6",
+    "prompt_type": "zero_shot",
+    "language": "java",
+    "code": "import java.util.*;\npublic class Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        int n = sc.nextInt();\n        long sum = 0;\n        for (int i = 0; i < n; i++) {\n            sum += sc.nextLong() - 1;\n        }\n        System.out.println(sum % 2 == 1 ? \"Takahashi\" : \"Aoki\");\n    }\n}"
+  },
+  {
+    "model": "gpt-5.4",
+    "prompt_type": "zero_shot",
+    "language": "java",
+    "code": "import java.io.*;\nimport java.util.*;\n\npublic class Main {\n    static class FastScanner {\n        private final InputStream in = System.in;\n        private final byte[] buffer = new byte[1 << 16];\n        private int ptr = 0, len = 0;\n\n        private int read() throws IOException {\n            if (ptr >= len) {\n                len = in.read(buffer);\n                ptr = 0;\n                if (len <= 0) return -1;\n            }\n            return buffer[ptr++];\n        }\n\n        long nextLong() throws IOException {\n            int c;\n            do {\n                c = read();\n            } while (c <= ' ' && c != -1);\n            long sign = 1;\n            if (c == '-') {\n                sign = -1;\n                c = read();\n            }\n            long val = 0;\n            while (c > ' ') {\n                val = val * 10 + (c - '0');\n                c = read();\n            }\n            return val * sign;\n        }\n\n        int nextInt() throws IOException {\n            return (int) nextLong();\n        }\n    }\n\n    static long gcd(long a, long b) {\n        while (b != 0) {\n            long t = a % b;\n            a = b;\n            b = t;\n        }\n        return a;\n    }\n\n    public static void main(String[] args) throws Exception {\n        FastScanner fs = new FastScanner();\n        int N = fs.nextInt();\n        long[] A = new long[N];\n        long sum = 0;\n        long g = 0;\n        for (int i = 0; i < N; i++) {\n            A[i] = fs.nextLong();\n            sum += A[i];\n            g = gcd(g, A[i]);\n        }\n\n        // Given gcd is 1, but keeping this for completeness.\n        for (int i = 0; i < N; i++) A[i] /= g;\n\n        // Key invariant:\n        // Each move decreases the total sum by exactly 1 after normalization by gcd,\n        // and the game ends exactly when all numbers are 1.\n        // Therefore the number of moves is fixed: sum(A) - N.\n        // First player wins iff this is odd.\n        long moves = 0;\n        for (int i = 0; i < N; i++) moves += A[i] - 1;\n\n        System.out.println((moves % 2 == 1) ? \"Takahashi\" : \"Aoki\");\n    }\n}"
+  },
+  {
+    "model": "deepseek-chat",
     "prompt_type": "zero_shot",
     "language": "python",
-    "code": "import sys\nimport math\n\ndef solve():\n    N, *rest = map(int, sys.stdin.read().split())\n    A = rest[:N]\n    \n    total_moves = 0\n    for num in A:\n        total_moves += num - 1\n    \n    if total_moves % 2 == 1:\n        print(\"Takahashi\")\n    else:\n        print(\"Aoki\")\n\nif __name__ == '__main__':\n    solve()",
-    "timestamp": "2025-08-13 15:21:21"
+    "code": "import sys\nimport math\n\ndef solve():\n    input = sys.stdin.readline\n    N = int(input())\n    A = list(map(int, input().split()))\n    \n    # Count odds\n    odd_cnt = sum(1 for x in A if x % 2 == 1)\n    \n    if odd_cnt % 2 == 1:\n        print(\"First\")\n        return\n    \n    # odd_cnt is even\n    if any(x == 1 for x in A):\n        print(\"Second\")\n        return\n    \n    # No 1s: find smallest\n    min_val = min(A)\n    cnt_min = A.count(min_val)\n    if cnt_min == 1 and (min_val - 1) % 2 == 0:\n        print(\"First\")\n    else:\n        print(\"Second\")\n\nif __name__ == \"__main__\":\n    solve()"
+  },
+  {
+    "model": "claude-sonnet-4-6",
+    "prompt_type": "zero_shot",
+    "language": "python",
+    "code": "import sys\nfrom functools import lru_cache\nfrom math import gcd\n\ndef solve():\n    input_data = sys.stdin.read().split()\n    n = int(input_data[0])\n    a = list(map(int, input_data[1:n+1]))\n    total = sum(x - 1 for x in a)\n    if total % 2 == 1:\n        print(\"Takahashi\")\n    else:\n        print(\"Aoki\")\n\nsolve()"
+  },
+  {
+    "model": "gpt-5.4",
+    "prompt_type": "zero_shot",
+    "language": "python",
+    "code": "import sys\nfrom math import gcd\n\ndef main():\n    input = sys.stdin.readline\n    N = int(input())\n    A = list(map(int, input().split()))\n\n    s = sum(A)\n    g = 0\n    for x in A:\n        g = gcd(g, x)\n\n    # Since gcd(A)=1 initially, the game value is determined by:\n    # - if (sum(A) - N) is odd: Takahashi\n    # - else if max exponent of common reduction from all piles after shifting by 1,\n    #   i.e. gcd(A_i - 1), has parity deciding recursively.\n    #\n    # This simplifies to the standard recurrence:\n    # if all are 1 -> lose\n    # else if (sum - N) % 2 == 1 -> win\n    # else divide (A_i - 1) by d = gcd(A_i - 1) and recurse with parity flip.\n    #\n    # Implement directly.\n\n    turn = 0  # 0: Takahashi to move in current normalized position\n    cur = A[:]\n\n    while True:\n        if all(x == 1 for x in cur):\n            print(\"Aoki\" if turn == 0 else \"Takahashi\")\n            return\n\n        moves = sum(x - 1 for x in cur)\n        if moves % 2 == 1:\n            print(\"Takahashi\" if turn == 0 else \"Aoki\")\n            return\n\n        d = 0\n        for x in cur:\n            d = gcd(d, x - 1)\n\n        # Transform to the next reduced position\n        cur = [(x - 1) // d + 1 for x in cur]\n        turn ^= 1\n\nif __name__ == \"__main__\":\n    main()"
   }
 ]

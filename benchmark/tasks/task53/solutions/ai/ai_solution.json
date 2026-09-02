@@ -1,23 +1,20 @@
 [
   {
-    "model": "claude-3-5-haiku-20241022",
-    "prompt_type": "zero_shot",
-    "language": "Python",
-    "code": "def solve(n, schedule):\n    start = -1\n    for i in range(n):\n        if schedule[i] == 1:\n            start = i\n            break\n    \n    if start == -1:\n        return 0\n    \n    end = -1\n    for i in range(n-1, -1, -1):\n        if schedule[i] == 1:\n            end = i\n            break\n    \n    pairs_at_uni = 0\n    for i in range(start, end+1):\n        if schedule[i] == 0:\n            # Check if break is 2 or more pairs\n            if i+1 < n and schedule[i+1] == 0:\n                continue\n            if i-1 >= 0 and schedule[i-1] == 0:\n                continue\n        pairs_at_uni += 1\n    \n    return pairs_at_uni\n\n# Read input\nn = int(input())\nschedule = list(map(int, input().split()))\n\n# Print output\nprint(solve(n, schedule))",
-    "timestamp": "2025-08-05 17:33:26"
-  },
-  {
-    "model": "deepseek-v3",
-    "prompt_type": "zero_shot",
-    "language": "Python",
-    "code": "n = int(input())\nschedule = list(map(int, input().split()))\nstay = 0\ni = 0\n\n# Find the first pair with class\nwhile i < n and schedule[i] == 0:\n    i += 1\n\nif i == n:\n    print(0)\nelse:\n    stay += 1\n    i += 1\n    while i < n:\n        if schedule[i] == 1:\n            stay += 1\n            i += 1\n        else:\n            # Check if there are two consecutive 0s\n            if i + 1 < n and schedule[i+1] == 0:\n                break\n            else:\n                stay += 1\n                i += 1\n    print(stay)",
-    "timestamp": "2025-08-05 17:34:15"
-  },
-  {
-    "model": "gpt-4o",
+    "model": "deepseek-chat",
     "prompt_type": "zero_shot",
     "language": "python",
-    "code": "n = int(input().strip())\npairs = list(map(int, input().strip().split()))\n\nfirst_class_index = next((i for i, x in enumerate(pairs) if x == 1), n)\nlast_class_index = next((i for i, x in enumerate(reversed(pairs)) if x == 1), n)\n\nif first_class_index == n:\n    print(0)\nelse:\n    print(sum(pairs[first_class_index:n - last_class_index]))",
-    "timestamp": "2025-08-12 21:55:18"
+    "code": "n = int(input().strip())\na = list(map(int, input().strip().split()))\n\n# Find first and last occurrence of 1\nfirst = -1\nlast = -1\nfor i in range(n):\n    if a[i] == 1:\n        if first == -1:\n            first = i\n        last = i\n\nif first == -1:\n    print(0)\nelse:\n    # Count total pairs from first to last\n    total = last - first + 1\n    # Subtract zeros that are in blocks of 2 or more consecutive zeros\n    i = first\n    while i <= last:\n        if a[i] == 0:\n            j = i\n            while j <= last and a[j] == 0:\n                j += 1\n            zero_len = j - i\n            if zero_len >= 2:\n                total -= zero_len\n            i = j\n        else:\n            i += 1\n    print(total)"
+  },
+  {
+    "model": "claude-sonnet-4-6",
+    "prompt_type": "zero_shot",
+    "language": "python",
+    "code": "n = int(input())\na = list(map(int, input().split()))\n\n# Find first and last class\nfirst = -1\nlast = -1\nfor i in range(n):\n    if a[i] == 1:\n        if first == -1:\n            first = i\n        last = i\n\nif first == -1:\n    print(0)\nelse:\n    count = 0\n    i = first\n    while i <= last:\n        if a[i] == 1:\n            count += 1\n            i += 1\n        else:\n            # Count length of this zero run\n            j = i\n            while j <= last and a[j] == 0:\n                j += 1\n            run_len = j - i\n            if run_len == 1:\n                count += 1  # Single free pair, she stays\n            # If run_len >= 2, she goes home, count += 0\n            i = j\n    print(count)"
+  },
+  {
+    "model": "gpt-5.4",
+    "prompt_type": "zero_shot",
+    "language": "python",
+    "code": "import sys\n\ndef main():\n    input = sys.stdin.readline\n    n = int(input().strip())\n    a = list(map(int, input().split()))\n    \n    first = -1\n    last = -1\n    \n    for i in range(n):\n        if a[i] == 1:\n            if first == -1:\n                first = i\n            last = i\n    \n    if first == -1:\n        print(0)\n        return\n    \n    # She stays at the university only during the segment from\n    # the first existing class to the last existing class,\n    # excluding breaks of length at least 2 (she goes home then).\n    ans = 0\n    i = first\n    while i <= last:\n        if a[i] == 1:\n            ans += 1\n            i += 1\n        else:\n            j = i\n            while j <= last and a[j] == 0:\n                j += 1\n            gap = j - i\n            if gap == 1:\n                ans += 1\n            i = j\n    \n    print(ans)\n\nif __name__ == \"__main__\":\n    main()"
   }
 ]

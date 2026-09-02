@@ -1,23 +1,20 @@
 [
   {
-    "model": "claude-3-5-haiku-20241022",
-    "prompt_type": "zero_shot",
-    "language": "Python",
-    "code": "def solve(d, k, a, b, t):\n    if d <= k:\n        return d * a\n\n    full_trips = d // k\n    remaining_dist = d % k\n\n    options = [\n        # Walk entire distance\n        d * b,\n        \n        # Full car trips + walk remaining\n        full_trips * (k * a + t) + remaining_dist * b,\n        \n        # Full car trips - 1 + walk remaining\n        (full_trips - 1) * (k * a + t) + k * a + remaining_dist * b if full_trips > 0 else float('inf'),\n        \n        # Full car trips + repair + partial car trip\n        full_trips * (k * a + t) + min(remaining_dist * a, remaining_dist * b)\n    ]\n\n    return min(options)\n\nd, k, a, b, t = map(int, input().split())\nprint(solve(d, k, a, b, t))",
-    "timestamp": "2025-08-05 17:31:20"
-  },
-  {
-    "model": "deepseek-v3",
-    "prompt_type": "zero_shot",
-    "language": "Python",
-    "code": "d, k, a, b, t = map(int, input().split())\n\nif d <= k:\n    print(d * a)\nelse:\n    # Calculate the full cycles and remaining distance\n    full_cycles = (d - 1) // k\n    remaining = d - full_cycles * k\n    \n    # Option 1: Drive full cycles and then walk the remaining\n    time1 = full_cycles * (k * a + t) - t + remaining * b\n    \n    # Option 2: Drive full cycles and then drive the remaining (if better than walking)\n    time2 = full_cycles * (k * a + t) + (remaining * a)\n    \n    # Option 3: Drive only the first k kilometers and walk the rest\n    time3 = k * a + (d - k) * b\n    \n    # Option 4: Drive as much as possible without the last repair if remaining is <=k\n    if full_cycles >= 1:\n        time4 = (full_cycles - 1) * (k * a + t) + k * a + (d - full_cycles * k) * a\n    else:\n        time4 = float('inf')\n    \n    min_time = min(time1, time2, time3, time4)\n    print(min_time)",
-    "timestamp": "2025-08-05 17:31:36"
-  },
-  {
-    "model": "gpt-4o",
+    "model": "deepseek-chat",
     "prompt_type": "zero_shot",
     "language": "python",
-    "code": "def minimal_time_to_post_office(d, k, a, b, t):\n    if d <= k:\n        return d * a\n    time = k * a\n    distance_left = d - k\n    while distance_left > 0:\n        if distance_left <= k:\n            time += min(distance_left * a, distance_left * b)\n            break\n        else:\n            # Decide whether to repair or to walk the next k kilometers\n            drive_and_repair_time = k * a + t\n            walk_time = k * b\n            if drive_and_repair_time <= walk_time:\n                time += drive_and_repair_time\n            else:\n                time += walk_time\n                break\n            distance_left -= k\n    return time\n\n# Example inputs\nprint(minimal_time_to_post_office(5, 2, 1, 4, 10)) # Output should be 14\nprint(minimal_time_to_post_office(5, 2, 1, 4, 5))  # Output should be 13",
-    "timestamp": "2025-08-12 21:40:33"
+    "code": "d, k, a, b, t = map(int, input().split())\n\n# If d <= k, just drive the whole way\nif d <= k:\n    print(d * a)\nelse:\n    # Option 1: Drive first k, then walk the rest\n    ans = k * a + (d - k) * b\n    \n    # Option 2: Drive multiple full segments, possibly repair\n    full_segments = d // k\n    remaining = d % k\n    \n    # Try driving all full segments (with repairs between them) and then walk remaining\n    # full_segments times we drive k km, with (full_segments - 1) repairs\n    time_all_drive = full_segments * k * a + (full_segments - 1) * t\n    if remaining > 0:\n        # either walk remaining\n        time_with_walk = time_all_drive + remaining * b\n        ans = min(ans, time_with_walk)\n        # or repair and drive remaining\n        time_with_drive = time_all_drive + t + remaining * a\n        ans = min(ans, time_with_drive)\n    else:\n        ans = min(ans, time_all_drive)\n    \n    # Also consider driving fewer full segments and walking earlier\n    for drives in range(1, full_segments):\n        dist_driven = drives * k\n        time_driven = dist_driven * a + (drives - 1) * t\n        time_walk = (d - dist_driven) * b\n        ans = min(ans, time_driven + time_walk)\n    \n    print(ans)"
+  },
+  {
+    "model": "gpt-5.4",
+    "prompt_type": "zero_shot",
+    "language": "python",
+    "code": "import sys\n\ndef main():\n    d, k, a, b, t = map(int, sys.stdin.readline().split())\n\n    # If the whole distance fits into the first working segment, just drive.\n    if d <= k:\n        print(d * a)\n        return\n\n    # For every full k-km segment after the first one, using the car costs:\n    # repair + drive = t + k*a\n    # walking the same segment costs k*b\n    # So for additional full segments, choose the cheaper option.\n    full_segments = d // k\n    rem = d % k\n\n    # First segment is always best to drive (car is initially repaired, and a < b).\n    ans = k * a\n    remaining_full = full_segments - 1\n\n    if t + k * a < k * b:\n        ans += remaining_full * (t + k * a)\n        # For the remaining partial segment:\n        # either repair then drive rem, or just walk rem.\n        ans += min(t + rem * a, rem * b)\n    else:\n        # After the first segment, it's never worth repairing for a full k segment.\n        # So just walk the rest.\n        ans += (d - k) * b\n\n    print(ans)\n\nif __name__ == \"__main__\":\n    main()"
+  },
+  {
+    "model": "claude-sonnet-4-6",
+    "prompt_type": "zero_shot",
+    "language": "python",
+    "code": "d, k, a, b, t = map(int, input().split())\n\ndef calc(n):\n    driven = n * k\n    if driven > d:\n        return float('inf')\n    r = min(k, d - driven)\n    w = d - driven - r\n    return n * (k * a + t) + r * a + w * b\n\n# Either drive maximum segments or just one segment (0 repairs after first)\nmax_n = d // k\n\n# Check if repair is worth it\nif t < (b - a) * k:\n    # Always worth repairing, drive max segments\n    print(calc(max_n))\nelse:\n    # Only worth driving first segment at most\n    print(min(calc(0), calc(1)))"
   }
 ]

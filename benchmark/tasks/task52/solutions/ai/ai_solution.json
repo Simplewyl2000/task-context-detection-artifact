@@ -1,23 +1,20 @@
 [
   {
-    "model": "claude-3-5-haiku-20241022",
-    "prompt_type": "zero_shot",
-    "language": "Python",
-    "code": "def solve():\n    k2, k3, k5, k6 = map(int, input().split())\n    \n    count_256 = min(k2 // 2, k5, k6)\n    remaining_2 = k2 - count_256 * 2\n    count_32 = min(remaining_2, k3, k6 - count_256)\n    \n    return count_256 * 256 + count_32 * 32\n\nprint(solve())",
-    "timestamp": "2025-08-05 17:33:24"
-  },
-  {
-    "model": "deepseek-v3",
-    "prompt_type": "zero_shot",
-    "language": "Python",
-    "code": "k2, k3, k5, k6 = map(int, input().split())\n\n# The number of 256s is limited by the min of k2, k5, k6\nnum256 = min(k2, k5, k6)\n\n# After using for 256, remaining k2 and k3 can be used for 32\nremaining_k2 = k2 - num256\nnum32 = min(remaining_k2, k3)\n\nmax_sum = num256 * 256 + num32 * 32\n\nprint(max_sum)",
-    "timestamp": "2025-08-05 17:33:46"
-  },
-  {
-    "model": "gpt-4o",
+    "model": "deepseek-chat",
     "prompt_type": "zero_shot",
     "language": "python",
-    "code": "def max_sum_of_favorite_integers(k_2, k_3, k_5, k_6):\n    count_256 = min(k_2, k_5, k_6)\n    k_2 -= count_256\n    count_32 = min(k_2, k_3)\n    return count_256 * 256 + count_32 * 32\n\n# Example usage:\nk_2, k_3, k_5, k_6 = map(int, input().split())\nprint(max_sum_of_favorite_integers(k_2, k_3, k_5, k_6))",
-    "timestamp": "2025-08-12 21:55:15"
+    "code": "k2, k3, k5, k6 = map(int, input().split())\n\n# First make as many 256 as possible\ncount256 = min(k2, k5, k6)\nk2 -= count256\nk5 -= count256\nk6 -= count256\n\n# Then make as many 32 as possible\ncount32 = min(k2, k3)\n\nresult = count256 * 256 + count32 * 32\nprint(result)"
+  },
+  {
+    "model": "claude-sonnet-4-6",
+    "prompt_type": "zero_shot",
+    "language": "python",
+    "code": "k2, k3, k5, k6 = map(int, input().split())\na = min(k5, k6, k2)\nb = min(k3, k2 - a)\nprint(256 * a + 32 * b)"
+  },
+  {
+    "model": "gpt-5.4",
+    "prompt_type": "zero_shot",
+    "language": "python",
+    "code": "import sys\n\ndef main():\n    k2, k3, k5, k6 = map(int, sys.stdin.readline().split())\n\n    cnt256 = min(k2, k5, k6)\n    k2 -= cnt256\n\n    cnt32 = min(k2, k3)\n\n    ans = cnt256 * 256 + cnt32 * 32\n    print(ans)\n\nif __name__ == \"__main__\":\n    main()"
   }
 ]

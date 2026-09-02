@@ -1,86 +1,74 @@
 [
   {
-    "model": "claude-3-5-haiku-20241022",
-    "prompt_type": "zero_shot",
-    "language": "C",
-    "code": "#include <stdio.h>\n#include <limits.h>\n\nint minimumDaysToReduce(int S, int T, int D, int *plan) {\n    for (int days = 0; days <= D * D; days++) {\n        if (S <= T) return days;\n        S -= plan[days % D];\n    }\n    return -1;\n}\n\nint main() {\n    int S, T, D;\n    scanf(\"%d %d %d\", &S, &T, &D);\n    \n    int plan[D];\n    for (int i = 0; i < D; i++) {\n        scanf(\"%d\", &plan[i]);\n    }\n    \n    int result = minimumDaysToReduce(S, T, D, plan);\n    printf(\"%d\\n\", result);\n    \n    return 0;\n}",
-    "timestamp": "2025-08-05 22:01:54"
-  },
-  {
-    "model": "deepseek-v3",
-    "prompt_type": "zero_shot",
-    "language": "C",
-    "code": "#include <stdio.h>\n#include <stdlib.h>\n\nint main() {\n    long long S, T, D;\n    scanf(\"%lld %lld %lld\", &S, &T, &D);\n    long long *cycle = (long long *)malloc(D * sizeof(long long));\n    for (long long i = 0; i < D; i++) {\n        scanf(\"%lld\", &cycle[i]);\n    }\n\n    long long current = S;\n    long long days = 0;\n    long long min_weight = S;\n    long long total_cycle = 0;\n\n    for (long long i = 0; i < D; i++) {\n        total_cycle += cycle[i];\n    }\n\n    if (total_cycle >= 0) {\n        printf(\"-1\\n\");\n        free(cycle);\n        return 0;\n    }\n\n    while (current > T) {\n        for (long long i = 0; i < D && current > T; i++) {\n            current += cycle[i];\n            days++;\n            if (current <= T) {\n                printf(\"%lld\\n\", days);\n                free(cycle);\n                return 0;\n            }\n        }\n        if (current >= min_weight) {\n            printf(\"-1\\n\");\n            free(cycle);\n            return 0;\n        }\n        min_weight = current;\n    }\n\n    printf(\"%lld\\n\", days);\n    free(cycle);\n    return 0;\n}",
-    "timestamp": "2025-08-05 22:02:08"
-  },
-  {
-    "model": "deepseek-v3",
-    "prompt_type": "zero_shot",
-    "language": "C++",
-    "code": "#include <iostream>\n#include <vector>\n#include <climits>\n\nusing namespace std;\n\nint main() {\n    long long S, T, D;\n    cin >> S >> T >> D;\n    vector<long long> changes(D);\n    for (long long i = 0; i < D; ++i) {\n        cin >> changes[i];\n    }\n\n    long long current = S;\n    long long days = 0;\n\n    // Check first D days\n    for (long long i = 0; i < D; ++i) {\n        if (current <= T) {\n            cout << days << endl;\n            return 0;\n        }\n        current += changes[i % D];\n        days++;\n        if (current <= T) {\n            cout << days << endl;\n            return 0;\n        }\n    }\n\n    if (current >= S) {\n        cout << -1 << endl;\n        return 0;\n    }\n\n    // Calculate the net change per D days\n    long long net_change = 0;\n    for (long long i = 0; i < D; ++i) {\n        net_change += changes[i];\n    }\n\n    if (net_change >= 0) {\n        cout << -1 << endl;\n        return 0;\n    }\n\n    // Calculate full cycles needed\n    long long full_cycles = (current - T + (-net_change) - 1) / (-net_change);\n    days += full_cycles * D;\n    current += full_cycles * net_change;\n\n    // Check remaining days\n    while (current > T) {\n        current += changes[days % D];\n        days++;\n    }\n\n    cout << days << endl;\n    return 0;\n}",
-    "timestamp": "2025-08-05 22:02:24"
-  },
-  {
-    "model": "deepseek-v3",
-    "prompt_type": "zero_shot",
-    "language": "Java",
-    "code": "import java.util.Scanner;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        int S = scanner.nextInt();\n        int T = scanner.nextInt();\n        int D = scanner.nextInt();\n        int[] changes = new int[D];\n        for (int i = 0; i < D; i++) {\n            changes[i] = scanner.nextInt();\n        }\n        \n        int currentWeight = S;\n        int days = 0;\n        boolean possible = false;\n        \n        while (true) {\n            if (currentWeight <= T) {\n                possible = true;\n                break;\n            }\n            int change = changes[days % D];\n            currentWeight += change;\n            days++;\n            \n            if (days > 1000000) { // Prevent infinite loop\n                break;\n            }\n        }\n        \n        System.out.println(possible ? days : -1);\n    }\n}",
-    "timestamp": "2025-08-05 22:02:37"
-  },
-  {
-    "model": "claude-3-5-haiku-20241022",
-    "prompt_type": "zero_shot",
-    "language": "Java",
-    "code": "class Solution {\n    public int findMinDays(int S, int T, int D, int[] weights) {\n        int currentWeight = S;\n        boolean[] visited = new boolean[D];\n        \n        for (int day = 0; day <= D * 100; day++) {\n            if (currentWeight <= T) {\n                return day;\n            }\n            \n            int weightChange = weights[day % D];\n            currentWeight -= weightChange;\n            \n            if (visited[day % D]) {\n                break;\n            }\n            \n            visited[day % D] = true;\n        }\n        \n        return -1;\n    }\n}",
-    "timestamp": "2025-08-05 22:02:40"
-  },
-  {
-    "model": "claude-3-5-haiku-20241022",
-    "prompt_type": "zero_shot",
-    "language": "C++",
-    "code": "class Solution {\npublic:\n    int minimumDays(int S, int T, vector<int>& weights) {\n        int D = weights.size();\n        int currentWeight = S;\n        \n        for (int day = 0; day < D * 2; day++) {\n            if (currentWeight <= T) {\n                return day;\n            }\n            \n            currentWeight -= weights[day % D];\n        }\n        \n        return currentWeight <= T ? D * 2 : -1;\n    }\n};",
-    "timestamp": "2025-08-05 22:02:43"
-  },
-  {
-    "model": "gpt-4o",
-    "prompt_type": "zero_shot",
-    "language": "python",
-    "code": "def chokudai_slimming(S, T, D_days):\n    day_count = 0\n    current_weight = S\n    n = len(D_days)\n    \n    while current_weight > T:\n        current_weight += D_days[day_count % n]\n        day_count += 1\n        if day_count > n and D_days[day_count % n] >= D_days[(day_count - n) % n]:\n            return -1\n        \n    return day_count\n\n# Example usage:\nS = 100\nT = 70\nD_days = [-2, 0, -5]\nprint(chokudai_slimming(S, T, D_days))  # Output: 10",
-    "timestamp": "2025-08-13 08:37:14"
-  },
-  {
-    "model": "gpt-4o",
-    "prompt_type": "zero_shot",
-    "language": "java",
-    "code": "public class WeightReduction {\n\n    public static int slimmingPlan(int S, int T, int[] changes) {\n        int D = changes.length;\n        int days = 0;\n        \n        while (S > T) {\n            S += changes[days % D];\n            days++;\n            if (days > D && changesCyclicNoReduction(changes)) {\n                return -1;\n            }\n        }\n        \n        return days;\n    }\n    \n    private static boolean changesCyclicNoReduction(int[] changes) {\n        int sum = 0;\n        for (int change : changes) {\n            sum += change;\n        }\n        return sum >= 0;\n    }\n\n    public static void main(String[] args) {\n        int S = 6;\n        int T = 4;\n        int[] changes = {-2, 1, -1};\n        \n        System.out.println(slimmingPlan(S, T, changes));  // Output: 2\n    }\n}",
-    "timestamp": "2025-08-13 08:37:17"
-  },
-  {
-    "model": "gpt-4o",
-    "prompt_type": "zero_shot",
-    "language": "c",
-    "code": "#include <stdio.h>\n\nint main() {\n    int S, T, D;\n    scanf(\"%d %d %d\", &S, &T, &D);\n\n    int weightChange[D];\n    for (int i = 0; i < D; i++) {\n        scanf(\"%d\", &weightChange[i]);\n    }\n\n    int currentWeight = S;\n    int days = 0;\n\n    while (currentWeight > T) {\n        if (days > 100000) {\n            printf(\"-1\\n\");\n            return 0;\n        }\n\n        currentWeight += weightChange[days % D];\n        days++;\n    }\n\n    printf(\"%d\\n\", days);\n    return 0;\n}",
-    "timestamp": "2025-08-13 08:37:23"
-  },
-  {
-    "model": "claude-3-5-haiku-20241022",
-    "prompt_type": "zero_shot",
-    "language": "python",
-    "code": "def solve_weight_reduction(S, T, D, weights):\n    visited = set()\n    current_weight = S\n    days = 0\n\n    while current_weight > T:\n        if days >= D * 2:  # Prevent infinite loop\n            return -1\n        \n        day_index = days % D\n        current_weight += weights[day_index]\n        \n        state = (current_weight, day_index)\n        if state in visited:\n            return -1\n        \n        visited.add(state)\n        days += 1\n\n    return days",
-    "timestamp": "2025-08-13 08:37:28"
-  },
-  {
-    "model": "deepseek-v3",
-    "prompt_type": "zero_shot",
-    "language": "python",
-    "code": "def solve():\n    S, T, D = map(int, input().split())\n    W = list(map(int, input().split()))\n    \n    current_weight = S\n    days = 0\n    \n    visited = set()\n    \n    while current_weight > T:\n        mod_day = days % D\n        current_weight += W[mod_day]\n        days += 1\n        \n        if current_weight <= T:\n            break\n            \n        state = (mod_day, current_weight)\n        if state in visited:\n            return -1\n        visited.add(state)\n        \n        if days > 1000000:  # Prevent infinite loop\n            return -1\n    \n    return days if current_weight <= T else -1\n\nprint(solve())",
-    "timestamp": "2025-08-13 08:37:37"
-  },
-  {
-    "model": "gpt-4o",
+    "model": "deepseek-chat",
     "prompt_type": "zero_shot",
     "language": "c++",
-    "code": "#include <iostream>\n#include <vector>\n\nusing namespace std;\n\nint slimmingPlan(int S, int T, int D, vector<int>& cycle) {\n    int weight = S;\n    for (int days = 0; days <= 300000; ++days) {\n        if (weight <= T) {\n            return days;\n        }\n        weight += cycle[days % D];\n    }\n    return -1;\n}\n\nint main() {\n    int S, T, D;\n    cin >> S >> T >> D;\n    vector<int> cycle(D);\n    for (int i = 0; i < D; ++i) {\n        cin >> cycle[i];\n    }\n    cout << slimmingPlan(S, T, D, cycle) << endl;\n    return 0;\n}",
-    "timestamp": "2025-08-13 11:47:11"
+    "code": "#include <iostream>\n#include <vector>\n#include <unordered_set>\nusing namespace std;\n\nint main() {\n    ios::sync_with_stdio(false);\n    cin.tie(nullptr);\n    \n    long long S, T;\n    int D;\n    cin >> S >> T >> D;\n    \n    vector<int> a(D);\n    for (int i = 0; i < D; i++) {\n        cin >> a[i];\n    }\n    \n    unordered_set<long long> visited;\n    long long current = S;\n    int days = 0;\n    \n    while (current > T) {\n        if (visited.count(current)) {\n            cout << -1 << '\\n';\n            return 0;\n        }\n        visited.insert(current);\n        current += a[days % D];\n        days++;\n    }\n    \n    cout << days << '\\n';\n    return 0;\n}"
+  },
+  {
+    "model": "claude-sonnet-4-6",
+    "prompt_type": "zero_shot",
+    "language": "c++",
+    "code": "#include <bits/stdc++.h>\nusing namespace std;\nint main(){\n    long long S, T, D;\n    cin >> S >> T >> D;\n    vector<long long> a(D);\n    for(auto &x: a) cin >> x;\n    long long w = S;\n    vector<long long> prefix(D+1, 0);\n    for(int i = 0; i < D; i++) prefix[i+1] = prefix[i] + a[i];\n    if(w <= T){ cout << 0; return 0; }\n    long long sum = prefix[D];\n    // simulate first cycle\n    for(int j = 1; j <= D; j++){\n        w = S + prefix[j];\n        if(w <= T){ cout << j; return 0; }\n    }\n    if(sum >= 0){ cout << -1; return 0; }\n    long long best = LLONG_MAX;\n    for(int j = 1; j <= D; j++){\n        long long need = T - S - prefix[j]; // need c*sum <= need, sum<0\n        // c >= need/sum (sum<0), c_min = ceil(need/sum)\n        long long c_min = 0;\n        if(need < 0){ // need c >= need/sum = negative/negative = positive\n            c_min = (-need + (-sum) - 1) / (-sum); // ceil((-need)/(-sum))\n        }\n        best = min(best, c_min * D + j);\n    }\n    cout << best;\n}"
+  },
+  {
+    "model": "gpt-5.4",
+    "prompt_type": "zero_shot",
+    "language": "c++",
+    "code": "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    ios::sync_with_stdio(false);\n    cin.tie(nullptr);\n\n    long long D, S, T;\n    cin >> D >> S >> T;\n\n    vector<long long> a(D);\n    for (int i = 0; i < D; i++) cin >> a[i];\n\n    if (S <= T) {\n        cout << 0 << '\\n';\n        return 0;\n    }\n\n    long long cycleSum = 0;\n    for (long long x : a) cycleSum += x;\n\n    long long need = S - T;\n\n    // If one full cycle does not decrease weight at all, only first cycle matters.\n    if (cycleSum >= 0) {\n        long long cur = 0;\n        for (int i = 0; i < D; i++) {\n            cur += a[i];\n            if (-cur >= need) {\n                cout << (i + 1) << '\\n';\n                return 0;\n            }\n        }\n        cout << -1 << '\\n';\n        return 0;\n    }\n\n    // cycleSum < 0, so weight decreases by -cycleSum every full cycle.\n    long long decPerCycle = -cycleSum;\n\n    // Binary search minimum days.\n    auto ok = [&](long long days) -> bool {\n        long long full = days / D;\n        int rem = (int)(days % D);\n\n        __int128 totalChange = (__int128)full * cycleSum;\n        for (int i = 0; i < rem; i++) totalChange += a[i];\n\n        __int128 finalWeight = (__int128)S + totalChange;\n        return finalWeight <= T;\n    };\n\n    long long low = 0, high = 1;\n    while (!ok(high)) {\n        high *= 2;\n    }\n\n    while (high - low > 1) {\n        long long mid = low + (high - low) / 2;\n        if (ok(mid)) high = mid;\n        else low = mid;\n    }\n\n    cout << high << '\\n';\n    return 0;\n}"
+  },
+  {
+    "model": "deepseek-chat",
+    "prompt_type": "zero_shot",
+    "language": "python",
+    "code": "def solve():\n    S, T, D = map(int, input().split())\n    changes = list(map(int, input().split()))\n    \n    weight = S\n    visited = set()\n    day = 0\n    \n    while weight > T:\n        state = (day % D, weight)\n        if state in visited:\n            print(-1)\n            return\n        visited.add(state)\n        weight += changes[day % D]\n        day += 1\n    \n    print(day)\n\nif __name__ == \"__main__\":\n    solve()"
+  },
+  {
+    "model": "claude-sonnet-4-6",
+    "prompt_type": "zero_shot",
+    "language": "python",
+    "code": "import math\n\ndef solve():\n    S, T, D = map(int, input().split())\n    a = list(map(int, input().split()))\n    \n    # Simulate first D days\n    weight = S\n    prefix = [0] * (D + 1)\n    for i in range(D):\n        prefix[i+1] = prefix[i] + a[i]\n        weight = S + prefix[i+1]\n        if weight <= T:\n            print(i + 1)\n            return\n    \n    total = prefix[D]  # sum of one cycle\n    \n    if total >= 0:\n        print(-1)\n        return\n    \n    # Find minimum prefix sum value\n    min_pref = min(prefix[1:D+1])\n    threshold = T - min_pref  # We need S + k*total <= threshold\n    \n    # k * total <= threshold - S  (total < 0, so dividing flips)\n    # k >= (S - threshold) / (-total)\n    neg = -total\n    k = max(0, math.ceil((S - threshold) / neg))\n    \n    # After k full cycles, starting weight is S + k*total\n    W = S + k * total\n    \n    for j in range(1, D+1):\n        if W + prefix[j] <= T:\n            print(k * D + j)\n            return\n    \n    print(-1)\n\nsolve()"
+  },
+  {
+    "model": "gpt-5.4",
+    "prompt_type": "zero_shot",
+    "language": "python",
+    "code": "import sys\n\ndef main():\n    input = sys.stdin.readline\n    S, T, D = map(int, input().split())\n    A = list(map(int, input().split()))\n\n    if S <= T:\n        print(0)\n        return\n\n    need = S - T  # total decrease needed\n\n    # Prefix sums of daily changes\n    pref = [0] * (D + 1)\n    for i in range(D):\n        pref[i + 1] = pref[i] + A[i]\n\n    cycle_sum = pref[D]\n\n    # Check within the first cycle\n    for i in range(1, D + 1):\n        if pref[i] <= -need:\n            print(i)\n            return\n\n    # If one full cycle does not decrease weight, impossible\n    if cycle_sum >= 0:\n        print(-1)\n        return\n\n    # Use as many full cycles as possible, then finish within one more cycle\n    dec_per_cycle = -cycle_sum  # positive\n    full = (need - 1) // dec_per_cycle  # guaranteed not enough yet\n    days = full * D\n    current_decrease = full * dec_per_cycle\n\n    remaining = need - current_decrease\n    for i in range(1, D + 1):\n        if -pref[i] >= remaining:\n            print(days + i)\n            return\n\nif __name__ == \"__main__\":\n    main()"
+  },
+  {
+    "model": "deepseek-chat",
+    "prompt_type": "zero_shot",
+    "language": "java",
+    "code": "import java.util.*;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        \n        long S = sc.nextLong();\n        long T = sc.nextLong();\n        int D = sc.nextInt();\n        \n        long[] changes = new long[D];\n        for (int i = 0; i < D; i++) {\n            changes[i] = sc.nextLong();\n        }\n        \n        long currentWeight = S;\n        int day = 0;\n        \n        // To detect cycles: map from (weight, dayInCycle) to day number\n        Set<String> seen = new HashSet<>();\n        \n        while (currentWeight > T) {\n            String state = currentWeight + \",\" + (day % D);\n            if (seen.contains(state)) {\n                System.out.println(-1);\n                return;\n            }\n            seen.add(state);\n            \n            currentWeight += changes[day % D];\n            day++;\n            \n            // Safety: if it goes extremely large without hitting T, but loop detection handles it\n        }\n        \n        System.out.println(day);\n    }\n}"
+  },
+  {
+    "model": "claude-sonnet-4-6",
+    "prompt_type": "zero_shot",
+    "language": "java",
+    "code": "import java.util.*;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        int D = sc.nextInt();\n        long S = sc.nextLong();\n        long T = sc.nextLong();\n        long[] a = new long[D];\n        for (int i = 0; i < D; i++) a[i] = sc.nextLong();\n        \n        // Simulate first cycle\n        long weight = S;\n        for (int i = 0; i < D; i++) {\n            weight += a[i];\n            if (weight <= T) {\n                System.out.println(i + 1);\n                return;\n            }\n        }\n        \n        long cycleSum = weight - S;\n        if (cycleSum >= 0) {\n            System.out.println(-1);\n            return;\n        }\n        \n        // Find minimum prefix in cycle\n        // Need k full cycles such that S + k*cycleSum + prefix[j] <= T\n        // Find how many full cycles needed\n        // k = ceil((S - T + min_prefix_after) / (-cycleSum)) but min_prefix could be after adding\n        // Actually just compute k large enough\n        long need = S - T; // need to reduce by this much via cycles before partial\n        // After k cycles: weight = S + k*cycleSum, need S + k*cycleSum <= T - min_prefix_in_cycle... \n        // Let's just use: k = max(0, ceil((S - T) / (-cycleSum))) - 1\n        long k = Math.max(0, (S - T + (-cycleSum) - 1) / (-cycleSum) - 1);\n        weight = S + k * cycleSum;\n        long baseDay = k * D;\n        for (int i = 0; i < D; i++) {\n            weight += a[i];\n            if (weight <= T) {\n                System.out.println(baseDay + i + 1);\n                return;\n            }\n        }\n        // Try one more cycle\n        k++;\n        weight = S + k * cycleSum;\n        baseDay = k * D;\n        for (int i = 0; i < D; i++) {\n            weight += a[i];\n            if (weight <= T) {\n                System.out.println(baseDay + i + 1);\n                return;\n            }\n        }\n        System.out.println(-1);\n    }\n}"
+  },
+  {
+    "model": "gpt-5.4",
+    "prompt_type": "zero_shot",
+    "language": "java",
+    "code": "import java.io.*;\nimport java.util.*;\n\npublic class Main {\n    public static void main(String[] args) throws Exception {\n        FastScanner fs = new FastScanner(System.in);\n\n        long S = fs.nextLong();\n        long T = fs.nextLong();\n        int D = (int) fs.nextLong();\n\n        long[] a = new long[D];\n        for (int i = 0; i < D; i++) a[i] = fs.nextLong();\n\n        // If already at or below target\n        if (S <= T) {\n            System.out.println(0);\n            return;\n        }\n\n        long need = S - T; // total decrease needed\n\n        long[] pref = new long[D + 1];\n        for (int i = 0; i < D; i++) {\n            pref[i + 1] = pref[i] + a[i];\n        }\n\n        long cycleSum = pref[D];\n\n        long answer = Long.MAX_VALUE;\n\n        if (cycleSum > 0) {\n            // Use full cycles, then find earliest day in next cycle\n            for (int i = 1; i <= D; i++) {\n                long p = pref[i];\n                if (p >= need) {\n                    answer = Math.min(answer, i);\n                } else {\n                    long rem = need - p;\n                    long k = (rem + cycleSum - 1) / cycleSum; // extra full cycles needed\n                    long days = k * (long) D + i;\n                    answer = Math.min(answer, days);\n                }\n            }\n            System.out.println(answer);\n        } else {\n            // Total decrease per cycle is non-positive, only first cycle matters\n            for (int i = 1; i <= D; i++) {\n                if (pref[i] >= need) {\n                    answer = Math.min(answer, i);\n                    break;\n                }\n            }\n            System.out.println(answer == Long.MAX_VALUE ? -1 : answer);\n        }\n    }\n\n    static class FastScanner {\n        private final InputStream in;\n        private final byte[] buffer = new byte[1 << 16];\n        private int ptr = 0, len = 0;\n\n        FastScanner(InputStream is) {\n            in = is;\n        }\n\n        private int read() throws IOException {\n            if (ptr >= len) {\n                len = in.read(buffer);\n                ptr = 0;\n                if (len <= 0) return -1;\n            }\n            return buffer[ptr++];\n        }\n\n        long nextLong() throws IOException {\n            int c;\n            do {\n                c = read();\n            } while (c <= ' ' && c != -1);\n\n            long sign = 1;\n            if (c == '-') {\n                sign = -1;\n                c = read();\n            }\n\n            long val = 0;\n            while (c > ' ') {\n                val = val * 10 + (c - '0');\n                c = read();\n            }\n            return val * sign;\n        }\n    }\n}"
+  },
+  {
+    "model": "deepseek-chat",
+    "prompt_type": "zero_shot",
+    "language": "c",
+    "code": "#include <stdio.h>\n#include <limits.h>\n\nint main() {\n    long long S, T;\n    int D;\n    scanf(\"%lld %lld %d\", &S, &T, &D);\n    int a[D];\n    for (int i = 0; i < D; i++) {\n        scanf(\"%d\", &a[i]);\n    }\n\n    if (S <= T) {\n        printf(\"0\\n\");\n        return 0;\n    }\n\n    long long current = S;\n    long long min_weight = S;\n    long long cycle_sum = 0;\n\n    // Simulate one full cycle to see if possible\n    for (int i = 0; i < D; i++) {\n        current += a[i];\n        if (current <= T) {\n            printf(\"%d\\n\", i + 1);\n            return 0;\n        }\n        if (current < min_weight) {\n            min_weight = current;\n        }\n        cycle_sum += a[i];\n    }\n\n    // If net change is non-negative, impossible to go below T after first cycle\n    if (cycle_sum >= 0) {\n        printf(\"-1\\n\");\n        return 0;\n    }\n\n    // Otherwise, we can reduce. Calculate full cycles needed.\n    long long drop_per_cycle = -cycle_sum;\n    long long needed_drop = S - T;\n    long long cycles = (needed_drop - (S - min_weight) + drop_per_cycle - 1) / drop_per_cycle;\n    if (cycles < 1) cycles = 1;\n\n    // Simulate from after those cycles\n    long long days = cycles * D;\n    current = S + cycles * cycle_sum;\n\n    // Simulate final partial cycle\n    for (int i = 0; i < D; i++) {\n        current += a[i];\n        days++;\n        if (current <= T) {\n            printf(\"%lld\\n\", days);\n            return 0;\n        }\n    }\n\n    // Should never reach here\n    printf(\"-1\\n\");\n    return 0;\n}"
+  },
+  {
+    "model": "claude-sonnet-4-6",
+    "prompt_type": "zero_shot",
+    "language": "c",
+    "code": "#include <stdio.h>\n#include <stdlib.h>\n\nint main() {\n    long long S, T, D;\n    scanf(\"%lld %lld %lld\", &S, &T, &D);\n    \n    long long *a = malloc(D * sizeof(long long));\n    for (int i = 0; i < D; i++) scanf(\"%lld\", &a[i]);\n    \n    // Simulate first cycle\n    long long w = S;\n    for (int i = 0; i < D; i++) {\n        w += a[i];\n        if (w <= T) {\n            printf(\"%d\\n\", i + 1);\n            free(a);\n            return 0;\n        }\n    }\n    \n    long long cycle_sum = w - S;\n    if (cycle_sum >= 0) {\n        printf(\"-1\\n\");\n        free(a);\n        return 0;\n    }\n    \n    // Find min prefix sum within a cycle\n    // We need smallest k >= 1 (additional full cycles beyond the first) such that\n    // after k full cycles total, simulating hits T\n    // Weight at start of cycle k+1 (0-indexed from 0) = S + k*cycle_sum\n    // We need S + k*cycle_sum + prefix[i] <= T for some i\n    // => k*(-cycle_sum) >= S + prefix[i] - T\n    // Find min over i of (S + prefix[i] - T), need k >= ceil(that / (-cycle_sum))\n    // But we want minimum k >= 1 (already checked k=1 above... wait k=1 is first cycle)\n    // Actually already checked k=0 start. k=1 means after 1 full cycle.\n    // k >= ceil((S + min_prefix - T) / (-cycle_sum)), k >= 1\n    \n    long long prefix = 0, min_prefix = 0;\n    long long min_day = 0;\n    for (int i = 0; i < D; i++) {\n        prefix += a[i];\n        if (prefix < min_prefix) { min_prefix = prefix; min_day = i + 1; }\n    }\n    \n    long long neg_cs = -cycle_sum;\n    long long need = S + min_prefix - T; // need k * neg_cs >= need\n    long long k = (need + neg_cs - 1) / neg_cs;\n    if (k < 1) k = 1;\n    \n    // Now simulate from weight S + k*cycle_sum\n    long long start_w = S + k * cycle_sum;\n    long long cur = start_w;\n    for (int i = 0; i < D; i++) {\n        cur += a[i];\n        if (cur <= T) {\n            printf(\"%lld\\n\", k * D + i + 1);\n            free(a);\n            return 0;\n        }\n    }\n    \n    printf(\"-1\\n\");\n    free(a);\n    return 0;\n}"
+  },
+  {
+    "model": "gpt-5.4",
+    "prompt_type": "zero_shot",
+    "language": "c",
+    "code": "#include <stdio.h>\n#include <stdlib.h>\n\nint main(void) {\n    long long D, S, T;\n    if (scanf(\"%lld %lld %lld\", &D, &S, &T) != 3) return 0;\n\n    long long *a = (long long *)malloc(sizeof(long long) * D);\n    for (long long i = 0; i < D; i++) scanf(\"%lld\", &a[i]);\n\n    if (S <= T) {\n        printf(\"0\\n\");\n        free(a);\n        return 0;\n    }\n\n    long long prefix = 0;\n    long long minPrefix = 0;\n    long long ans = -1;\n\n    for (long long i = 0; i < D; i++) {\n        prefix += a[i];\n        if (S + prefix <= T) {\n            ans = i + 1;\n            break;\n        }\n        if (prefix < minPrefix) minPrefix = prefix;\n    }\n\n    if (ans != -1) {\n        printf(\"%lld\\n\", ans);\n        free(a);\n        return 0;\n    }\n\n    long long cycleSum = prefix;\n\n    if (cycleSum >= 0) {\n        printf(\"-1\\n\");\n        free(a);\n        return 0;\n    }\n\n    long long need = (S + minPrefix) - T;  // positive\n    long long k = 0;\n    if (need > 0) {\n        long long dec = -cycleSum;\n        k = (need + dec - 1) / dec;\n    }\n\n    long long baseWeight = S + k * cycleSum;\n    prefix = 0;\n    for (long long i = 0; i < D; i++) {\n        prefix += a[i];\n        if (baseWeight + prefix <= T) {\n            ans = k * D + (i + 1);\n            break;\n        }\n    }\n\n    printf(\"%lld\\n\", ans);\n\n    free(a);\n    return 0;\n}"
   }
 ]

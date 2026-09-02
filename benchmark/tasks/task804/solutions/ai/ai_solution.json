@@ -1,107 +1,74 @@
 [
   {
-    "model": "claude-3-5-haiku-20241022",
-    "prompt_type": "zero_shot",
-    "language": "C",
-    "code": "#include <stdio.h>\n#include <limits.h>\n\n#define MAX_N 400\n\nint main() {\n    int N, a[MAX_N];\n    int dp[MAX_N][MAX_N];\n    \n    scanf(\"%d\", &N);\n    for (int i = 0; i < N; i++) {\n        scanf(\"%d\", &a[i]);\n    }\n    \n    for (int i = 0; i < N; i++) {\n        for (int j = 0; j < N; j++) {\n            dp[i][j] = 0;\n        }\n    }\n    \n    for (int len = 2; len <= N; len++) {\n        for (int i = 0; i + len <= N; i++) {\n            int j = i + len - 1;\n            dp[i][j] = INT_MAX;\n            \n            int sum = 0;\n            for (int k = i; k <= j; k++) {\n                sum += a[k];\n            }\n            \n            for (int k = i; k < j; k++) {\n                dp[i][j] = (dp[i][j] < dp[i][k] + dp[k+1][j] + sum) ? dp[i][j] : (dp[i][k] + dp[k+1][j] + sum);\n            }\n        }\n    }\n    \n    printf(\"%d\\n\", dp[0][N-1]);\n    \n    return 0;\n}",
-    "timestamp": "2025-08-05 22:57:37"
-  },
-  {
-    "model": "deepseek-v3",
-    "prompt_type": "zero_shot",
-    "language": "C",
-    "code": "#include <stdio.h>\n#include <stdlib.h>\n#include <limits.h>\n\n#define MIN(a, b) ((a) < (b) ? (a) : (b))\n\nlong long dp[405][405];\nlong long sum[405][405];\n\nvoid solve() {\n    int n;\n    scanf(\"%d\", &n);\n    long long a[n+1];\n    for (int i = 1; i <= n; i++) {\n        scanf(\"%lld\", &a[i]);\n    }\n\n    for (int i = 1; i <= n; i++) {\n        sum[i][i] = a[i];\n        for (int j = i + 1; j <= n; j++) {\n            sum[i][j] = sum[i][j-1] + a[j];\n        }\n    }\n\n    for (int len = 2; len <= n; len++) {\n        for (int i = 1; i <= n - len + 1; i++) {\n            int j = i + len - 1;\n            dp[i][j] = LLONG_MAX;\n            for (int k = i; k < j; k++) {\n                dp[i][j] = MIN(dp[i][j], dp[i][k] + dp[k+1][j] + sum[i][j]);\n            }\n        }\n    }\n\n    printf(\"%lld\\n\", dp[1][n]);\n}\n\nint main() {\n    solve();\n    return 0;\n}",
-    "timestamp": "2025-08-05 22:58:23"
-  },
-  {
-    "model": "deepseek-v3",
-    "prompt_type": "zero_shot",
-    "language": "C++",
-    "code": "#include <iostream>\n#include <vector>\n#include <climits>\nusing namespace std;\n\nlong long dp[405][405];\nlong long sum[405][405];\n\nlong long solve(int l, int r, vector<long long>& a) {\n    if (l == r) return 0;\n    if (dp[l][r] != -1) return dp[l][r];\n    long long res = LLONG_MAX;\n    for (int k = l; k < r; k++) {\n        res = min(res, solve(l, k, a) + solve(k + 1, r, a) + sum[l][r]);\n    }\n    return dp[l][r] = res;\n}\n\nint main() {\n    int N;\n    cin >> N;\n    vector<long long> a(N);\n    for (int i = 0; i < N; i++) cin >> a[i];\n\n    for (int i = 0; i < N; i++) {\n        sum[i][i] = a[i];\n        for (int j = i + 1; j < N; j++) {\n            sum[i][j] = sum[i][j - 1] + a[j];\n        }\n    }\n\n    for (int i = 0; i < 405; i++) {\n        for (int j = 0; j < 405; j++) {\n            dp[i][j] = -1;\n        }\n    }\n\n    cout << solve(0, N - 1, a) << endl;\n    return 0;\n}",
-    "timestamp": "2025-08-05 22:58:39"
-  },
-  {
-    "model": "deepseek-v3",
-    "prompt_type": "zero_shot",
-    "language": "Java",
-    "code": "import java.util.*;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        int N = sc.nextInt();\n        long[] a = new long[N];\n        for (int i = 0; i < N; i++) {\n            a[i] = sc.nextLong();\n        }\n        \n        long[][] dp = new long[N][N];\n        long[][] sum = new long[N][N];\n        for (int i = 0; i < N; i++) {\n            sum[i][i] = a[i];\n            for (int j = i + 1; j < N; j++) {\n                sum[i][j] = sum[i][j - 1] + a[j];\n            }\n        }\n        \n        for (int len = 1; len < N; len++) {\n            for (int i = 0; i + len < N; i++) {\n                int j = i + len;\n                dp[i][j] = Long.MAX_VALUE;\n                for (int k = i; k < j; k++) {\n                    dp[i][j] = Math.min(dp[i][j], dp[i][k] + dp[k + 1][j] + sum[i][j]);\n                }\n            }\n        }\n        \n        System.out.println(dp[0][N - 1]);\n    }\n}",
-    "timestamp": "2025-08-05 22:58:52"
-  },
-  {
-    "model": "claude-3-5-haiku-20241022",
-    "prompt_type": "zero_shot",
-    "language": "Java",
-    "code": "import java.util.*;\n\npublic class SlimeCombination {\n    public static int minimumCost(int[] arr) {\n        int n = arr.length;\n        int[][] dp = new int[n][n];\n        int[][] prefixSum = new int[n][n];\n\n        for (int i = 0; i < n; i++) {\n            prefixSum[i][i] = arr[i];\n            for (int j = i + 1; j < n; j++) {\n                prefixSum[i][j] = prefixSum[i][j-1] + arr[j];\n            }\n        }\n\n        for (int len = 2; len <= n; len++) {\n            for (int i = 0; i + len <= n; i++) {\n                int j = i + len - 1;\n                dp[i][j] = Integer.MAX_VALUE;\n                for (int k = i; k < j; k++) {\n                    dp[i][j] = Math.min(dp[i][j], dp[i][k] + dp[k+1][j] + prefixSum[i][j]);\n                }\n            }\n        }\n\n        return dp[0][n-1];\n    }\n\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        int n = scanner.nextInt();\n        int[] arr = new int[n];\n        for (int i = 0; i < n; i++) {\n            arr[i] = scanner.nextInt();\n        }\n        System.out.println(minimumCost(arr));\n    }\n}",
-    "timestamp": "2025-08-05 22:58:57"
-  },
-  {
-    "model": "claude-3-5-haiku-20241022",
-    "prompt_type": "zero_shot",
-    "language": "C++",
-    "code": "#include <iostream>\n#include <vector>\n#include <queue>\n#include <climits>\n\nusing namespace std;\n\nint main() {\n    int N;\n    cin >> N;\n    \n    vector<int> A(N);\n    for (int i = 0; i < N; i++) {\n        cin >> A[i];\n    }\n    \n    vector<vector<int>> dp(N, vector<int>(N, 0));\n    \n    for (int len = 2; len <= N; len++) {\n        for (int left = 0; left + len - 1 < N; left++) {\n            int right = left + len - 1;\n            dp[left][right] = INT_MAX;\n            \n            for (int mid = left; mid < right; mid++) {\n                int sum = 0;\n                for (int k = left; k <= right; k++) {\n                    sum += A[k];\n                }\n                \n                dp[left][right] = min(dp[left][right], \n                                      dp[left][mid] + dp[mid+1][right] + sum);\n            }\n        }\n    }\n    \n    cout << dp[0][N-1] << endl;\n    \n    return 0;\n}",
-    "timestamp": "2025-08-05 22:59:02"
-  },
-  {
-    "model": "gpt-4o",
-    "prompt_type": "zero_shot",
-    "language": "python",
-    "code": "def min_slime_cost(a):\n    import heapq\n\n    # Initialize total cost as 0\n    total_cost = 0\n    pq = a[:]  # Use a list and transform it into a priority queue\n    heapq.heapify(pq)\n\n    # While there's more than one slime in the priority queue\n    while len(pq) > 1:\n        # Pop the two smallest sizes\n        x = heapq.heappop(pq)\n        y = heapq.heappop(pq)\n\n        # Combine them into a new size\n        new_size = x + y\n\n        # Add the new size back into the priority queue\n        heapq.heappush(pq, new_size)\n\n        # Add the cost to the total cost\n        total_cost += new_size\n\n    return total_cost\n\n# Example usage\na = [3, 7, 2, 5]\nprint(min_slime_cost(a))  # Example output: 33",
-    "timestamp": "2025-08-13 13:11:05"
-  },
-  {
-    "model": "gpt-4o",
-    "prompt_type": "zero_shot",
-    "language": "java",
-    "code": "import java.util.PriorityQueue;\n\npublic class SlimeCombiner {\n    public static int minCost(int[] a) {\n        PriorityQueue<Integer> pq = new PriorityQueue<>();\n        for (int size : a) {\n            pq.offer(size);\n        }\n\n        int totalCost = 0;\n\n        while (pq.size() > 1) {\n            int first = pq.poll();\n            int second = pq.poll();\n            int combined = first + second;\n            totalCost += combined;\n            pq.offer(combined);\n        }\n\n        return totalCost;\n    }\n\n    public static void main(String[] args) {\n        int[] a = {3, 6, 2, 8, 7};\n        System.out.println(minCost(a)); // Example usage\n    }\n}",
-    "timestamp": "2025-08-13 13:11:09"
-  },
-  {
-    "model": "gpt-4o",
-    "prompt_type": "zero_shot",
-    "language": "c",
-    "code": "#include <stdio.h>\n#include <limits.h>\n\n#define MAXN 1000\n\nint minCost(int slimes[], int n) {\n    int dp[MAXN][MAXN], prefixSum[MAXN];\n\n    // Calculate prefix sums to easily calculate sum of any subarray\n    prefixSum[0] = slimes[0];\n    for (int i = 1; i < n; ++i) {\n        prefixSum[i] = prefixSum[i-1] + slimes[i];\n    }\n\n    // Initialize DP table with 0 cost for combining slimes of length 1\n    for (int i = 0; i < n; ++i) {\n        dp[i][i] = 0;\n    }\n\n    // Fill DP table for combinations of length 2 to n\n    for (int length = 2; length <= n; ++length) {\n        for (int i = 0; i <= n - length; ++i) {\n            int j = i + length - 1;\n            dp[i][j] = INT_MAX;\n            int totalSum = prefixSum[j] - (i > 0 ? prefixSum[i - 1] : 0);\n            for (int k = i; k < j; ++k) {\n                dp[i][j] = dp[i][j] < dp[i][k] + dp[k+1][j] + totalSum ? dp[i][j] : dp[i][k] + dp[k+1][j] + totalSum;\n            }\n        }\n    }\n\n    return dp[0][n-1];\n}\n\nint main() {\n    int n, slimes[MAXN];\n    scanf(\"%d\", &n);\n    for (int i = 0; i < n; ++i) {\n        scanf(\"%d\", &slimes[i]);\n    }\n    \n    printf(\"%d\\n\", minCost(slimes, n));\n    return 0;\n}",
-    "timestamp": "2025-08-13 13:11:14"
-  },
-  {
-    "model": "gpt-4o",
-    "prompt_type": "zero_shot",
-    "language": "js",
-    "code": "function minSlimeCost(slimes) {\n    let n = slimes.length;\n    let dp = Array.from({ length: n }, () => Array(n).fill(0));\n    let prefixSum = new Array(n + 1).fill(0);\n\n    for (let i = 0; i < n; i++) {\n        prefixSum[i + 1] = prefixSum[i] + slimes[i];\n    }\n\n    for (let length = 2; length <= n; length++) {\n        for (let i = 0; i + length <= n; i++) {\n            let j = i + length - 1;\n            dp[i][j] = Infinity;\n            for (let k = i; k < j; k++) {\n                dp[i][j] = Math.min(dp[i][j], dp[i][k] + dp[k + 1][j] + prefixSum[j + 1] - prefixSum[i]);\n            }\n        }\n    }\n    \n    return dp[0][n - 1];\n}\n\n// Example usage:\n// Initialize the sizes of the slimes\nlet slimes = [3, 2, 4, 1];\n// Calculate the minimum cost to combine all slimes\nconsole.log(minSlimeCost(slimes)); // Output",
-    "timestamp": "2025-08-13 13:11:22"
-  },
-  {
-    "model": "claude-3-5-haiku-20241022",
-    "prompt_type": "zero_shot",
-    "language": "python",
-    "code": "def minimum_slime_combination_cost(N, slimes):\n    # Use dynamic programming with minimum heap\n    import heapq\n    \n    # Create a copy of slimes to modify\n    arr = slimes.copy()\n    \n    # Use a min heap to always combine smallest elements\n    heapq.heapify(arr)\n    \n    total_cost = 0\n    \n    # Combine slimes until only one remains\n    while len(arr) > 1:\n        # Extract two smallest slimes\n        x = heapq.heappop(arr)\n        y = heapq.heappop(arr)\n        \n        # Calculate cost of combining these slimes\n        cost = x + y\n        total_cost += cost\n        \n        # Add combined slime back to heap\n        heapq.heappush(arr, cost)\n    \n    return total_cost\n\n# Example usage\nN = int(input())\nslimes = list(map(int, input().split()))\nprint(minimum_slime_combination_cost(N, slimes))",
-    "timestamp": "2025-08-13 13:11:28"
-  },
-  {
-    "model": "claude-3-5-haiku-20241022",
-    "prompt_type": "zero_shot",
-    "language": "js",
-    "code": "function minimumCombinationCost(N, slimes) {\n    const dp = Array.from({ length: N }, () => new Array(N).fill(0));\n    const prefixSum = new Array(N + 1).fill(0);\n\n    for (let i = 0; i < N; i++) {\n        prefixSum[i + 1] = prefixSum[i] + slimes[i];\n    }\n\n    for (let len = 2; len <= N; len++) {\n        for (let i = 0; i + len - 1 < N; i++) {\n            const j = i + len - 1;\n            dp[i][j] = Infinity;\n            for (let k = i; k < j; k++) {\n                dp[i][j] = Math.min(\n                    dp[i][j],\n                    dp[i][k] + dp[k + 1][j] + prefixSum[j + 1] - prefixSum[i]\n                );\n            }\n        }\n    }\n\n    return dp[0][N - 1];\n}",
-    "timestamp": "2025-08-13 13:11:34"
-  },
-  {
-    "model": "deepseek-v3",
-    "prompt_type": "zero_shot",
-    "language": "python",
-    "code": "def solve():\n    import sys\n    input = sys.stdin.read\n    data = input().split()\n    N = int(data[0])\n    a = list(map(int, data[1:N+1]))\n    \n    # Create prefix sum array\n    prefix = [0] * (N + 1)\n    for i in range(N):\n        prefix[i+1] = prefix[i] + a[i]\n    \n    # Initialize DP table\n    INF = float('inf')\n    dp = [[0] * N for _ in range(N)]\n    for length in range(2, N+1):\n        for i in range(N - length + 1):\n            j = i + length - 1\n            dp[i][j] = INF\n            for k in range(i, j):\n                cost = dp[i][k] + dp[k+1][j] + (prefix[j+1] - prefix[i])\n                if cost < dp[i][j]:\n                    dp[i][j] = cost\n    print(dp[0][N-1])\n\nsolve()",
-    "timestamp": "2025-08-13 13:11:42"
-  },
-  {
-    "model": "deepseek-v3",
-    "prompt_type": "zero_shot",
-    "language": "js",
-    "code": "function solve() {\n    const fs = require('fs');\n    const input = fs.readFileSync('/dev/stdin', 'utf8').trim().split('\\n');\n    const N = parseInt(input[0], 10);\n    const a = input[1].split(' ').map(Number);\n    \n    if (N === 1) {\n        console.log(0);\n        return;\n    }\n    \n    const prefixSum = new Array(N + 1).fill(0);\n    for (let i = 0; i < N; i++) {\n        prefixSum[i + 1] = prefixSum[i] + a[i];\n    }\n    \n    const dp = Array.from({ length: N }, () => new Array(N).fill(0));\n    \n    for (let len = 2; len <= N; len++) {\n        for (let i = 0; i + len <= N; i++) {\n            const j = i + len - 1;\n            dp[i][j] = Infinity;\n            for (let k = i; k < j; k++) {\n                const cost = dp[i][k] + dp[k + 1][j] + (prefixSum[j + 1] - prefixSum[i]);\n                if (cost < dp[i][j]) {\n                    dp[i][j] = cost;\n                }\n            }\n        }\n    }\n    \n    console.log(dp[0][N - 1]);\n}\n\nsolve();",
-    "timestamp": "2025-08-13 13:11:53"
-  },
-  {
-    "model": "gpt-4o",
+    "model": "claude-sonnet-4-6",
     "prompt_type": "zero_shot",
     "language": "c++",
-    "code": "#include <iostream>\n#include <vector>\n#include <climits>\n\nusing namespace std;\n\nint minCostSlimes(vector<int>& a) {\n    int n = a.size();\n    vector<vector<long long>> dp(n, vector<long long>(n, LLONG_MAX));\n    vector<long long> sum(n + 1, 0);\n\n    for (int i = 0; i < n; ++i) {\n        dp[i][i] = 0;\n        sum[i + 1] = sum[i] + a[i];\n    }\n\n    for (int length = 2; length <= n; ++length) {\n        for (int i = 0; i <= n - length; ++i) {\n            int j = i + length - 1;\n            for (int k = i; k < j; ++k) {\n                dp[i][j] = min(dp[i][j], dp[i][k] + dp[k+1][j] + sum[j+1] - sum[i]);\n            }\n        }\n    }\n\n    return dp[0][n-1];\n}\n\nint main() {\n    int N;\n    cin >> N;\n    vector<int> a(N);\n    for (int i = 0; i < N; ++i) {\n        cin >> a[i];\n    }\n    cout << minCostSlimes(a) << endl;\n    return 0;\n}",
-    "timestamp": "2025-08-13 14:38:26"
+    "code": "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n    \n    int n;\n    cin >> n;\n    \n    vector<long long> a(n);\n    for (int i = 0; i < n; i++) cin >> a[i];\n    \n    vector<long long> prefix(n + 1, 0);\n    for (int i = 0; i < n; i++) prefix[i + 1] = prefix[i] + a[i];\n    \n    auto sum = [&](int i, int j) {\n        return prefix[j + 1] - prefix[i];\n    };\n    \n    // dp[i][j] = min cost to merge slimes i..j\n    vector<vector<long long>> dp(n, vector<long long>(n, 0));\n    \n    // Fill by increasing length\n    for (int len = 2; len <= n; len++) {\n        for (int i = 0; i <= n - len; i++) {\n            int j = i + len - 1;\n            dp[i][j] = LLONG_MAX;\n            for (int k = i; k < j; k++) {\n                long long cost = dp[i][k] + dp[k + 1][j] + sum(i, j);\n                dp[i][j] = min(dp[i][j], cost);\n            }\n        }\n    }\n    \n    cout << dp[0][n - 1] << endl;\n    \n    return 0;\n}"
+  },
+  {
+    "model": "deepseek-chat",
+    "prompt_type": "zero_shot",
+    "language": "c++",
+    "code": "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    ios::sync_with_stdio(false);\n    cin.tie(nullptr);\n    \n    int n;\n    cin >> n;\n    vector<long long> a(n + 1), pref(n + 1, 0);\n    for (int i = 1; i <= n; i++) {\n        cin >> a[i];\n        pref[i] = pref[i - 1] + a[i];\n    }\n    \n    // dp[l][r] = minimum cost to combine slimes l..r into one\n    vector<vector<long long>> dp(n + 1, vector<long long>(n + 1, 0));\n    \n    // len = 2 to n\n    for (int len = 2; len <= n; len++) {\n        for (int l = 1; l + len - 1 <= n; l++) {\n            int r = l + len - 1;\n            dp[l][r] = LLONG_MAX;\n            // sum of sizes from l to r\n            long long sum = pref[r] - pref[l - 1];\n            for (int k = l; k < r; k++) {\n                dp[l][r] = min(dp[l][r], dp[l][k] + dp[k + 1][r] + sum);\n            }\n        }\n    }\n    \n    cout << dp[1][n] << \"\\n\";\n    return 0;\n}"
+  },
+  {
+    "model": "gpt-5.4",
+    "prompt_type": "zero_shot",
+    "language": "c++",
+    "code": "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    ios::sync_with_stdio(false);\n    cin.tie(nullptr);\n\n    int N;\n    cin >> N;\n    vector<long long> a(N + 1), pref(N + 1, 0);\n    for (int i = 1; i <= N; i++) {\n        cin >> a[i];\n        pref[i] = pref[i - 1] + a[i];\n    }\n\n    const long long INF = (1LL << 62);\n    vector<vector<long long>> dp(N + 2, vector<long long>(N + 2, 0));\n\n    for (int len = 2; len <= N; len++) {\n        for (int l = 1; l + len - 1 <= N; l++) {\n            int r = l + len - 1;\n            dp[l][r] = INF;\n            long long sum = pref[r] - pref[l - 1];\n            for (int k = l; k < r; k++) {\n                dp[l][r] = min(dp[l][r], dp[l][k] + dp[k + 1][r] + sum);\n            }\n        }\n    }\n\n    cout << dp[1][N] << '\\n';\n    return 0;\n}"
+  },
+  {
+    "model": "claude-sonnet-4-6",
+    "prompt_type": "zero_shot",
+    "language": "java",
+    "code": "import java.util.*;\nimport java.io.*;\n\npublic class Main {\n    public static void main(String[] args) throws IOException {\n        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));\n        int n = Integer.parseInt(br.readLine().trim());\n        StringTokenizer st = new StringTokenizer(br.readLine().trim());\n        long[] a = new long[n];\n        for (int i = 0; i < n; i++) {\n            a[i] = Long.parseLong(st.nextToken());\n        }\n        \n        // prefix sums\n        long[] prefix = new long[n + 1];\n        for (int i = 0; i < n; i++) {\n            prefix[i + 1] = prefix[i] + a[i];\n        }\n        \n        // dp[i][j] = min cost to merge slimes i..j (0-indexed)\n        long[][] dp = new long[n][n];\n        \n        // length 1: cost 0 (already initialized)\n        \n        for (int len = 2; len <= n; len++) {\n            for (int i = 0; i <= n - len; i++) {\n                int j = i + len - 1;\n                dp[i][j] = Long.MAX_VALUE;\n                long sumIJ = prefix[j + 1] - prefix[i];\n                for (int k = i; k < j; k++) {\n                    long cost = dp[i][k] + dp[k + 1][j] + sumIJ;\n                    if (cost < dp[i][j]) {\n                        dp[i][j] = cost;\n                    }\n                }\n            }\n        }\n        \n        System.out.println(dp[0][n - 1]);\n    }\n}"
+  },
+  {
+    "model": "deepseek-chat",
+    "prompt_type": "zero_shot",
+    "language": "java",
+    "code": "import java.io.*;\nimport java.util.*;\n\npublic class Main {\n    public static void main(String[] args) throws IOException {\n        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));\n        int n = Integer.parseInt(br.readLine());\n        int[] a = new int[n];\n        StringTokenizer st = new StringTokenizer(br.readLine());\n        for (int i = 0; i < n; i++) {\n            a[i] = Integer.parseInt(st.nextToken());\n        }\n\n        // prefix sums for range sum queries\n        long[] prefix = new long[n + 1];\n        for (int i = 0; i < n; i++) {\n            prefix[i + 1] = prefix[i] + a[i];\n        }\n\n        long[][] dp = new long[n][n];\n        // dp[i][j] = min cost to combine slimes i..j (inclusive)\n\n        // len = 1 => cost 0 already (no need to combine)\n        for (int len = 2; len <= n; len++) {\n            for (int i = 0; i + len - 1 < n; i++) {\n                int j = i + len - 1;\n                dp[i][j] = Long.MAX_VALUE;\n                long sum = prefix[j + 1] - prefix[i];\n                for (int k = i; k < j; k++) {\n                    long cost = dp[i][k] + dp[k + 1][j] + sum;\n                    if (cost < dp[i][j]) {\n                        dp[i][j] = cost;\n                    }\n                }\n            }\n        }\n\n        System.out.println(dp[0][n - 1]);\n    }\n}"
+  },
+  {
+    "model": "gpt-5.4",
+    "prompt_type": "zero_shot",
+    "language": "java",
+    "code": "import java.io.*;\nimport java.util.*;\n\npublic class Main {\n    public static void main(String[] args) throws Exception {\n        FastScanner fs = new FastScanner(System.in);\n        int N = fs.nextInt();\n        long[] a = new long[N + 1];\n        for (int i = 1; i <= N; i++) a[i] = fs.nextLong();\n\n        long[] prefix = new long[N + 1];\n        for (int i = 1; i <= N; i++) prefix[i] = prefix[i - 1] + a[i];\n\n        long[][] dp = new long[N + 2][N + 2];\n        long INF = Long.MAX_VALUE / 4;\n\n        for (int len = 2; len <= N; len++) {\n            for (int l = 1; l + len - 1 <= N; l++) {\n                int r = l + len - 1;\n                dp[l][r] = INF;\n                long sum = prefix[r] - prefix[l - 1];\n                for (int k = l; k < r; k++) {\n                    dp[l][r] = Math.min(dp[l][r], dp[l][k] + dp[k + 1][r] + sum);\n                }\n            }\n        }\n\n        System.out.println(dp[1][N]);\n    }\n\n    static class FastScanner {\n        private final InputStream in;\n        private final byte[] buffer = new byte[1 << 16];\n        private int ptr = 0, len = 0;\n\n        FastScanner(InputStream is) {\n            in = is;\n        }\n\n        private int read() throws IOException {\n            if (ptr >= len) {\n                len = in.read(buffer);\n                ptr = 0;\n                if (len <= 0) return -1;\n            }\n            return buffer[ptr++];\n        }\n\n        long nextLong() throws IOException {\n            int c;\n            do {\n                c = read();\n            } while (c <= ' ' && c != -1);\n\n            int sign = 1;\n            if (c == '-') {\n                sign = -1;\n                c = read();\n            }\n\n            long val = 0;\n            while (c > ' ') {\n                val = val * 10 + (c - '0');\n                c = read();\n            }\n            return val * sign;\n        }\n\n        int nextInt() throws IOException {\n            return (int) nextLong();\n        }\n    }\n}"
+  },
+  {
+    "model": "claude-sonnet-4-6",
+    "prompt_type": "zero_shot",
+    "language": "c",
+    "code": "#include <stdio.h>\n#include <string.h>\n\n#define MAXN 405\n#define INF 1e18\n\nlong long dp[MAXN][MAXN];\nlong long prefix[MAXN];\nint a[MAXN];\n\nint main() {\n    int n;\n    scanf(\"%d\", &n);\n    \n    for (int i = 0; i < n; i++) {\n        scanf(\"%d\", &a[i]);\n    }\n    \n    prefix[0] = 0;\n    for (int i = 0; i < n; i++) {\n        prefix[i+1] = prefix[i] + a[i];\n    }\n    \n    // Initialize dp\n    for (int i = 0; i < n; i++) {\n        for (int j = 0; j < n; j++) {\n            if (i == j) dp[i][j] = 0;\n            else dp[i][j] = (long long)INF;\n        }\n    }\n    \n    // Fill by increasing length\n    for (int len = 2; len <= n; len++) {\n        for (int i = 0; i <= n - len; i++) {\n            int j = i + len - 1;\n            long long sum = prefix[j+1] - prefix[i];\n            for (int k = i; k < j; k++) {\n                long long cost = dp[i][k] + dp[k+1][j] + sum;\n                if (cost < dp[i][j]) {\n                    dp[i][j] = cost;\n                }\n            }\n        }\n    }\n    \n    printf(\"%lld\\n\", dp[0][n-1]);\n    \n    return 0;\n}"
+  },
+  {
+    "model": "deepseek-chat",
+    "prompt_type": "zero_shot",
+    "language": "c",
+    "code": "#include <stdio.h>\n#include <limits.h>\n\n#define MAX_N 400\n\nlong long dp[MAX_N][MAX_N];\nlong long prefix[MAX_N + 1];\n\nint main() {\n    int N;\n    scanf(\"%d\", &N);\n    \n    int a[MAX_N];\n    for (int i = 0; i < N; i++) {\n        scanf(\"%d\", &a[i]);\n    }\n    \n    // prefix sums\n    prefix[0] = 0;\n    for (int i = 0; i < N; i++) {\n        prefix[i + 1] = prefix[i] + a[i];\n    }\n    \n    // Initialize dp with large values\n    for (int i = 0; i < N; i++) {\n        for (int j = 0; j < N; j++) {\n            dp[i][j] = LLONG_MAX;\n        }\n    }\n    \n    // Base case: single slime costs 0\n    for (int i = 0; i < N; i++) {\n        dp[i][i] = 0;\n    }\n    \n    // DP over increasing length\n    for (int len = 2; len <= N; len++) {\n        for (int l = 0; l + len - 1 < N; l++) {\n            int r = l + len - 1;\n            long long sum = prefix[r + 1] - prefix[l];\n            for (int k = l; k < r; k++) {\n                long long cost = dp[l][k] + dp[k + 1][r] + sum;\n                if (cost < dp[l][r]) {\n                    dp[l][r] = cost;\n                }\n            }\n        }\n    }\n    \n    printf(\"%lld\\n\", dp[0][N - 1]);\n    \n    return 0;\n}"
+  },
+  {
+    "model": "gpt-5.4",
+    "prompt_type": "zero_shot",
+    "language": "c",
+    "code": "#include <stdio.h>\n#include <limits.h>\n\n#define MAXN 405\n#define INF ((long long)4e18)\n\nlong long dp[MAXN][MAXN];\nlong long pref[MAXN];\n\nstatic inline long long sum(int l, int r) {\n    return pref[r + 1] - pref[l];\n}\n\nint main(void) {\n    int N;\n    if (scanf(\"%d\", &N) != 1) return 0;\n\n    for (int i = 0; i < N; i++) {\n        long long x;\n        scanf(\"%lld\", &x);\n        pref[i + 1] = pref[i] + x;\n    }\n\n    for (int len = 2; len <= N; len++) {\n        for (int l = 0; l + len - 1 < N; l++) {\n            int r = l + len - 1;\n            dp[l][r] = INF;\n            long long s = sum(l, r);\n            for (int k = l; k < r; k++) {\n                long long cand = dp[l][k] + dp[k + 1][r] + s;\n                if (cand < dp[l][r]) dp[l][r] = cand;\n            }\n        }\n    }\n\n    printf(\"%lld\\n\", dp[0][N - 1]);\n    return 0;\n}"
+  },
+  {
+    "model": "claude-sonnet-4-6",
+    "prompt_type": "zero_shot",
+    "language": "python",
+    "code": "import sys\n\ndef solve():\n    input_data = sys.stdin.read().split()\n    n = int(input_data[0])\n    a = list(map(int, input_data[1:n+1]))\n    \n    # prefix sums\n    prefix = [0] * (n + 1)\n    for i in range(n):\n        prefix[i+1] = prefix[i] + a[i]\n    \n    def range_sum(i, j):\n        return prefix[j+1] - prefix[i]\n    \n    # dp[i][j] = min cost to merge slimes i..j\n    INF = float('inf')\n    dp = [[0] * n for _ in range(n)]\n    \n    # Fill by length\n    for length in range(2, n + 1):\n        for i in range(n - length + 1):\n            j = i + length - 1\n            dp[i][j] = INF\n            s = range_sum(i, j)\n            for k in range(i, j):\n                cost = dp[i][k] + dp[k+1][j] + s\n                if cost < dp[i][j]:\n                    dp[i][j] = cost\n    \n    print(dp[0][n-1])\n\nsolve()"
+  },
+  {
+    "model": "deepseek-chat",
+    "prompt_type": "zero_shot",
+    "language": "python",
+    "code": "import sys\nimport heapq\n\ndef solve() -> None:\n    it = iter(sys.stdin.read().strip().split())\n    try:\n        n = int(next(it))\n    except StopIteration:\n        return\n    a = [int(next(it)) for _ in range(n)]\n\n    if n == 1:\n        print(0)\n        return\n\n    # Use a min-heap to always combine two smallest adjacent slimes.\n    # We need to maintain adjacency constraints, but since we always\n    # combine adjacent slimes and the order doesn't change,\n    # the optimal strategy is to combine the two smallest slimes\n    # that are adjacent at each step. This is equivalent to\n    # Huffman coding on a line (optimal merging of adjacent files).\n    # We can simulate with a heap of (size, index) and a doubly linked list.\n    \n    # Doubly linked list nodes\n    left = [i - 1 for i in range(n)]\n    right = [i + 1 for i in range(n)]\n    left[0] = -1\n    right[n-1] = -1\n    \n    heap = [(a[i], i) for i in range(n)]\n    heapq.heapify(heap)\n    \n    # Mark deleted nodes\n    deleted = [False] * n\n    \n    total_cost = 0\n    \n    while n > 1:\n        size, idx = heapq.heappop(heap)\n        if deleted[idx]:\n            continue\n        # Combine with the smaller of its two adjacent slimes\n        # We need to find the smallest adjacent neighbor\n        candidates = []\n        if left[idx] != -1 and not deleted[left[idx]]:\n            candidates.append((a[left[idx]], left[idx]))\n        if right[idx] != -1 and not deleted[right[idx]]:\n            candidates.append((a[right[idx]], right[idx]))\n        \n        if not candidates:\n            continue  # Should not happen\n        \n        # Pick the smallest adjacent\n        adj_size, adj_idx = min(candidates)\n        \n        total_cost += size + adj_size\n        \n        # Merge idx and adj_idx into a new slime at the position of the larger index? \n        # We'll keep the position of the left one of the two, and mark the other deleted.\n        # But careful: we need to maintain correct adjacency for future merges.\n        # We'll merge the two into one node, keeping the left index if they are adjacent.\n        # Since we always combine two adjacent, we can keep the left one and delete the right one.\n        if idx < adj_idx:\n            keep_idx = idx\n            del_idx = adj_idx\n        else:\n            keep_idx = adj_idx\n            del_idx = idx\n        \n        # Update size of kept node\n        a[keep_idx] = size + adj_size\n        deleted[del_idx] = True\n        \n        # Update linked list\n        l_del = left[del_idx]\n        r_del = right[del_idx]\n        \n        # Connect keep_idx to the neighbors of del_idx\n        if keep_idx == del_idx - 1:\n            # keep_idx is left of del_idx\n            right[keep_idx] = r_del\n            if r_del != -1:\n                left[r_del] = keep_idx\n        elif keep_idx == del_idx + 1:\n            # keep_idx is right of del_idx\n            left[keep_idx] = l_del\n            if l_del != -1:\n                right[l_del] = keep_idx\n        else:\n            # Should not happen for adjacent nodes\n            pass\n        \n        # Push the new merged node into heap\n        heapq.heappush(heap, (a[keep_idx], keep_idx))\n        \n        n -= 1\n    \n    print(total_cost)\n\nif __name__ == \"__main__\":\n    solve()"
+  },
+  {
+    "model": "gpt-5.4",
+    "prompt_type": "zero_shot",
+    "language": "python",
+    "code": "import sys\n\ndef main():\n    input = sys.stdin.readline\n    N = int(input())\n    a = list(map(int, input().split()))\n\n    # Prefix sums for range sum queries\n    pref = [0] * (N + 1)\n    for i in range(N):\n        pref[i + 1] = pref[i] + a[i]\n\n    def range_sum(l, r):\n        return pref[r + 1] - pref[l]\n\n    INF = 10**30\n    dp = [[0] * N for _ in range(N)]\n\n    # dp[l][r] = minimum cost to merge slimes l..r into one\n    for length in range(2, N + 1):\n        for l in range(N - length + 1):\n            r = l + length - 1\n            total = range_sum(l, r)\n            best = INF\n            for k in range(l, r):\n                cost = dp[l][k] + dp[k + 1][r] + total\n                if cost < best:\n                    best = cost\n            dp[l][r] = best\n\n    print(dp[0][N - 1])\n\nif __name__ == \"__main__\":\n    main()"
   }
 ]

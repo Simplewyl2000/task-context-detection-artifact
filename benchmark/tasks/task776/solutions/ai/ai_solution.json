@@ -1,107 +1,74 @@
 [
   {
-    "model": "claude-3-5-haiku-20241022",
-    "prompt_type": "zero_shot",
-    "language": "C",
-    "code": "#include <stdio.h>\n#include <string.h>\n\n#define MOD 1000000007\n\nint solve(int N) {\n    int dp[N + 1][2];\n    memset(dp, 0, sizeof(dp));\n    \n    dp[1][0] = 1;\n    dp[1][1] = 1;\n    \n    for (int i = 2; i <= N; i++) {\n        dp[i][0] = (dp[i-1][0] + dp[i-1][1]) % MOD;\n        dp[i][1] = (dp[i-1][0] + dp[i-1][1]) % MOD;\n    }\n    \n    return (dp[N][0] + dp[N][1]) % MOD;\n}\n\nint main() {\n    int N;\n    scanf(\"%d\", &N);\n    printf(\"%d\\n\", solve(N));\n    return 0;\n}",
-    "timestamp": "2025-08-05 22:52:28"
-  },
-  {
-    "model": "deepseek-v3",
-    "prompt_type": "zero_shot",
-    "language": "C",
-    "code": "#include <stdio.h>\n#include <string.h>\n#define MOD 1000000007\n#define MAXN 1000000\n\nlong long power(long long a, long long b) {\n    long long result = 1;\n    a %= MOD;\n    while (b > 0) {\n        if (b % 2 == 1) {\n            result = (result * a) % MOD;\n        }\n        a = (a * a) % MOD;\n        b /= 2;\n    }\n    return result;\n}\n\nlong long gcd(long long a, long long b) {\n    while (b) {\n        long long temp = b;\n        b = a % b;\n        a = temp;\n    }\n    return a;\n}\n\nlong long solve(int N, char* S) {\n    int len = strlen(S);\n    long long res = 0;\n    for (int d = 1; d <= N; ++d) {\n        if (N % d != 0) continue;\n        int ok = 1;\n        for (int i = 0; i < len; ++i) {\n            if (S[i] != S[(i + d) % len]) {\n                ok = 0;\n                break;\n            }\n        }\n        if (ok) {\n            res = (res + power(2, gcd(d, N))) % MOD;\n        }\n    }\n    return res;\n}\n\nint main() {\n    int N;\n    char S[MAXN + 1];\n    scanf(\"%d %s\", &N, S);\n    printf(\"%lld\\n\", solve(N, S));\n    return 0;\n}",
-    "timestamp": "2025-08-05 22:52:43"
-  },
-  {
-    "model": "deepseek-v3",
-    "prompt_type": "zero_shot",
-    "language": "C++",
-    "code": "#include <bits/stdc++.h>\nusing namespace std;\nconst int MOD = 1e9 + 7;\n\nlong long modPow(long long a, long long b) {\n    long long res = 1;\n    while (b > 0) {\n        if (b & 1) res = res * a % MOD;\n        a = a * a % MOD;\n        b >>= 1;\n    }\n    return res;\n}\n\nint solve(int N, const string &S) {\n    int M = S.size();\n    for (int d = 1; d <= N; ++d) {\n        if (N % d != 0) continue;\n        bool ok = true;\n        for (int i = 0; i < M; ++i) {\n            if (S[i] != S[(i + d) % M]) {\n                ok = false;\n                break;\n            }\n        }\n        if (ok) {\n            return modPow(2, d);\n        }\n    }\n    return 0;\n}\n\nint main() {\n    int N;\n    string S;\n    cin >> N >> S;\n    cout << solve(N, S) << endl;\n    return 0;\n}",
-    "timestamp": "2025-08-05 22:52:55"
-  },
-  {
-    "model": "deepseek-v3",
-    "prompt_type": "zero_shot",
-    "language": "Java",
-    "code": "import java.util.*;\n\npublic class Main {\n    static final int MOD = 1000000007;\n\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        int N = sc.nextInt();\n        String S = sc.next();\n        sc.close();\n\n        long result = 0;\n        for (int d = 1; d <= N; d++) {\n            if (N % d != 0) continue;\n            boolean ok = true;\n            for (int i = 0; i < d; i++) {\n                char c = S.charAt(i);\n                for (int j = i; j < N; j += d) {\n                    if (S.charAt(j) != c) {\n                        ok = false;\n                        break;\n                    }\n                }\n                if (!ok) break;\n            }\n            if (ok) {\n                result = (result + powMod(2, d)) % MOD;\n            }\n        }\n        System.out.println(result);\n    }\n\n    static long powMod(long base, int exp) {\n        long result = 1;\n        while (exp > 0) {\n            if (exp % 2 == 1) {\n                result = (result * base) % MOD;\n            }\n            base = (base * base) % MOD;\n            exp /= 2;\n        }\n        return result;\n    }\n}",
-    "timestamp": "2025-08-05 22:53:08"
-  },
-  {
-    "model": "claude-3-5-haiku-20241022",
-    "prompt_type": "zero_shot",
-    "language": "Java",
-    "code": "import java.util.*;\n\npublic class CirclePainting {\n    private static final int MOD = 1_000_000_007;\n\n    public static int countPaintings(int N) {\n        // Memoization array to store computed results\n        long[][] dp = new long[N + 1][2];\n        \n        // Base cases\n        dp[1][0] = 1;\n        dp[1][1] = 1;\n        \n        // Dynamic programming to compute possible painting configurations\n        for (int i = 2; i <= N; i++) {\n            // Count ways when first and last arcs have different colors\n            dp[i][0] = (dp[i-1][0] * 2 + dp[i-1][1]) % MOD;\n            \n            // Count ways when first and last arcs have same color\n            dp[i][1] = (dp[i-1][0] + dp[i-1][1]) % MOD;\n        }\n        \n        // Total number of valid painting configurations\n        return (int)((dp[N][0] + dp[N][1]) % MOD);\n    }\n}",
-    "timestamp": "2025-08-05 22:53:14"
-  },
-  {
-    "model": "claude-3-5-haiku-20241022",
-    "prompt_type": "zero_shot",
-    "language": "C++",
-    "code": "#include <bits/stdc++.h>\nusing namespace std;\n\nconst int MOD = 1e9 + 7;\n\nclass Solution {\npublic:\n    int colorCircle(int N) {\n        vector<vector<int>> dp(N, vector<int>(2, 0));\n        \n        // Base case\n        dp[0][0] = dp[0][1] = 1;\n        \n        // Dynamic programming to calculate possible color configurations\n        for (int i = 1; i < N; i++) {\n            // If current arc is red\n            dp[i][0] = (dp[i-1][0] + dp[i-1][1]) % MOD;\n            \n            // If current arc is blue\n            dp[i][1] = (dp[i-1][0] + dp[i-1][1]) % MOD;\n        }\n        \n        // Total configurations are sum of last row\n        int total = (dp[N-1][0] + dp[N-1][1]) % MOD;\n        \n        return total;\n    }\n};\n\nint main() {\n    Solution sol;\n    int N;\n    cin >> N;\n    cout << sol.colorCircle(N) << endl;\n    return 0;\n}",
-    "timestamp": "2025-08-05 22:53:22"
-  },
-  {
-    "model": "gpt-4o",
-    "prompt_type": "zero_shot",
-    "language": "python",
-    "code": "MOD = 10**9 + 7\n\ndef count_ways(N):\n    dp = [0] * (N + 1)\n    dp[0], dp[1] = 1, 2\n\n    for i in range(2, N + 1):\n        dp[i] = (dp[i-1] + dp[i-2]) % MOD\n\n    return dp[N]\n\nN = int(input())\nprint(count_ways(N))",
-    "timestamp": "2025-08-13 12:50:46"
-  },
-  {
-    "model": "gpt-4o",
-    "prompt_type": "zero_shot",
-    "language": "java",
-    "code": "import java.util.Scanner;\n\npublic class CircleString {\n    static final int MOD = 1000000007;\n\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        int N = sc.nextInt();\n        sc.close();\n\n        long[][] dp = new long[N + 1][2];\n        dp[1][0] = 1;\n        dp[1][1] = 1;\n\n        for (int i = 2; i <= N; i++) {\n            dp[i][0] = (dp[i - 1][0] + dp[i - 1][1]) % MOD;\n            dp[i][1] = dp[i - 1][0];\n        }\n\n        long result = (dp[N][0] + dp[N][1]) % MOD;\n        System.out.println(result);\n    }\n}",
-    "timestamp": "2025-08-13 12:50:49"
-  },
-  {
-    "model": "gpt-4o",
+    "model": "deepseek-chat",
     "prompt_type": "zero_shot",
     "language": "c",
-    "code": "#include <stdio.h>\n\n#define MOD 1000000007\n\nint main() {\n    int N;\n    scanf(\"%d\", &N);\n\n    // Since the solution is just the number of 2-colorings of the circle.\n    long long result = 1;\n    for (int i = 0; i < N; ++i) {\n        result = (result * 2) % MOD;\n    }\n\n    printf(\"%lld\\n\", result);\n    return 0;\n}",
-    "timestamp": "2025-08-13 12:50:50"
+    "code": "f[d] = 2^d - sum_{k|d, k<d} f[k]"
   },
   {
-    "model": "gpt-4o",
+    "model": "claude-sonnet-4-6",
+    "prompt_type": "zero_shot",
+    "language": "c",
+    "code": "#include <stdio.h>\n\nint main() {\n    int n;\n    scanf(\"%d\", &n);\n    // A coloring where every starting point generates the same string\n    // requires the string to be constant (all same color)\n    // Answer is 2 (all red or all blue)\n    printf(\"%d\\n\", 2);\n    return 0;\n}"
+  },
+  {
+    "model": "gpt-5.4",
+    "prompt_type": "zero_shot",
+    "language": "c",
+    "code": "#include <stdio.h>\n#include <stdlib.h>\n#include <string.h>\n\n#define MOD 1000000007LL\n\nstatic long long mod_pow(long long a, long long e) {\n    long long r = 1 % MOD;\n    while (e > 0) {\n        if (e & 1) r = (r * a) % MOD;\n        a = (a * a) % MOD;\n        e >>= 1;\n    }\n    return r;\n}\n\nstatic long long gcdll(long long a, long long b) {\n    while (b) {\n        long long t = a % b;\n        a = b;\n        b = t;\n    }\n    return a;\n}\n\nint main(void) {\n    long long N;\n    char S[200005];\n\n    if (scanf(\"%lld\", &N) != 1) return 0;\n    if (scanf(\"%s\", S) != 1) return 0;\n\n    long long L = (long long)strlen(S);\n\n    /* \n       Let movement rule be:\n       R -> move +1, B -> move -1 on circle.\n       Starting from any point, following S must end at same relative place.\n       Hence net displacement after whole string must be 0 modulo N.\n\n       If cnt1 = number of one color, cnt2 = number of the other,\n       then displacement = cntR - cntB = 2*cntR - L.\n       We need 2*cntR - L ≡ 0 (mod N).\n\n       Number of colorings of N arcs for which generated string S is possible\n       from every starting point equals:\n       - if displacement d != 0 mod N : 0\n       - else every arc coloring works consistently with all starts, so 2^g\n         where g = gcd(N, L) under periodicity condition.\n\n       For equal-length circular arcs and requirement \"from every initial point\",\n       the valid colorings are exactly those invariant on cycles induced by\n       stepping through the string length, giving 2^{gcd(N,L)}.\n    */\n\n    long long cntR = 0;\n    for (long long i = 0; i < L; ++i) {\n        if (S[i] == 'R' || S[i] == 'r') cntR++;\n    }\n\n    long long disp = (2 * cntR - L) % N;\n    if (disp < 0) disp += N;\n\n    if (disp != 0) {\n        printf(\"0\\n\");\n        return 0;\n    }\n\n    long long g = gcdll(N, L);\n    printf(\"%lld\\n\", mod_pow(2, g));\n    return 0;\n}"
+  },
+  {
+    "model": "deepseek-chat",
     "prompt_type": "zero_shot",
     "language": "c++",
-    "code": "#include <iostream>\n#include <vector>\nusing namespace std;\n\nconst int MOD = 1000000007;\n\nint power(int base, int exp, int mod) {\n    long long result = 1;\n    long long b = base;\n    while (exp > 0) {\n        if (exp % 2 == 1)\n            result = (result * b) % mod;\n        b = (b * b) % mod;\n        exp /= 2;\n    }\n    return result;\n}\n\nint main() {\n    int N;\n    cin >> N;\n    \n    if (N == 0) {\n        cout << 0 << endl;\n        return 0;\n    }\n    \n    int result = power(2, N, MOD);\n    \n    cout << result << endl;\n    return 0;\n}",
-    "timestamp": "2025-08-13 12:50:53"
+    "code": "#include <bits/stdc++.h>\nusing namespace std;\nconst int MOD = 1e9+7;\n\nint main() {\n    ios::sync_with_stdio(false);\n    cin.tie(nullptr);\n    int N;\n    cin >> N;\n    cout << 2 % MOD << '\\n';\n    return 0;\n}"
   },
   {
-    "model": "claude-3-5-haiku-20241022",
+    "model": "claude-sonnet-4-6",
+    "prompt_type": "zero_shot",
+    "language": "c++",
+    "code": "#include <bits/stdc++.h>\nusing namespace std;\nconst int MOD = 1e9 + 7;\nlong long fib(int n, map<int,long long>& memo) {\n    if (n <= 1) return n;\n    if (memo.count(n)) return memo[n];\n    return memo[n] = (fib(n-1, memo) + fib(n-2, memo)) % MOD;\n}\nint mu(int n) {\n    int factors = 0; int m = n;\n    for (int i = 2; i * i <= m; i++) { if (m % i == 0) { factors++; m /= i; if (m % i == 0) return 0; } }\n    if (m > 1) factors++;\n    return (factors % 2 == 0) ? 1 : -1;\n}\nint main() {\n    int N; cin >> N;\n    map<int,long long> memo;\n    long long ans = 0;\n    for (int d = 1; d <= N; d++) if (N % d == 0) {\n        int muval = mu(N / d);\n        if (muval != 0) ans = (ans + muval * fib(d + 1, memo) % MOD + MOD) % MOD;\n    }\n    cout << ans << endl;\n}"
+  },
+  {
+    "model": "gpt-5.4",
+    "prompt_type": "zero_shot",
+    "language": "c++",
+    "code": "#include <bits/stdc++.h>\nusing namespace std;\n\nstatic const long long MOD = 1000000007LL;\n\n// KMP prefix function\nvector<int> prefix_function(const string& s) {\n    int n = (int)s.size();\n    vector<int> pi(n, 0);\n    for (int i = 1; i < n; ++i) {\n        int j = pi[i - 1];\n        while (j > 0 && s[i] != s[j]) j = pi[j - 1];\n        if (s[i] == s[j]) ++j;\n        pi[i] = j;\n    }\n    return pi;\n}\n\n// Build all divisors of n\nvector<int> divisors(int n) {\n    vector<int> d;\n    for (int i = 1; 1LL * i * i <= n; ++i) {\n        if (n % i == 0) {\n            d.push_back(i);\n            if (i * i != n) d.push_back(n / i);\n        }\n    }\n    sort(d.begin(), d.end());\n    return d;\n}\n\nint main() {\n    ios::sync_with_stdio(false);\n    cin.tie(nullptr);\n\n    int N;\n    string S;\n    cin >> N >> S;\n\n    // Interpretation:\n    // Starting from any point, traversing the N arcs clockwise gives a binary string.\n    // We need the number of circular colorings such that from every starting point,\n    // the generated string equals S.\n    //\n    // That means every rotation of the arc-color sequence must equal S.\n    // Equivalently, S must be invariant under all cyclic shifts that arise from changing\n    // the starting point among the N points. This forces the circle coloring to be\n    // periodic, and the count reduces to the number of cyclic binary strings whose\n    // every rotation can produce S.\n    //\n    // For a fixed S, this is possible iff S itself is periodic with some period d | N,\n    // and then the coloring is determined by choosing a binary pattern on one orbit.\n    //\n    // The standard result for this problem is:\n    // answer = sum_{d | N and S has period d} phi(N / d)\n    //\n    // We detect all periods of S using prefix function.\n\n    vector<int> pi = prefix_function(S);\n\n    // hasPeriod[d] = whether S[i] = S[i-d] for all i>=d\n    vector<char> hasPeriod(N + 1, false);\n\n    // All periods can be derived from borders of S\n    int p = N - pi[N - 1];\n    if (N % p == 0) {\n        for (int d = p; d <= N; d += p) {\n            if (N % d == 0) hasPeriod[d] = true;\n        }\n    } else {\n        hasPeriod[N] = true;\n    }\n\n    // More generally, mark every divisor d that is a period\n    auto divs = divisors(N);\n    for (int d : divs) {\n        bool ok = true;\n        for (int i = d; i < N; ++i) {\n            if (S[i] != S[i - d]) {\n                ok = false;\n                break;\n            }\n        }\n        hasPeriod[d] = ok;\n    }\n\n    // Euler phi up to N\n    vector<int> phi(N + 1);\n    for (int i = 0; i <= N; ++i) phi[i] = i;\n    for (int i = 2; i <= N; ++i) {\n        if (phi[i] == i) {\n            for (int j = i; j <= N; j += i) {\n                phi[j] -= phi[j] / i;\n            }\n        }\n    }\n\n    long long ans = 0;\n    for (int d : divs) {\n        if (hasPeriod[d]) {\n            ans += phi[N / d];\n            if (ans >= MOD) ans %= MOD;\n        }\n    }\n\n    cout << ans % MOD << '\\n';\n    return 0;\n}"
+  },
+  {
+    "model": "deepseek-chat",
     "prompt_type": "zero_shot",
     "language": "python",
-    "code": "def count_valid_colorings(N):\n    MOD = 10**9 + 7\n    \n    # Dp state will track the number of valid colorings\n    dp = [[0] * (1 << N) for _ in range(N)]\n    \n    # Initial state: all N points possible\n    for i in range(N):\n        dp[i][1 << i] = 1\n    \n    # Iterate through all states\n    for mask in range(1, 1 << N):\n        for curr in range(N):\n            if not (mask & (1 << curr)):\n                continue\n            \n            for prev in range(N):\n                if prev == curr or not (mask & (1 << prev)):\n                    continue\n                \n                # Reduce mask by removing current point\n                reduced_mask = mask ^ (1 << curr)\n                \n                # Check if previous point in reduced mask can generate same string\n                if (curr - prev + N) % N == 1:\n                    dp[curr][mask] = (dp[curr][mask] + dp[prev][reduced_mask]) % MOD\n    \n    # Sum valid colorings from all points\n    result = sum(dp[i][(1 << N) - 1] for i in range(N)) % MOD\n    return result",
-    "timestamp": "2025-08-13 12:51:00"
+    "code": "MOD = 10**9 + 7\nN = int(input().strip())\nprint(2 % MOD)"
   },
   {
-    "model": "deepseek-v3",
+    "model": "claude-sonnet-4-6",
     "prompt_type": "zero_shot",
     "language": "python",
-    "code": "MOD = 10**9 + 7\n\ndef solve():\n    import sys\n    N = int(sys.stdin.readline())\n    S = sys.stdin.readline().strip()\n    \n    # Check for invalid cases\n    if N % 2 != 0:\n        print(0)\n        return\n    \n    # Check if S is a valid doubled string\n    half = N // 2\n    for i in range(half):\n        if S[i] != S[i + half]:\n            print(0)\n            return\n    \n    # The first half must be a valid pattern\n    pattern = S[:half]\n    # The pattern must be such that it can be rotated to match itself\n    # We need to find the minimal period d of the pattern\n    d = half\n    for k in range(1, half + 1):\n        if half % k != 0:\n            continue\n        valid = True\n        for i in range(half):\n            if pattern[i] != pattern[i % k]:\n                valid = False\n                break\n        if valid:\n            d = k\n            break\n    \n    # The answer is 2^d mod MOD\n    ans = pow(2, d, MOD)\n    print(ans)\n\nsolve()",
-    "timestamp": "2025-08-13 12:51:08"
+    "code": "import sys\nfrom math import gcd\n\ndef solve():\n    MOD = 10**9 + 7\n    input_data = sys.stdin.read().split()\n    if not input_data:\n        print(0)\n        return\n    N = int(input_data[0])\n    \n    # Count colorings of N arcs (2 colors) invariant under all rotations\n    # A coloring is invariant under rotation by k for all k iff all arcs same color\n    # Answer = 2\n    \n    # But maybe it's necklaces (invariant under at least one non-trivial rotation generating all)\n    # Using Burnside: number of necklaces = (1/N) * sum_{d|N} phi(d) * 2^(N/d)\n    \n    # Compute sum_{d|N} phi(d) * 2^(N/d) mod (N * MOD), then divide by N\n    \n    def euler_phi(n):\n        result = n\n        p = 2\n        temp = n\n        while p * p <= temp:\n            if temp % p == 0:\n                while temp % p == 0:\n                    temp //= p\n                result -= result // p\n            p += 1\n        if temp > 1:\n            result -= result // temp\n        return result\n    \n    total = 0\n    for d in range(1, N+1):\n        if N % d == 0:\n            phi_d = euler_phi(d)\n            total = (total + phi_d * pow(2, N // d, MOD)) % MOD\n    \n    inv_N = pow(N, MOD-2, MOD)\n    ans = total * inv_N % MOD\n    print(ans)\n\nsolve()"
   },
   {
-    "model": "gpt-4o",
+    "model": "gpt-5.4",
     "prompt_type": "zero_shot",
-    "language": "js",
-    "code": "function countWays(N) {\n    const MOD = 1000000007;\n\n    function modExp(base, exp, mod) {\n        let result = 1;\n        while (exp > 0) {\n            if (exp % 2 === 1) {\n                result = (result * base) % mod;\n            }\n            base = (base * base) % mod;\n            exp = Math.floor(exp / 2);\n        }\n        return result;\n    }\n\n    if (N === 1) return 2;\n    if (N % 2 === 1) {\n        return modExp(2, N, MOD);\n    }\n\n    const x = modExp(2, N / 2, MOD);\n    const y = (modExp(x, 2, MOD) * 2) % MOD;\n    let res = ((modExp(2, N, MOD) + y) % MOD);\n    res = (res * modExp(4, MOD - 2, MOD)) % MOD; // division by 4\n    return res;\n}\n\n// Example usage:\n// const ways = countWays(N);\n// console.log(ways);",
-    "timestamp": "2025-08-13 12:52:37"
+    "language": "python",
+    "code": "import sys\n\nMOD = 10**9 + 7\n\ndef main():\n    data = sys.stdin.read().strip().split()\n    if not data:\n        return\n    n = int(data[0])\n    s = data[1].strip()\n    m = len(s)\n\n    # dp[i][j]:\n    # after processing first i characters of s,\n    # currently there are j \"active\" starting points still consistent.\n    #\n    # For a fixed painting, every starting point either survives or not after each step.\n    # The transition depends only on how many active points there are, not on their positions,\n    # because the circle is symmetric and arcs are binary-colored.\n    #\n    # If next char is 'r':\n    # choose arcs so that among j active points, k continue on red arcs.\n    # Number of ways for that choice over the whole circle equals C(j, k) in this compressed model,\n    # but using the standard recurrence for this problem it simplifies to:\n    #   new[j] += dp * j\n    #   new[j-1] += dp * j\n    #\n    # If next char is 'b', symmetric:\n    #   new[j] += dp * (n-j)\n    #   new[j+1] += dp * (n-j)\n    #\n    # This is the classic DP for counting colorings consistent from every start.\n    #\n    # Initial: before reading anything, all n starting points are active.\n    dp = [0] * (n + 1)\n    dp[n] = 1\n\n    for ch in s:\n        ndp = [0] * (n + 1)\n        if ch == 'r':\n            for j in range(1, n + 1):\n                if dp[j] == 0:\n                    continue\n                v = dp[j]\n                ndp[j] = (ndp[j] + v * j) % MOD\n                ndp[j - 1] = (ndp[j - 1] + v * j) % MOD\n        else:  # 'b'\n            for j in range(0, n):\n                if dp[j] == 0:\n                    continue\n                v = dp[j]\n                x = n - j\n                ndp[j] = (ndp[j] + v * x) % MOD\n                ndp[j + 1] = (ndp[j + 1] + v * x) % MOD\n        dp = ndp\n\n    # Need all starting points to be able to generate S, i.e. all n active at the end.\n    print(dp[n] % MOD)\n\nif __name__ == \"__main__\":\n    main()"
   },
   {
-    "model": "claude-3-5-haiku-20241022",
+    "model": "deepseek-chat",
     "prompt_type": "zero_shot",
-    "language": "js",
-    "code": "function countColorings(N) {\n    const MOD = 1e9 + 7;\n    \n    // Dynamic programming to track valid colorings\n    const dp = new Array(1 << N).fill(0);\n    dp[0] = 1;\n    \n    // Iterate through all possible states\n    for (let mask = 0; mask < (1 << N); mask++) {\n        for (let color = 0; color < 2; color++) {\n            let newMask = 0;\n            let valid = true;\n            \n            // Calculate new state for each point\n            for (let i = 0; i < N; i++) {\n                let current = (mask >> i) & 1;\n                let next = (mask >> ((i + 1) % N)) & 1;\n                \n                if (current === color) {\n                    newMask |= (1 << ((i + 2) % N));\n                }\n                \n                if (current === color && next === color) {\n                    valid = false;\n                    break;\n                }\n            }\n            \n            if (valid) {\n                dp[mask | (color << N)] = (dp[mask | (color << N)] + dp[mask]) % MOD;\n            }\n        }\n    }\n    \n    // Sum all valid states\n    let result = 0;\n    for (let mask = 0; mask < (1 << N); mask++) {\n        result = (result + dp[mask]) % MOD;\n    }\n    \n    return result;\n}",
-    "timestamp": "2025-08-13 12:52:43"
+    "language": "java",
+    "code": "import java.util.Scanner;\n\npublic class Main {\n    static final int MOD = 1_000_000_007;\n    \n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        int N = sc.nextInt();\n        int R = sc.nextInt();\n        int B = sc.nextInt();\n        // Only two possibilities: all red or all blue\n        System.out.println(2 % MOD);\n    }\n}"
   },
   {
-    "model": "deepseek-v3",
+    "model": "claude-sonnet-4-6",
     "prompt_type": "zero_shot",
-    "language": "js",
-    "code": "const MOD = 1e9 + 7;\n\nfunction solve(N, S) {\n    const K = S.length;\n    if (N % K !== 0) {\n        return 0;\n    }\n    const m = N / K;\n    let total = 0;\n    \n    for (let d = 1; d <= m; d++) {\n        if (m % d !== 0) continue;\n        const phi = eulerPhi(d);\n        let isValid = true;\n        for (let i = 0; i < K; i++) {\n            for (let j = i + 1; j < K; j++) {\n                if ((j - i) % (m / d) === 0 && S[i] !== S[j]) {\n                    isValid = false;\n                    break;\n                }\n            }\n            if (!isValid) break;\n        }\n        if (isValid) {\n            total = (total + phi * Math.pow(2, d)) % MOD;\n        }\n    }\n    \n    const invK = modInverse(K, MOD);\n    total = (total * invK) % MOD;\n    return total;\n}\n\nfunction eulerPhi(n) {\n    let result = n;\n    for (let p = 2; p * p <= n; p++) {\n        if (n % p === 0) {\n            while (n % p === 0) {\n                n = Math.floor(n / p);\n            }\n            result -= Math.floor(result / p);\n        }\n    }\n    if (n > 1) {\n        result -= Math.floor(result / n);\n    }\n    return result;\n}\n\nfunction modInverse(a, mod) {\n    let [old_r, r] = [a, mod];\n    let [old_s, s] = [1, 0];\n    let [old_t, t] = [0, 1];\n    \n    while (r !== 0) {\n        const quotient = Math.floor(old_r / r);\n        [old_r, r] = [r, old_r - quotient * r];\n        [old_s, s] = [s, old_s - quotient * s];\n        [old_t, t] = [t, old_t - quotient * t];\n    }\n    \n    return (old_s % mod + mod) % mod;\n}\n\n// Example usage:\n// const N = 4;\n// const S = \"RR\";\n// console.log(solve(N, S));",
-    "timestamp": "2025-08-13 12:52:55"
+    "language": "java",
+    "code": "import java.util.*;\nimport java.io.*;\n\npublic class Main {\n    static final int MOD = 1_000_000_007;\n    \n    public static void main(String[] args) throws IOException {\n        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));\n        int N = Integer.parseInt(br.readLine().trim());\n        // Count colorings with full rotational symmetry\n        // These are colorings where color[i] = color[i+k] for all i,k\n        // i.e., all same color => 2 ways\n        // But if period d divides N, then 2^d ways total using Burnside\n        // For \"same from every point\": need color[i] = color[(i+1) mod N] for all i\n        // => all same => 2 ways\n        System.out.println(2 % MOD);\n    }\n}"
+  },
+  {
+    "model": "gpt-5.4",
+    "prompt_type": "zero_shot",
+    "language": "java",
+    "code": "import java.io.*;\nimport java.util.*;\n\n/*\nWe have a circle split into N equal arcs, each arc colored red/blue.\nFor each starting point, moving around the circle generates a binary string.\nWe need the number of colorings such that the same string S is generated from every starting point.\n\nKey observation:\nIf the generated string is identical from every starting point, then the coloring must be invariant under rotation by 1 position.\nHence all arcs must have the same color.\nTherefore there are exactly:\n- 2 valid colorings if S consists of all same character and its length matches N appropriately\nBut the original statement provided here is incomplete and does not define S construction rules.\nThe well-known intended result for this type of task is:\nnumber of binary necklaces of length N that are equal under every rotation = 2.\n\nSince the statement as given only asks for number of paintings such that the string can be created from every initial point,\nthe only universally rotation-invariant paintings are all-red and all-blue.\n\nSo answer is 2 for any N >= 1.\n\nIf the original hidden problem had more details, they are missing here; with the provided statement this is the only consistent interpretation.\n*/\n\npublic class Main {\n    public static void main(String[] args) throws Exception {\n        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));\n        String s = br.readLine();\n        if (s == null || s.trim().isEmpty()) return;\n        System.out.println(2);\n    }\n}"
   }
 ]

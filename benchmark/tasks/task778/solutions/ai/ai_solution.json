@@ -1,107 +1,74 @@
 [
   {
-    "model": "claude-3-5-haiku-20241022",
-    "prompt_type": "zero_shot",
-    "language": "C",
-    "code": "#include <stdio.h>\n#include <string.h>\n\nint maxConsecutiveOnes(char* S, int N, int K) {\n    int maxOnes = 0;\n    int left = 0, zeroCount = 0;\n    \n    for (int right = 0; right < N; right++) {\n        if (S[right] == '0') {\n            zeroCount++;\n        }\n        \n        while (zeroCount > K) {\n            if (S[left] == '0') {\n                zeroCount--;\n            }\n            left++;\n        }\n        \n        maxOnes = (right - left + 1 > maxOnes) ? right - left + 1 : maxOnes;\n    }\n    \n    return maxOnes;\n}\n\nint main() {\n    char S[100];\n    int N, K;\n    \n    scanf(\"%s %d\", S, &K);\n    N = strlen(S);\n    \n    printf(\"%d\\n\", maxConsecutiveOnes(S, N, K));\n    \n    return 0;\n}",
-    "timestamp": "2025-08-05 22:53:02"
-  },
-  {
-    "model": "deepseek-v3",
-    "prompt_type": "zero_shot",
-    "language": "C",
-    "code": "#include <stdio.h>\n#include <string.h>\n\nint maxConsecutiveOnes(char* S, int N, int K) {\n    int left = 0, right = 0;\n    int max_len = 0;\n    int zero_count = 0;\n\n    while (right < N) {\n        if (S[right] == '0') {\n            zero_count++;\n        }\n        while (zero_count > K) {\n            if (S[left] == '0') {\n                zero_count--;\n            }\n            left++;\n        }\n        max_len = (right - left + 1 > max_len) ? (right - left + 1) : max_len;\n        right++;\n    }\n    return max_len;\n}\n\nint main() {\n    int N, K;\n    scanf(\"%d %d\", &N, &K);\n    char S[N + 1];\n    scanf(\"%s\", S);\n    printf(\"%d\\n\", maxConsecutiveOnes(S, N, K));\n    return 0;\n}",
-    "timestamp": "2025-08-05 22:53:12"
-  },
-  {
-    "model": "deepseek-v3",
-    "prompt_type": "zero_shot",
-    "language": "C++",
-    "code": "#include <iostream>\n#include <vector>\n#include <algorithm>\nusing namespace std;\n\nint main() {\n    int N, K;\n    string S;\n    cin >> N >> K >> S;\n\n    vector<int> runs;\n    char current = S[0];\n    int count = 1;\n    for (int i = 1; i < N; ++i) {\n        if (S[i] == current) {\n            ++count;\n        } else {\n            runs.push_back(count);\n            current = S[i];\n            count = 1;\n        }\n    }\n    runs.push_back(count);\n\n    int max_consec = 0;\n    int left = 0;\n    int sum = 0;\n    int zero_count = 0;\n    for (int right = 0; right < runs.size(); ++right) {\n        sum += runs[right];\n        if (right % 2 == 0) {\n            max_consec = max(max_consec, sum);\n        } else {\n            zero_count++;\n            while (zero_count > K) {\n                sum -= runs[left];\n                if (left % 2 == 0) {\n                    zero_count--;\n                }\n                left++;\n            }\n            max_consec = max(max_consec, sum);\n        }\n    }\n    if (K >= zero_count) {\n        max_consec = N;\n    }\n\n    cout << max_consec << endl;\n    return 0;\n}",
-    "timestamp": "2025-08-05 22:53:30"
-  },
-  {
-    "model": "deepseek-v3",
-    "prompt_type": "zero_shot",
-    "language": "Java",
-    "code": "public class Solution {\n    public int maxConsecutiveOnes(String S, int K) {\n        char[] arr = S.toCharArray();\n        int left = 0, right = 0;\n        int max = 0;\n        int zeroCount = 0;\n\n        while (right < arr.length) {\n            if (arr[right] == '0') {\n                zeroCount++;\n            }\n            while (zeroCount > K) {\n                if (arr[left] == '0') {\n                    zeroCount--;\n                }\n                left++;\n            }\n            max = Math.max(max, right - left + 1);\n            right++;\n        }\n        return max;\n    }\n}",
-    "timestamp": "2025-08-05 22:53:38"
-  },
-  {
-    "model": "claude-3-5-haiku-20241022",
-    "prompt_type": "zero_shot",
-    "language": "Java",
-    "code": "class Solution {\n    public int maxConsecutiveOnes(String S, int K) {\n        int N = S.length();\n        int maxOnes = 0;\n        int zeroCount = 0;\n        int left = 0;\n        \n        for (int right = 0; right < N; right++) {\n            if (S.charAt(right) == '0') {\n                zeroCount++;\n            }\n            \n            while (zeroCount > K) {\n                if (S.charAt(left) == '0') {\n                    zeroCount--;\n                }\n                left++;\n            }\n            \n            maxOnes = Math.max(maxOnes, right - left + 1);\n        }\n        \n        return maxOnes;\n    }\n}",
-    "timestamp": "2025-08-05 22:53:42"
-  },
-  {
-    "model": "claude-3-5-haiku-20241022",
-    "prompt_type": "zero_shot",
-    "language": "C++",
-    "code": "class Solution {\npublic:\n    int maxConsecutiveOnes(string s, int k) {\n        int n = s.length();\n        int maxOnes = 0;\n        int left = 0, zeroCount = 0;\n        \n        for (int right = 0; right < n; right++) {\n            if (s[right] == '0') {\n                zeroCount++;\n            }\n            \n            while (zeroCount > k) {\n                if (s[left] == '0') {\n                    zeroCount--;\n                }\n                left++;\n            }\n            \n            maxOnes = max(maxOnes, right - left + 1);\n        }\n        \n        return maxOnes;\n    }\n};",
-    "timestamp": "2025-08-05 22:53:47"
-  },
-  {
-    "model": "gpt-4o",
-    "prompt_type": "zero_shot",
-    "language": "python",
-    "code": "def max_consecutive_on_hands(S, K):\n    N = len(S)\n    zeros_flipped = 0\n    max_hands = 0\n    left = 0\n    \n    for right in range(N):\n        if S[right] == '0':\n            zeros_flipped += 1\n        \n        while zeros_flipped > K:\n            if S[left] == '0':\n                zeros_flipped -= 1\n            left += 1\n        \n        max_hands = max(max_hands, right - left + 1)\n    \n    return max_hands\n\n# Example Usage:\n# S = \"110010001\"\n# K = 2\n# print(max_consecutive_on_hands(S, K))  # Output should be 5",
-    "timestamp": "2025-08-13 12:51:57"
-  },
-  {
-    "model": "gpt-4o",
-    "prompt_type": "zero_shot",
-    "language": "java",
-    "code": "public class MaxConsecutiveOnes {\n\n    public static int maxConsecutiveOnes(String S, int K) {\n        int n = S.length();\n        int left = 0, right = 0;\n        int maxConsecutiveOnes = 0;\n        int flipsUsed = 0;\n        \n        while (right < n) {\n            if (S.charAt(right) == '0') {\n                flipsUsed++;\n            }\n            \n            while (flipsUsed > K) {\n                if (S.charAt(left) == '0') {\n                    flipsUsed--;\n                }\n                left++;\n            }\n            \n            maxConsecutiveOnes = Math.max(maxConsecutiveOnes, right - left + 1);\n            right++;\n        }\n        \n        return maxConsecutiveOnes;\n    }\n\n    public static void main(String[] args) {\n        String S = \"010110\";\n        int K = 2;\n        System.out.println(maxConsecutiveOnes(S, K)); // Output: 5\n    }\n}",
-    "timestamp": "2025-08-13 12:52:06"
-  },
-  {
-    "model": "gpt-4o",
+    "model": "claude-sonnet-4-6",
     "prompt_type": "zero_shot",
     "language": "c",
-    "code": "#include <stdio.h>\n#include <string.h>\n\nint maxConsecutiveOnes(char* S, int N, int K) {\n    int zeroCount = 0, maxOnes = 0, left = 0;\n\n    for (int right = 0; right < N; right++) {\n        if (S[right] == '0') {\n            zeroCount++;\n        }\n\n        while (zeroCount > K) {\n            if (S[left] == '0') {\n                zeroCount--;\n            }\n            left++;\n        }\n\n        maxOnes = (maxOnes > (right - left + 1)) ? maxOnes : (right - left + 1);\n    }\n\n    return maxOnes;\n}\n\nint main() {\n    int N, K;\n    char S[100001];\n    \n    scanf(\"%d %d\", &N, &K);\n    scanf(\"%s\", S);\n    \n    printf(\"%d\\n\", maxConsecutiveOnes(S, N, K));\n    \n    return 0;\n}",
-    "timestamp": "2025-08-13 12:52:08"
+    "code": "#include <stdio.h>\n#include <string.h>\n\nint main() {\n    int n, k;\n    char s[100005];\n    \n    scanf(\"%d %d\", &n, &k);\n    scanf(\"%s\", s);\n    \n    int left = 0, zeros = 0, max_len = 0;\n    \n    for (int right = 0; right < n; right++) {\n        if (s[right] == '0') {\n            zeros++;\n        }\n        while (zeros > k) {\n            if (s[left] == '0') {\n                zeros--;\n            }\n            left++;\n        }\n        if (right - left + 1 > max_len) {\n            max_len = right - left + 1;\n        }\n    }\n    \n    printf(\"%d\\n\", max_len);\n    \n    return 0;\n}"
   },
   {
-    "model": "gpt-4o",
+    "model": "deepseek-chat",
+    "prompt_type": "zero_shot",
+    "language": "c",
+    "code": "#include <stdio.h>\n#include <string.h>\n\nint main() {\n    int N, K;\n    scanf(\"%d %d\", &N, &K);\n    char S[N+1];\n    scanf(\"%s\", S);\n\n    int left = 0, zeros = 0, max_len = 0;\n\n    for (int right = 0; right < N; right++) {\n        if (S[right] == '0') {\n            zeros++;\n        }\n\n        while (zeros > K) {\n            if (S[left] == '0') {\n                zeros--;\n            }\n            left++;\n        }\n\n        int len = right - left + 1;\n        if (len > max_len) {\n            max_len = len;\n        }\n    }\n\n    printf(\"%d\\n\", max_len);\n    return 0;\n}"
+  },
+  {
+    "model": "gpt-5.4",
+    "prompt_type": "zero_shot",
+    "language": "c",
+    "code": "#include <stdio.h>\n#include <string.h>\n\nint main(void) {\n    int N, K;\n    char S[200005];\n\n    if (scanf(\"%d %d\", &N, &K) != 2) return 0;\n    if (scanf(\"%s\", S) != 1) return 0;\n\n    int left = 0, zero_groups = 0, ans = 0;\n\n    for (int right = 0; right < N; right++) {\n        if (S[right] == '0' && (right == 0 || S[right - 1] == '1')) {\n            zero_groups++;\n        }\n\n        while (zero_groups > K) {\n            if (S[left] == '0' && (left == 0 || S[left - 1] == '1')) {\n                zero_groups--;\n            }\n            left++;\n        }\n\n        int len = right - left + 1;\n        if (len > ans) ans = len;\n    }\n\n    printf(\"%d\\n\", ans);\n    return 0;\n}"
+  },
+  {
+    "model": "deepseek-chat",
     "prompt_type": "zero_shot",
     "language": "c++",
-    "code": "#include <iostream>\n#include <vector>\n#include <algorithm>\n\nusing namespace std;\n\nint maxConsecutiveOnesAfterFlips(string &S, int K) {\n    int n = S.length();\n    int left = 0, right = 0, maxOnes = 0, zerosCount = 0;\n\n    while (right < n) {\n        if (S[right] == '0') {\n            zerosCount++;\n        }\n        \n        while (zerosCount > K) {\n            if (S[left] == '0') {\n                zerosCount--;\n            }\n            left++;\n        }\n\n        maxOnes = max(maxOnes, right - left + 1);\n        right++;\n    }\n\n    return maxOnes;\n}\n\nint main() {\n    string S;\n    int K;\n    cin >> S >> K;\n    cout << maxConsecutiveOnesAfterFlips(S, K) << endl;\n    return 0;\n}",
-    "timestamp": "2025-08-13 12:52:11"
+    "code": "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    ios::sync_with_stdio(false);\n    cin.tie(nullptr);\n    \n    int N, K;\n    string S;\n    cin >> N >> K >> S;\n    \n    int left = 0, zeroCount = 0, maxLen = 0;\n    \n    for (int right = 0; right < N; ++right) {\n        if (S[right] == '0') {\n            zeroCount++;\n        }\n        while (zeroCount > K) {\n            if (S[left] == '0') {\n                zeroCount--;\n            }\n            left++;\n        }\n        maxLen = max(maxLen, right - left + 1);\n    }\n    \n    cout << maxLen << \"\\n\";\n    return 0;\n}"
   },
   {
-    "model": "claude-3-5-haiku-20241022",
+    "model": "claude-sonnet-4-6",
+    "prompt_type": "zero_shot",
+    "language": "c++",
+    "code": "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    int n, k;\n    cin >> n >> k;\n    string s;\n    cin >> s;\n    \n    int ans = 0;\n    int groups = 0;\n    int l = 0;\n    \n    for (int r = 0; r < n; r++) {\n        // Adding s[r] to window\n        if (s[r] == '0') {\n            // Does it start a new group?\n            if (r == l || s[r-1] == '1') {\n                groups++;\n            }\n        }\n        \n        // Shrink from left while groups > k\n        while (groups > k) {\n            if (s[l] == '0') {\n                // removing s[l] from window\n                // if s[l] is the start of a group\n                if (l == r || s[l+1] == '1' || l+1 > r) {\n                    // the group at l is just s[l] alone, or s[l+1] is '1'\n                    // actually, removing s[l] reduces groups if s[l] starts a group\n                    // s[l] starts a group if l==0 (within window, l is leftmost) or previous was '1'\n                    // Since l is leftmost in window, s[l]=='0' always starts a group\n                    groups--;\n                }\n            }\n            l++;\n        }\n        \n        ans = max(ans, r - l + 1);\n    }\n    \n    cout << ans << endl;\n    return 0;\n}"
+  },
+  {
+    "model": "gpt-5.4",
+    "prompt_type": "zero_shot",
+    "language": "c++",
+    "code": "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    ios::sync_with_stdio(false);\n    cin.tie(nullptr);\n\n    int N, K;\n    string S;\n    cin >> N >> K >> S;\n\n    vector<pair<char,int>> groups;\n    for (int i = 0; i < N; ) {\n        int j = i;\n        while (j < N && S[j] == S[i]) j++;\n        groups.push_back({S[i], j - i});\n        i = j;\n    }\n\n    vector<int> lens;\n    if (groups[0].first == '0') lens.push_back(0);\n    for (auto &g : groups) lens.push_back(g.second);\n    if (groups.back().first == '0') lens.push_back(0);\n\n    int m = lens.size();\n    vector<int> pref(m + 1, 0);\n    for (int i = 0; i < m; i++) pref[i + 1] = pref[i] + lens[i];\n\n    int ans = 0;\n    for (int left = 0; left < m; left += 2) {\n        int right = min(m, left + 2 * K + 1);\n        ans = max(ans, pref[right] - pref[left]);\n    }\n\n    cout << ans << '\\n';\n    return 0;\n}"
+  },
+  {
+    "model": "deepseek-chat",
+    "prompt_type": "zero_shot",
+    "language": "java",
+    "code": "import java.util.Scanner;\n\npublic class MaxConsecutiveHands {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        String S = sc.next();\n        int K = sc.nextInt();\n        sc.close();\n\n        int left = 0, zeroCount = 0, maxLen = 0;\n\n        for (int right = 0; right < S.length(); right++) {\n            if (S.charAt(right) == '0') {\n                zeroCount++;\n            }\n\n            while (zeroCount > K) {\n                if (S.charAt(left) == '0') {\n                    zeroCount--;\n                }\n                left++;\n            }\n\n            maxLen = Math.max(maxLen, right - left + 1);\n        }\n\n        System.out.println(maxLen);\n    }\n}"
+  },
+  {
+    "model": "claude-sonnet-4-6",
+    "prompt_type": "zero_shot",
+    "language": "java",
+    "code": "import java.util.*;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        String S = sc.next();\n        int K = sc.nextInt();\n        int N = S.length();\n        \n        int maxLen = 0;\n        int l = 0;\n        int zeroSegments = 0;\n        \n        for (int r = 0; r < N; r++) {\n            // Check if s[r] starts a new zero-segment\n            if (S.charAt(r) == '0') {\n                if (r == l || S.charAt(r - 1) == '1') {\n                    zeroSegments++;\n                }\n            }\n            \n            // Shrink window from left while too many zero-segments\n            while (zeroSegments > K) {\n                if (S.charAt(l) == '0') {\n                    // Check if l is the start of a zero-segment\n                    if (l == 0 || S.charAt(l - 1) == '1') {\n                        zeroSegments--;\n                    }\n                }\n                l++;\n            }\n            \n            maxLen = Math.max(maxLen, r - l + 1);\n        }\n        \n        System.out.println(maxLen);\n    }\n}"
+  },
+  {
+    "model": "gpt-5.4",
+    "prompt_type": "zero_shot",
+    "language": "java",
+    "code": "import java.io.*;\nimport java.util.*;\n\npublic class Main {\n    public static void main(String[] args) throws Exception {\n        FastScanner fs = new FastScanner(System.in);\n\n        int N = fs.nextInt();\n        int K = fs.nextInt();\n        String S = fs.next();\n\n        // Run-length encode S\n        ArrayList<Integer> groups = new ArrayList<>();\n        ArrayList<Character> chars = new ArrayList<>();\n\n        int cnt = 1;\n        for (int i = 1; i < N; i++) {\n            if (S.charAt(i) == S.charAt(i - 1)) {\n                cnt++;\n            } else {\n                chars.add(S.charAt(i - 1));\n                groups.add(cnt);\n                cnt = 1;\n            }\n        }\n        chars.add(S.charAt(N - 1));\n        groups.add(cnt);\n\n        int m = groups.size();\n\n        // Prefix sums of group lengths\n        long[] pref = new long[m + 1];\n        for (int i = 0; i < m; i++) {\n            pref[i + 1] = pref[i] + groups.get(i);\n        }\n\n        long ans = 0;\n\n        // We choose a window of groups containing at most K groups of '0'\n        // Since groups alternate, starting from each possible left boundary,\n        // the farthest right boundary is determined by taking 2*K+1 groups,\n        // adjusted by whether the left group is '0' or '1'.\n        for (int l = 0; l < m; l++) {\n            int r;\n            if (chars.get(l) == '1') {\n                r = Math.min(m, l + 2 * K + 1);\n            } else {\n                r = Math.min(m, l + 2 * K);\n            }\n            ans = Math.max(ans, pref[r] - pref[l]);\n        }\n\n        System.out.println(ans);\n    }\n\n    static class FastScanner {\n        private final InputStream in;\n        private final byte[] buffer = new byte[1 << 16];\n        private int ptr = 0, len = 0;\n\n        FastScanner(InputStream is) {\n            in = is;\n        }\n\n        private int read() throws IOException {\n            if (ptr >= len) {\n                len = in.read(buffer);\n                ptr = 0;\n                if (len <= 0) return -1;\n            }\n            return buffer[ptr++];\n        }\n\n        String next() throws IOException {\n            StringBuilder sb = new StringBuilder();\n            int c;\n            do {\n                c = read();\n            } while (c <= ' ' && c != -1);\n            while (c > ' ') {\n                sb.append((char) c);\n                c = read();\n            }\n            return sb.toString();\n        }\n\n        int nextInt() throws IOException {\n            return Integer.parseInt(next());\n        }\n    }\n}"
+  },
+  {
+    "model": "deepseek-chat",
     "prompt_type": "zero_shot",
     "language": "python",
-    "code": "def max_consecutive_ones(S, K):\n    N = len(S)\n    max_ones = 0\n    zeros = 0\n    left = 0\n    \n    for right in range(N):\n        if S[right] == '0':\n            zeros += 1\n        \n        while zeros > K:\n            if S[left] == '0':\n                zeros -= 1\n            left += 1\n        \n        max_ones = max(max_ones, right - left + 1)\n    \n    return max_ones\n\n# Example usage\nS = input().strip()\nK = int(input())\nprint(max_consecutive_ones(S, K))",
-    "timestamp": "2025-08-13 12:52:14"
+    "code": "s = input().strip()\nk = int(input().strip())\n\nn = len(s)\nleft = 0\nzeros = 0\nmax_len = 0\n\nfor right in range(n):\n    if s[right] == '0':\n        zeros += 1\n    \n    while zeros > k:\n        if s[left] == '0':\n            zeros -= 1\n        left += 1\n    \n    max_len = max(max_len, right - left + 1)\n\nprint(max_len)"
   },
   {
-    "model": "deepseek-v3",
+    "model": "claude-sonnet-4-6",
     "prompt_type": "zero_shot",
     "language": "python",
-    "code": "def max_consecutive_ones(S, K):\n    left = 0\n    max_length = 0\n    zero_count = 0\n    \n    for right in range(len(S)):\n        if S[right] == '0':\n            zero_count += 1\n        \n        while zero_count > K:\n            if S[left] == '0':\n                zero_count -= 1\n            left += 1\n        \n        max_length = max(max_length, right - left + 1)\n    \n    return max_length\n\n# Read input\nN, K = map(int, input().split())\nS = input().strip()\n\nprint(max_consecutive_ones(S, K))",
-    "timestamp": "2025-08-13 12:52:19"
+    "code": "def solve():\n    import sys\n    input_data = sys.stdin.read().split()\n    idx = 0\n    N = int(input_data[idx]); idx += 1\n    S = input_data[idx]; idx += 1\n    K = int(input_data[idx]); idx += 1\n    \n    left = 0\n    zeros = 0\n    max_len = 0\n    \n    for right in range(N):\n        if S[right] == '0':\n            zeros += 1\n        while zeros > K:\n            if S[left] == '0':\n                zeros -= 1\n            left += 1\n        max_len = max(max_len, right - left + 1)\n    \n    print(max_len)\n\nsolve()"
   },
   {
-    "model": "gpt-4o",
+    "model": "gpt-5.4",
     "prompt_type": "zero_shot",
-    "language": "js",
-    "code": "function maxConsecutiveHands(S, K) {\n    const N = S.length;\n    let left = 0, right = 0, maxCount = 0, zeroCount = 0;\n\n    while (right < N) {\n        if (S[right] === '0') {\n            zeroCount++;\n        }\n\n        while (zeroCount > K) {\n            if (S[left] === '0') {\n                zeroCount--;\n            }\n            left++;\n        }\n\n        maxCount = Math.max(maxCount, right - left + 1);\n        right++;\n    }\n\n    return maxCount;\n}",
-    "timestamp": "2025-08-13 12:53:13"
-  },
-  {
-    "model": "claude-3-5-haiku-20241022",
-    "prompt_type": "zero_shot",
-    "language": "js",
-    "code": "function maxConsecutiveOnes(S, K) {\n    let maxOnes = 0;\n    let left = 0;\n    let zeroCount = 0;\n    \n    for (let right = 0; right < S.length; right++) {\n        if (S[right] === '0') {\n            zeroCount++;\n        }\n        \n        while (zeroCount > K) {\n            if (S[left] === '0') {\n                zeroCount--;\n            }\n            left++;\n        }\n        \n        maxOnes = Math.max(maxOnes, right - left + 1);\n    }\n    \n    return maxOnes;\n}",
-    "timestamp": "2025-08-13 12:53:17"
-  },
-  {
-    "model": "deepseek-v3",
-    "prompt_type": "zero_shot",
-    "language": "js",
-    "code": "function maxConsecutiveOnes(S, K) {\n    let left = 0;\n    let max = 0;\n    let zeroCount = 0;\n    \n    for (let right = 0; right < S.length; right++) {\n        if (S[right] === '0') {\n            zeroCount++;\n        }\n        \n        while (zeroCount > K) {\n            if (S[left] === '0') {\n                zeroCount--;\n            }\n            left++;\n        }\n        \n        max = Math.max(max, right - left + 1);\n    }\n    \n    return max;\n}",
-    "timestamp": "2025-08-13 12:53:22"
+    "language": "python",
+    "code": "import sys\n\ndef main():\n    input = sys.stdin.readline\n    N, K = map(int, input().split())\n    S = input().strip()\n\n    # Run-length encode S\n    groups = []\n    cnt = 1\n    for i in range(1, N):\n        if S[i] == S[i - 1]:\n            cnt += 1\n        else:\n            groups.append(cnt)\n            cnt = 1\n    groups.append(cnt)\n\n    # If S starts with '0', prepend 0 so that:\n    # even indices -> lengths of '1' groups\n    # odd indices  -> lengths of '0' groups\n    if S[0] == '0':\n        groups = [0] + groups\n    # If ends with '0', append 0 for easier window handling\n    if S[-1] == '0':\n        groups.append(0)\n\n    # Prefix sums of group lengths\n    prefix = [0]\n    for x in groups:\n        prefix.append(prefix[-1] + x)\n\n    ans = 0\n    m = len(groups)\n\n    # Choose up to K zero-groups => window of 2K+1 groups starting at even index\n    for left in range(0, m, 2):\n        right = min(m, left + 2 * K + 1)\n        ans = max(ans, prefix[right] - prefix[left])\n\n    print(ans)\n\nif __name__ == \"__main__\":\n    main()"
   }
 ]

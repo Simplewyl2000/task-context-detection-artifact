@@ -1,86 +1,74 @@
 [
   {
-    "model": "claude-3-5-haiku-20241022",
-    "prompt_type": "zero_shot",
-    "language": "C",
-    "code": "#include <stdio.h>\n#include <stdlib.h>\n#include <float.h>\n\nint longestSubsequence(double* arr, int N, double K) {\n    int maxLen = 0;\n    int left = 0;\n    double currProduct = 1.0;\n\n    for (int right = 0; right < N; right++) {\n        currProduct *= arr[right];\n\n        while (currProduct > K && left <= right) {\n            currProduct /= arr[left];\n            left++;\n        }\n\n        maxLen = (right - left + 1 > maxLen) ? right - left + 1 : maxLen;\n    }\n\n    return maxLen;\n}\n\nint main() {\n    int N;\n    double K;\n    scanf(\"%d %lf\", &N, &K);\n\n    double* arr = malloc(N * sizeof(double));\n    for (int i = 0; i < N; i++) {\n        scanf(\"%lf\", &arr[i]);\n    }\n\n    int result = longestSubsequence(arr, N, K);\n    printf(\"%d\\n\", result);\n\n    free(arr);\n    return 0;\n}",
-    "timestamp": "2025-08-05 22:01:54"
-  },
-  {
-    "model": "deepseek-v3",
-    "prompt_type": "zero_shot",
-    "language": "C",
-    "code": "#include <stdio.h>\n\nint maxLength(double arr[], int n, double K) {\n    int max_len = 0;\n    double product;\n    \n    for (int i = 0; i < n; i++) {\n        product = 1.0;\n        for (int j = i; j < n; j++) {\n            product *= arr[j];\n            if (product <= K) {\n                if (j - i + 1 > max_len) {\n                    max_len = j - i + 1;\n                }\n            } else {\n                break;\n            }\n        }\n    }\n    \n    return max_len;\n}\n\nint main() {\n    int N;\n    double K;\n    scanf(\"%d %lf\", &N, &K);\n    double arr[N];\n    for (int i = 0; i < N; i++) {\n        scanf(\"%lf\", &arr[i]);\n    }\n    printf(\"%d\\n\", maxLength(arr, N, K));\n    return 0;\n}",
-    "timestamp": "2025-08-05 22:02:07"
-  },
-  {
-    "model": "deepseek-v3",
-    "prompt_type": "zero_shot",
-    "language": "C++",
-    "code": "#include <iostream>\n#include <vector>\n#include <cmath>\n\nusing namespace std;\n\nint maxSubsequenceLength(const vector<double>& sequence, double K) {\n    int n = sequence.size();\n    if (n == 0) return 0;\n\n    int max_len = 0;\n    double product = 1.0;\n    int left = 0;\n\n    for (int right = 0; right < n; ++right) {\n        product *= sequence[right];\n        while (left <= right && product > K) {\n            product /= sequence[left];\n            left++;\n        }\n        if (product <= K) {\n            max_len = max(max_len, right - left + 1);\n        }\n    }\n\n    return max_len;\n}\n\nint main() {\n    int N;\n    double K;\n    cin >> N >> K;\n    vector<double> sequence(N);\n    for (int i = 0; i < N; ++i) {\n        cin >> sequence[i];\n    }\n    cout << maxSubsequenceLength(sequence, K) << endl;\n    return 0;\n}",
-    "timestamp": "2025-08-05 22:02:23"
-  },
-  {
-    "model": "deepseek-v3",
-    "prompt_type": "zero_shot",
-    "language": "Java",
-    "code": "public class Solution {\n    public static int maxSubsequenceLength(double[] nums, double K) {\n        if (nums == null || nums.length == 0 || K < 0) {\n            return 0;\n        }\n        \n        int maxLen = 0;\n        double product = 1;\n        int left = 0;\n        \n        for (int right = 0; right < nums.length; right++) {\n            product *= nums[right];\n            \n            while (left <= right && product > K) {\n                product /= nums[left];\n                left++;\n            }\n            \n            if (product <= K) {\n                maxLen = Math.max(maxLen, right - left + 1);\n            }\n        }\n        \n        return maxLen;\n    }\n}",
-    "timestamp": "2025-08-05 22:02:31"
-  },
-  {
-    "model": "claude-3-5-haiku-20241022",
-    "prompt_type": "zero_shot",
-    "language": "Java",
-    "code": "class Solution {\n    public int longestSubsequence(double[] nums, double k) {\n        int n = nums.length;\n        int maxLen = 0;\n        int left = 0;\n        double currProduct = 1.0;\n\n        for (int right = 0; right < n; right++) {\n            currProduct *= nums[right];\n\n            while (currProduct > k && left <= right) {\n                currProduct /= nums[left];\n                left++;\n            }\n\n            if (currProduct <= k) {\n                maxLen = Math.max(maxLen, right - left + 1);\n            }\n        }\n\n        return maxLen;\n    }\n}",
-    "timestamp": "2025-08-05 22:02:34"
-  },
-  {
-    "model": "claude-3-5-haiku-20241022",
-    "prompt_type": "zero_shot",
-    "language": "C++",
-    "code": "class Solution {\npublic:\n    int longestSubsequence(vector<double>& nums, double K) {\n        int n = nums.size();\n        int maxLen = 0;\n        int left = 0;\n        double currProduct = 1.0;\n\n        for (int right = 0; right < n; right++) {\n            currProduct *= nums[right];\n\n            while (currProduct > K && left <= right) {\n                currProduct /= nums[left];\n                left++;\n            }\n\n            maxLen = max(maxLen, right - left + 1);\n        }\n\n        return maxLen;\n    }\n};",
-    "timestamp": "2025-08-05 22:02:37"
-  },
-  {
-    "model": "gpt-4o",
-    "prompt_type": "zero_shot",
-    "language": "python",
-    "code": "def longest_subsequence(sequence, K):\n    if K <= 0:\n        return 0\n    \n    n = len(sequence)\n    max_length = 0\n    product = 1\n    start = 0\n    \n    for end in range(n):\n        product *= sequence[end]\n        \n        while start <= end and product > K:\n            product /= sequence[start]\n            start += 1\n            \n        max_length = max(max_length, end - start + 1)\n    \n    return max_length",
-    "timestamp": "2025-08-13 08:36:48"
-  },
-  {
-    "model": "gpt-4o",
-    "prompt_type": "zero_shot",
-    "language": "java",
-    "code": "public class LongestSubsequence {\n    public static int findLongestSubsequence(double[] sequence, double K) {\n        int maxLen = 0;\n        int left = 0;\n        double prod = 1.0;\n\n        for (int right = 0; right < sequence.length; right++) {\n            prod *= sequence[right];\n\n            while (prod > K && left <= right) {\n                prod /= sequence[left++];\n            }\n\n            if (prod <= K) {\n                maxLen = Math.max(maxLen, right - left + 1);\n            }\n        }\n\n        return maxLen;\n    }\n\n    public static void main(String[] args) {\n        double[] sequence = {1.5, 2.0, 0.5, 4.0};\n        double K = 10.0;\n        System.out.println(findLongestSubsequence(sequence, K)); // Example usage\n    }\n}",
-    "timestamp": "2025-08-13 08:36:55"
-  },
-  {
-    "model": "gpt-4o",
-    "prompt_type": "zero_shot",
-    "language": "c",
-    "code": "#include <stdio.h>\n\nint main() {\n    int N;\n    double K;\n    scanf(\"%d %lf\", &N, &K);\n\n    double sequence[N];\n    for (int i = 0; i < N; i++) {\n        scanf(\"%lf\", &sequence[i]);\n    }\n\n    int max_length = 0;\n    int start = 0;\n    double product = 1.0;\n\n    for (int end = 0; end < N; end++) {\n        product *= sequence[end];\n\n        while (product > K && start <= end) {\n            product /= sequence[start++];\n        }\n\n        if (product <= K) {\n            int current_length = end - start + 1;\n            if (current_length > max_length) {\n                max_length = current_length;\n            }\n        }\n    }\n\n    printf(\"%d\\n\", max_length);\n    return 0;\n}",
-    "timestamp": "2025-08-13 08:36:58"
-  },
-  {
-    "model": "claude-3-5-haiku-20241022",
-    "prompt_type": "zero_shot",
-    "language": "python",
-    "code": "def find_longest_subsequence(arr, K):\n    n = len(arr)\n    max_length = 0\n    left = 0\n    current_product = 1\n\n    for right in range(n):\n        current_product *= arr[right]\n\n        while current_product > K and left <= right:\n            current_product /= arr[left]\n            left += 1\n\n        if current_product <= K:\n            max_length = max(max_length, right - left + 1)\n\n    return max_length",
-    "timestamp": "2025-08-13 08:37:03"
-  },
-  {
-    "model": "deepseek-v3",
-    "prompt_type": "zero_shot",
-    "language": "python",
-    "code": "def max_subsequence_length(sequence, K):\n    if K < 0:\n        return 0\n    max_len = 0\n    product = 1\n    left = 0\n    for right in range(len(sequence)):\n        product *= sequence[right]\n        while left <= right and product > K:\n            product /= sequence[left]\n            left += 1\n        max_len = max(max_len, right - left + 1)\n    return max_len if max_len != 0 or K >= 0 else 0",
-    "timestamp": "2025-08-13 08:37:09"
-  },
-  {
-    "model": "gpt-4o",
+    "model": "deepseek-chat",
     "prompt_type": "zero_shot",
     "language": "c++",
-    "code": "#include <iostream>\n#include <vector>\n\nusing namespace std;\n\nint main() {\n    int N;\n    double K;\n    cin >> N >> K;\n    vector<double> sequence(N);\n    \n    for (int i = 0; i < N; ++i) {\n        cin >> sequence[i];\n    }\n    \n    int max_length = 0, start = 0;\n    double product = 1.0;\n    \n    for (int end = 0; end < N; ++end) {\n        product *= sequence[end];\n        \n        while (start <= end && product > K) {\n            product /= sequence[start];\n            ++start;\n        }\n        \n        if (product <= K) {\n            max_length = max(max_length, end - start + 1);\n        }\n    }\n    \n    cout << max_length << endl;\n    \n    return 0;\n}",
-    "timestamp": "2025-08-13 11:47:08"
+    "code": "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    ios::sync_with_stdio(false);\n    cin.tie(nullptr);\n    \n    int n;\n    double k;\n    cin >> n >> k;\n    vector<double> a(n);\n    for (int i = 0; i < n; ++i) {\n        cin >> a[i];\n    }\n    \n    int ans = 0;\n    double prod = 1.0;\n    int left = 0;\n    \n    for (int right = 0; right < n; ++right) {\n        prod *= a[right];\n        while (left <= right && prod > k + 1e-12) {\n            prod /= a[left];\n            left++;\n        }\n        if (prod <= k + 1e-12) {\n            ans = max(ans, right - left + 1);\n        }\n    }\n    \n    cout << ans << \"\\n\";\n    return 0;\n}"
+  },
+  {
+    "model": "claude-sonnet-4-6",
+    "prompt_type": "zero_shot",
+    "language": "c++",
+    "code": "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    int n;\n    double K;\n    cin >> n >> K;\n    vector<double> a(n);\n    for (int i = 0; i < n; i++) cin >> a[i];\n    \n    int left = 0;\n    int zeros = 0;\n    double prod = 1.0;\n    int ans = 0;\n    \n    for (int right = 0; right < n; right++) {\n        if (a[right] == 0.0) zeros++;\n        else prod *= a[right];\n        \n        // Window is valid if zeros > 0 or prod <= K\n        while (zeros == 0 && prod > K && left <= right) {\n            if (a[left] == 0.0) zeros--;\n            else prod /= a[left];\n            left++;\n        }\n        \n        // Check validity\n        if (zeros > 0 || prod <= K) {\n            ans = max(ans, right - left + 1);\n        }\n    }\n    \n    cout << ans << endl;\n    return 0;\n}"
+  },
+  {
+    "model": "gpt-5.4",
+    "prompt_type": "zero_shot",
+    "language": "c++",
+    "code": "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    ios::sync_with_stdio(false);\n    cin.tie(nullptr);\n\n    int N;\n    long double K;\n    cin >> N >> K;\n\n    vector<long double> a(N);\n    bool hasZero = false;\n    for (int i = 0; i < N; ++i) {\n        cin >> a[i];\n        if (a[i] == 0.0L) hasZero = true;\n    }\n\n    // If there is a zero, any subarray containing it has product 0 <= K\n    // (since K is non-negative), so the whole array is valid.\n    if (hasZero) {\n        cout << N << '\\n';\n        return 0;\n    }\n\n    // No zero exists. If K == 0, no positive-product subarray can satisfy.\n    if (K == 0.0L) {\n        cout << 0 << '\\n';\n        return 0;\n    }\n\n    int ans = 0;\n    int r = 0;\n    long double prod = 1.0L;\n\n    for (int l = 0; l < N; ++l) {\n        while (r < N && prod * a[r] <= K) {\n            prod *= a[r];\n            ++r;\n        }\n\n        ans = max(ans, r - l);\n\n        if (r == l) {\n            ++r;\n        } else {\n            prod /= a[l];\n        }\n    }\n\n    cout << ans << '\\n';\n    return 0;\n}"
+  },
+  {
+    "model": "deepseek-chat",
+    "prompt_type": "zero_shot",
+    "language": "c",
+    "code": "#include <stdio.h>\n#include <math.h>\n\nint main() {\n    int n;\n    double k;\n    scanf(\"%d %lf\", &n, &k);\n    \n    double a[n];\n    for (int i = 0; i < n; i++) {\n        scanf(\"%lf\", &a[i]);\n    }\n    \n    // Edge case: if any element is 0, product is 0 ≤ K always\n    // We can handle this naturally in sliding window.\n    \n    double log_k = log(k);\n    int max_len = 0;\n    int left = 0;\n    double current_log_prod = 0.0;\n    \n    for (int right = 0; right < n; right++) {\n        if (a[right] == 0) {\n            // Product becomes 0, which is ≤ K for any K >= 0\n            // The whole window from left to right is valid.\n            // We can take length = right - left + 1\n            int len = right - left + 1;\n            if (len > max_len) max_len = len;\n            // Reset window to start after this zero for maximal length\n            // But we can also just expand further: product stays 0 if zero inside.\n            // So we can keep going without resetting left.\n            // Since 0 ≤ K always, the window can always be extended to right.\n            // The maximum possible length is from the first element after last reset to here.\n            // We just need to keep track.\n            continue;\n        }\n        \n        current_log_prod += log(a[right]);\n        \n        while (current_log_prod > log_k && left <= right) {\n            current_log_prod -= log(a[left]);\n            left++;\n        }\n        \n        int len = right - left + 1;\n        if (len > max_len) max_len = len;\n    }\n    \n    printf(\"%d\\n\", max_len);\n    return 0;\n}"
+  },
+  {
+    "model": "claude-sonnet-4-6",
+    "prompt_type": "zero_shot",
+    "language": "c",
+    "code": "#include <stdio.h>\n#include <stdlib.h>\n\nint main() {\n    int n;\n    double k;\n    scanf(\"%d %lf\", &n, &k);\n    \n    double *a = malloc(n * sizeof(double));\n    for (int i = 0; i < n; i++) scanf(\"%lf\", &a[i]);\n    \n    int left = 0, best = 0;\n    double prod = 1.0;\n    int zero_count = 0;\n    \n    for (int right = 0; right < n; right++) {\n        if (a[right] == 0.0) {\n            zero_count++;\n        } else {\n            prod *= a[right];\n        }\n        \n        // effective product: 0 if zero_count > 0, else prod\n        // shrink while effective product > k\n        while (zero_count == 0 && prod > k) {\n            if (a[left] == 0.0) {\n                zero_count--;\n            } else {\n                prod /= a[left];\n            }\n            left++;\n        }\n        \n        if (right - left + 1 > best) best = right - left + 1;\n    }\n    \n    printf(\"%d\\n\", best);\n    free(a);\n    return 0;\n}"
+  },
+  {
+    "model": "gpt-5.4",
+    "prompt_type": "zero_shot",
+    "language": "c",
+    "code": "#include <stdio.h>\n#include <stdlib.h>\n\nint main(void) {\n    int N;\n    double K;\n\n    if (scanf(\"%d %lf\", &N, &K) != 2) return 0;\n\n    double *a = (double *)malloc(sizeof(double) * N);\n    if (!a) return 0;\n\n    int hasZero = 0;\n    for (int i = 0; i < N; i++) {\n        if (scanf(\"%lf\", &a[i]) != 1) {\n            free(a);\n            return 0;\n        }\n        if (a[i] == 0.0) hasZero = 1;\n    }\n\n    /* If there is a zero and K >= 0, any subarray containing that zero\n       has product 0 <= K, so the whole array can be taken. */\n    if (hasZero) {\n        printf(\"%d\\n\", N);\n        free(a);\n        return 0;\n    }\n\n    /* No zeros from here. If K == 0, no positive-product subarray works. */\n    if (K == 0.0) {\n        printf(\"0\\n\");\n        free(a);\n        return 0;\n    }\n\n    int ans = 0;\n    int left = 0;\n    double prod = 1.0;\n\n    for (int right = 0; right < N; right++) {\n        prod *= a[right];\n\n        while (left <= right && prod > K) {\n            prod /= a[left];\n            left++;\n        }\n\n        if (left <= right) {\n            int len = right - left + 1;\n            if (len > ans) ans = len;\n        }\n    }\n\n    printf(\"%d\\n\", ans);\n\n    free(a);\n    return 0;\n}"
+  },
+  {
+    "model": "deepseek-chat",
+    "prompt_type": "zero_shot",
+    "language": "python",
+    "code": "import sys\n\ndef solve() -> None:\n    data = sys.stdin.read().strip().split()\n    if not data:\n        return\n    it = iter(data)\n    n = int(next(it))\n    k = float(next(it))\n    a = [float(next(it)) for _ in range(n)]\n\n    # If k < 0, product of non‑negative numbers can never be ≤ k\n    if k < 0:\n        print(0)\n        return\n\n    max_len = 0\n    prod = 1.0\n    left = 0\n\n    for right in range(n):\n        prod *= a[right]\n\n        # Shrink window while product exceeds k\n        while left <= right and prod > k:\n            prod /= a[left]\n            left += 1\n\n        # Now prod ≤ k, update max length\n        if prod <= k:\n            max_len = max(max_len, right - left + 1)\n\n    print(max_len)\n\nif __name__ == \"__main__\":\n    solve()"
+  },
+  {
+    "model": "claude-sonnet-4-6",
+    "prompt_type": "zero_shot",
+    "language": "python",
+    "code": "import math\nimport sys\n\ndef solve():\n    input_data = sys.stdin.read().split()\n    idx = 0\n    N = int(input_data[idx]); idx += 1\n    K = float(input_data[idx]); idx += 1\n    a = []\n    for i in range(N):\n        a.append(float(input_data[idx])); idx += 1\n    \n    # Check if any zero exists\n    if any(x == 0.0 for x in a):\n        print(N)\n        return\n    \n    # All elements positive\n    if K == 0:\n        print(0)\n        return\n    \n    logK = math.log(K)\n    logs = [math.log(x) for x in a]\n    \n    best = 0\n    current_sum = 0.0\n    left = 0\n    for right in range(N):\n        current_sum += logs[right]\n        while current_sum > logK + 1e-12 and left <= right:\n            current_sum -= logs[left]\n            left += 1\n        best = max(best, right - left + 1)\n    \n    print(best)\n\nsolve()"
+  },
+  {
+    "model": "gpt-5.4",
+    "prompt_type": "zero_shot",
+    "language": "python",
+    "code": "import sys\n\ndef main():\n    data = sys.stdin.read().strip().split()\n    if not data:\n        return\n\n    N = int(data[0])\n    K = float(data[1])\n    a = list(map(float, data[2:2 + N]))\n\n    # If there is any zero and K >= 0, the whole array is valid\n    # because its product is 0 <= K.\n    if any(x == 0.0 for x in a):\n        print(N)\n        return\n\n    # Since all elements are non-negative and there is no zero now,\n    # if K == 0, no positive-product subarray can satisfy product <= 0.\n    if K == 0.0:\n        print(0)\n        return\n\n    ans = 0\n    prod = 1.0\n    left = 0\n\n    for right in range(N):\n        prod *= a[right]\n\n        while left <= right and prod > K:\n            prod /= a[left]\n            left += 1\n\n        if left <= right:\n            ans = max(ans, right - left + 1)\n\n    print(ans)\n\nif __name__ == \"__main__\":\n    main()"
+  },
+  {
+    "model": "deepseek-chat",
+    "prompt_type": "zero_shot",
+    "language": "java",
+    "code": "import java.io.*;\nimport java.util.*;\n\npublic class Main {\n    public static void main(String[] args) throws IOException {\n        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));\n        StringTokenizer st = new StringTokenizer(br.readLine());\n        \n        int N = Integer.parseInt(st.nextToken());\n        double K = Double.parseDouble(st.nextToken());\n        \n        double[] arr = new double[N];\n        st = new StringTokenizer(br.readLine());\n        for (int i = 0; i < N; i++) {\n            arr[i] = Double.parseDouble(st.nextToken());\n        }\n        \n        double logK = Math.log(K);\n        double[] logArr = new double[N];\n        for (int i = 0; i < N; i++) {\n            if (arr[i] == 0) {\n                logArr[i] = Double.NEGATIVE_INFINITY; // product will be 0 ≤ K always\n            } else {\n                logArr[i] = Math.log(arr[i]);\n            }\n        }\n        \n        int left = 0;\n        double currentSum = 0.0;\n        int maxLen = 0;\n        \n        for (int right = 0; right < N; right++) {\n            if (arr[right] == 0) {\n                // 0 makes entire product 0, which is always ≤ K\n                maxLen = Math.max(maxLen, right - left + 1);\n                // Reset because any window containing 0 is valid, but we must continue\n                // Actually since product becomes 0, we can extend as far as possible\n                // But we need to reset sum since zeros break log sum\n                // The best approach: treat zero as reset: any window containing zero is valid\n                // We'll just handle specially by tracking last zero.\n                currentSum = 0.0;\n                left = right + 1;\n                continue;\n            }\n            \n            currentSum += logArr[right];\n            \n            while (currentSum > logK + 1e-12 && left <= right) {\n                currentSum -= logArr[left];\n                left++;\n            }\n            \n            if (currentSum <= logK + 1e-12) {\n                maxLen = Math.max(maxLen, right - left + 1);\n            }\n        }\n        \n        // Check for zeros separately: if any zero exists, the window from first zero to last zero\n        // or covering zero can be longer than above logic. We'll do one simple pass:\n        int lastZero = -1;\n        for (int i = 0; i < N; i++) {\n            if (arr[i] == 0) {\n                if (lastZero == -1) {\n                    maxLen = Math.max(maxLen, i + 1);\n                } else {\n                    maxLen = Math.max(maxLen, i - lastZero);\n                }\n                lastZero = i;\n            }\n        }\n        if (lastZero != -1) {\n            maxLen = Math.max(maxLen, N - lastZero);\n        }\n        \n        System.out.println(maxLen);\n    }\n}"
+  },
+  {
+    "model": "claude-sonnet-4-6",
+    "prompt_type": "zero_shot",
+    "language": "java",
+    "code": "import java.util.*;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        int n = sc.nextInt();\n        double k = sc.nextDouble();\n        double[] a = new double[n];\n        for (int i = 0; i < n; i++) a[i] = sc.nextDouble();\n        \n        int maxLen = 0;\n        int left = 0;\n        int zeroCount = 0;\n        double logSum = 0;\n        double logK = (k > 0) ? Math.log(k) : Double.NEGATIVE_INFINITY;\n        \n        for (int right = 0; right < n; right++) {\n            if (a[right] == 0) {\n                zeroCount++;\n            } else {\n                logSum += Math.log(a[right]);\n            }\n            \n            // Shrink window if needed\n            while (zeroCount == 0 && logSum > logK + 1e-9) {\n                if (left > right) break;\n                if (a[left] == 0) {\n                    zeroCount--;\n                } else {\n                    logSum -= Math.log(a[left]);\n                }\n                left++;\n            }\n            \n            // Check validity\n            if (zeroCount > 0 || logSum <= logK + 1e-9) {\n                maxLen = Math.max(maxLen, right - left + 1);\n            }\n        }\n        \n        System.out.println(maxLen);\n    }\n}"
+  },
+  {
+    "model": "gpt-5.4",
+    "prompt_type": "zero_shot",
+    "language": "java",
+    "code": "import java.io.*;\nimport java.util.*;\n\npublic class Main {\n    static class FastScanner {\n        private final InputStream in = System.in;\n        private final byte[] buffer = new byte[1 << 16];\n        private int ptr = 0, len = 0;\n\n        private int read() throws IOException {\n            if (ptr >= len) {\n                len = in.read(buffer);\n                ptr = 0;\n                if (len <= 0) return -1;\n            }\n            return buffer[ptr++];\n        }\n\n        String next() throws IOException {\n            StringBuilder sb = new StringBuilder();\n            int c;\n            do {\n                c = read();\n            } while (c != -1 && c <= ' ');\n            if (c == -1) return null;\n            while (c != -1 && c > ' ') {\n                sb.append((char) c);\n                c = read();\n            }\n            return sb.toString();\n        }\n\n        int nextInt() throws IOException {\n            return Integer.parseInt(next());\n        }\n\n        double nextDouble() throws IOException {\n            return Double.parseDouble(next());\n        }\n    }\n\n    public static void main(String[] args) throws Exception {\n        FastScanner fs = new FastScanner();\n\n        String first = fs.next();\n        if (first == null) return;\n        int N = Integer.parseInt(first);\n        double K = fs.nextDouble();\n\n        double[] a = new double[N];\n        boolean hasZero = false;\n        for (int i = 0; i < N; i++) {\n            a[i] = fs.nextDouble();\n            if (a[i] == 0.0) hasZero = true;\n        }\n\n        // Any subarray containing 0 has product 0 <= K (since K is non-negative),\n        // so if any zero exists, the whole array is valid.\n        if (hasZero) {\n            System.out.println(N);\n            return;\n        }\n\n        // If K == 0 and there is no zero, no positive-product subarray can satisfy.\n        if (K == 0.0) {\n            System.out.println(0);\n            return;\n        }\n\n        // Standard two-pointers / sliding window for positive numbers.\n        int ans = 0;\n        int left = 0;\n        double prod = 1.0;\n        final double EPS = 1e-12;\n\n        for (int right = 0; right < N; right++) {\n            prod *= a[right];\n\n            while (left <= right && prod > K + EPS) {\n                prod /= a[left++];\n            }\n\n            ans = Math.max(ans, right - left + 1);\n        }\n\n        System.out.println(ans);\n    }\n}"
   }
 ]

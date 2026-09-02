@@ -1,23 +1,20 @@
 [
   {
-    "model": "claude-3-5-haiku-20241022",
-    "prompt_type": "zero_shot",
-    "language": "Python",
-    "code": "def f(x):\n    return x // 2 if x % 2 == 0 else x - 1\n\ndef path(v):\n    result = [v]\n    while result[-1] != 1:\n        result.append(f(result[-1]))\n    return result\n\ndef solve(n, k):\n    paths = [path(x) for x in range(1, n+1)]\n    \n    value_counts = {}\n    for p in paths:\n        unique_p = set(p)\n        for val in unique_p:\n            value_counts[val] = value_counts.get(val, 0) + 1\n    \n    max_count_values = [val for val, count in value_counts.items() if count >= k]\n    \n    return max(max_count_values) if max_count_values else 1\n\nn, k = map(int, input().split())\nprint(solve(n, k))",
-    "timestamp": "2025-08-05 17:32:03"
-  },
-  {
-    "model": "deepseek-v3",
-    "prompt_type": "zero_shot",
-    "language": "Python",
-    "code": "def solve():\n    n, k = map(int, input().split())\n    low = 1\n    high = n\n    best = 1\n    \n    # Check for odd candidates first\n    left = 1\n    right = n\n    best_odd = 0\n    while left <= right:\n        mid = (left + right) // 2\n        current = mid\n        # Count numbers <=n where path contains 'current' (odd)\n        count = 0\n        # The sequence is current, current*2, current*2+1, current*4, current*4+1, current*4+2, current*4+3, etc.\n        # So for current (must be odd), the numbers are current * 2^m and current *2^m + delta where delta < 2^m\n        power = 1\n        total = 0\n        while True:\n            lower = current * power\n            upper = current * power + (power - 1)\n            if lower > n:\n                break\n            upper = min(upper, n)\n            total += upper - lower + 1\n            power *= 2\n        if total >= k:\n            best_odd = current\n            left = mid + 2\n        else:\n            right = mid - 2\n    best = max(best, best_odd)\n    \n    # Check for even candidates\n    left = 2\n    right = n\n    best_even = 0\n    while left <= right:\n        mid = (left + right) // 2\n        if mid % 2 != 0:\n            mid += 1\n        if mid > right:\n            mid -= 1\n            if mid % 2 != 0:\n                break\n        current = mid\n        # Count numbers <=n where path contains 'current' (even)\n        count = 0\n        # The sequence is current, current/2 (if even), etc. But for counting, similar to odd but shifted.\n        # The numbers are current * 2^m and current*2^m + delta where delta < 2^m, but current must be even.\n        power = 1\n        total = 0\n        while True:\n            lower = current * power\n            upper = current * power + (power - 1)\n            if lower > n:\n                break\n            upper = min(upper, n)\n            total += upper - lower + 1\n            power *= 2\n        if total >= k:\n            best_even = current\n            left = mid + 2\n        else:\n            right = mid - 2\n    best = max(best, best_even)\n    \n    print(best)\n\nsolve()",
-    "timestamp": "2025-08-05 17:32:29"
-  },
-  {
-    "model": "gpt-4o",
+    "model": "deepseek-chat",
     "prompt_type": "zero_shot",
     "language": "python",
-    "code": "def max_y_in_paths(n, k):\n    def count_paths_containing(y):\n        return (n // (2**y)) - (n // (2**(y + 1)))\n\n    left, right = 1, n.bit_length() + 1\n\n    while left < right:\n        mid = (left + right) // 2\n        if count_paths_containing(mid) >= k:\n            left = mid + 1\n        else:\n            right = mid\n\n    return left - 1\n\nn, k = map(int, input().split())\nprint(max_y_in_paths(n, k))",
-    "timestamp": "2025-08-12 21:42:58"
+    "code": "def count_occurrences(y, n):\n    \"\"\"Return how many x in [1, n] have y in path(x).\"\"\"\n    if y > n:\n        return 0\n    total = 0\n    # We'll maintain a queue of intervals [l, r] that map to y\n    stack = [(y, y)]\n    while stack:\n        l, r = stack.pop()\n        if l > n:\n            continue\n        total += min(r, n) - l + 1\n        # Expand upward\n        # From even numbers: previous can be 2*l .. 2*r+1\n        # From odd numbers: previous can be 2*l .. 2*r\n        if l % 2 == 0:\n            # All numbers in [l, r] are even? Not necessarily.\n            # But we can split into even and odd subranges\n            # Simpler: just compute new interval directly\n            nl = 2 * l\n            nr = 2 * r + 1\n        else:\n            nl = 2 * l\n            nr = 2 * r\n        if nl <= n:\n            stack.append((nl, nr))\n    return total\n\n\ndef solve():\n    n, k = map(int, input().split())\n    lo, hi = 1, n\n    ans = 1\n    while lo <= hi:\n        mid = (lo + hi) // 2\n        if count_occurrences(mid, n) >= k:\n            ans = mid\n            lo = mid + 1\n        else:\n            hi = mid - 1\n    print(ans)\n\n\nif __name__ == \"__main__\":\n    solve()"
+  },
+  {
+    "model": "claude-sonnet-4-6",
+    "prompt_type": "zero_shot",
+    "language": "python",
+    "code": "def cnt(y):\n    if y > n: return 0\n    result = 1  # y itself\n    result += cnt(2*y)  # left child always\n    if y % 2 == 0:  # right child y+1 exists if y is even\n        result += cnt(y+1)\n    return result"
+  },
+  {
+    "model": "gpt-5.4",
+    "prompt_type": "zero_shot",
+    "language": "python",
+    "code": "import sys\n\ndef count_occurrences(y, n):\n    # Number of x in [1..n] such that y is in path(x)\n    # Descendants of y in the reverse tree:\n    # from v, children are 2v and 2v+1 if v is even, only 2v if v is odd.\n    # Therefore:\n    # - if y is odd: all descendants are y * 2^t\n    # - if y is even: descendants split into two chains:\n    #   y * 2^t and (y+1) * 2^t for suitable t, counted without overlap as:\n    #   floor(n / y) + floor(n / (y+1)) for odd quotients only,\n    #   which simplifies to:\n    #   count(y) = A + B where\n    #   A = number of odd m with y*m <= n\n    #   B = number of odd m with (y+1)*m <= n\n    #\n    # Number of odd integers in [1..T] is (T+1)//2.\n    if y & 1:\n        return (n // y + 1) // 2\n    else:\n        return (n // y + 1) // 2 + (n // (y + 1) + 1) // 2\n\ndef main():\n    data = sys.stdin.readline().split()\n    n = int(data[0])\n    k = int(data[1])\n\n    ans = 1\n\n    # Any valid y must satisfy count_occurrences(y, n) >= k.\n    # Since count decreases as y grows, answer is among:\n    # - odd y\n    # - even y\n    # We binary search separately on odd and even numbers.\n\n    # Search odd y = 2*m - 1\n    lo, hi = 1, (n + 1) // 2\n    best_odd = 0\n    while lo <= hi:\n        mid = (lo + hi) // 2\n        y = 2 * mid - 1\n        if count_occurrences(y, n) >= k:\n            best_odd = y\n            lo = mid + 1\n        else:\n            hi = mid - 1\n\n    # Search even y = 2*m\n    lo, hi = 1, n // 2\n    best_even = 0\n    while lo <= hi:\n        mid = (lo + hi) // 2\n        y = 2 * mid\n        if count_occurrences(y, n) >= k:\n            best_even = y\n            lo = mid + 1\n        else:\n            hi = mid - 1\n\n    ans = max(best_odd, best_even)\n    print(ans)\n\nif __name__ == \"__main__\":\n    main()"
   }
 ]

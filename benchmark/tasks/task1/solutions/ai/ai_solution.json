@@ -1,23 +1,20 @@
 [
   {
-    "model": "claude-3-5-haiku-20241022",
-    "prompt_type": "zero_shot",
-    "language": "Python",
-    "code": "def max_accordion_length(s):\n    n = len(s)\n    max_length = -1\n    \n    for left_start in range(n):\n        for left_bracket_index in range(left_start, n):\n            if s[left_bracket_index] != '[':\n                continue\n            \n            for first_colon_index in range(left_bracket_index + 1, n):\n                if s[first_colon_index] != ':':\n                    continue\n                \n                for pipe_start in range(first_colon_index + 1, n + 1):\n                    pipe_end = pipe_start\n                    while pipe_end < n and s[pipe_end] == '|':\n                        pipe_end += 1\n                    \n                    for second_colon_index in range(pipe_end, n):\n                        if s[second_colon_index] != ':':\n                            continue\n                        \n                        for right_bracket_index in range(second_colon_index + 1, n):\n                            if s[right_bracket_index] != ']':\n                                continue\n                            \n                            # Found a valid accordion\n                            accordion_length = (right_bracket_index - left_bracket_index + 1)\n                            max_length = max(max_length, accordion_length)\n                            break\n                        break\n    \n    return max_length\n\n# Read input\ns = input().strip()\nprint(max_accordion_length(s))",
-    "timestamp": "2025-08-05 17:31:20"
-  },
-  {
-    "model": "deepseek-v3",
-    "prompt_type": "zero_shot",
-    "language": "Python",
-    "code": "s = input().strip()\nn = len(s)\nleft_bracket = -1\nright_bracket = -1\nleft_colon = -1\nright_colon = -1\n\n# Find the first '['\nfor i in range(n):\n    if s[i] == '[':\n        left_bracket = i\n        break\n\nif left_bracket == -1:\n    print(-1)\n    exit()\n\n# Find the first ':' after left_bracket\nfor i in range(left_bracket + 1, n):\n    if s[i] == ':':\n        left_colon = i\n        break\n\nif left_colon == -1:\n    print(-1)\n    exit()\n\n# Find the last ']'\nfor i in range(n-1, -1, -1):\n    if s[i] == ']':\n        right_bracket = i\n        break\n\nif right_bracket == -1 or right_bracket <= left_colon:\n    print(-1)\n    exit()\n\n# Find the last ':' before right_bracket\nfor i in range(right_bracket - 1, left_colon, -1):\n    if s[i] == ':':\n        right_colon = i\n        break\n\nif right_colon == -1:\n    print(-1)\n    exit()\n\n# Count the number of | between left_colon and right_colon\ncount = 0\nfor i in range(left_colon + 1, right_colon):\n    if s[i] == '|':\n        count += 1\n\nprint(4 + count)",
-    "timestamp": "2025-08-05 17:31:37"
-  },
-  {
-    "model": "gpt-4o",
+    "model": "deepseek-chat",
     "prompt_type": "zero_shot",
     "language": "python",
-    "code": "def max_accordion_length(s):\n    idx_open_bracket = s.find('[')\n    idx_close_bracket = s.rfind(']')\n    \n    if idx_open_bracket == -1 or idx_close_bracket == -1 or idx_close_bracket <= idx_open_bracket:\n        return -1\n    \n    idx_first_colon = s.find(':', idx_open_bracket + 1, idx_close_bracket)\n    idx_last_colon = s.rfind(':', idx_open_bracket + 1, idx_close_bracket)\n    \n    if idx_first_colon == -1 or idx_last_colon == -1 or idx_last_colon <= idx_first_colon:\n        return -1\n    \n    num_pipes = s.count('|', idx_first_colon + 1, idx_last_colon)\n    \n    return 4 + num_pipes\n\ns = input().strip()\nprint(max_accordion_length(s))",
-    "timestamp": "2025-08-12 21:38:27"
+    "code": "s = input().strip()\n\nn = len(s)\n\n# Find leftmost '['\nleft_bracket = s.find('[')\nif left_bracket == -1:\n    print(-1)\n    exit()\n\n# Find rightmost ']'\nright_bracket = s.rfind(']')\nif right_bracket == -1 or right_bracket <= left_bracket:\n    print(-1)\n    exit()\n\n# Find first ':' after left_bracket\nleft_colon = s.find(':', left_bracket + 1)\nif left_colon == -1 or left_colon >= right_bracket:\n    print(-1)\n    exit()\n\n# Find last ':' before right_bracket\nright_colon = s.rfind(':', 0, right_bracket)\nif right_colon == -1 or right_colon <= left_colon:\n    print(-1)\n    exit()\n\n# Count '|' between left_colon and right_colon\npipe_count = s.count('|', left_colon + 1, right_colon)\n\n# Length = 4 + pipe_count\nprint(4 + pipe_count)"
+  },
+  {
+    "model": "gpt-5.4",
+    "prompt_type": "zero_shot",
+    "language": "python",
+    "code": "import sys\n\ns = sys.stdin.readline().strip()\n\nn = len(s)\n\n# Find first '['\nlbr = s.find('[')\nif lbr == -1:\n    print(-1)\n    sys.exit()\n\n# Find first ':' after '['\nc1 = s.find(':', lbr + 1)\nif c1 == -1:\n    print(-1)\n    sys.exit()\n\n# Find last ']'\nrbr = s.rfind(']')\nif rbr == -1:\n    print(-1)\n    sys.exit()\n\n# Find last ':' before ']'\nc2 = s.rfind(':', 0, rbr)\nif c2 == -1 or c2 <= c1:\n    print(-1)\n    sys.exit()\n\n# Count '|' between the two colons\npipes = s[c1 + 1:c2].count('|')\n\nprint(4 + pipes)"
+  },
+  {
+    "model": "claude-sonnet-4-6",
+    "prompt_type": "zero_shot",
+    "language": "python",
+    "code": "s = input().strip()\n\n# Step 1: find first '['\ni1 = s.find('[')\nif i1 == -1:\n    print(-1)\n    exit()\n\n# Step 2: find first ':' after i1\ni2 = s.find(':', i1 + 1)\nif i2 == -1:\n    print(-1)\n    exit()\n\n# Step 3: find last ']'\ni4 = s.rfind(']')\nif i4 == -1:\n    print(-1)\n    exit()\n\n# Step 4: find last ':' before i4 and after i2 (strictly)\ni3 = s.rfind(':', i2 + 1, i4)\nif i3 == -1:\n    print(-1)\n    exit()\n\n# i3 must be > i2 (guaranteed by rfind with start=i2+1)\n# Count '|' between i2 and i3\ncount = s.count('|', i2 + 1, i3)\n\nprint(4 + count)"
   }
 ]

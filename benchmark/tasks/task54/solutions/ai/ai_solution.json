@@ -1,23 +1,20 @@
 [
   {
-    "model": "claude-3-5-haiku-20241022",
-    "prompt_type": "zero_shot",
-    "language": "Python",
-    "code": "def solve(n, m, switches):\n    for skip in range(n):\n        lamps = [0] * m\n        for i in range(n):\n            if i == skip:\n                continue\n            for j in range(m):\n                if switches[i][j] == '1':\n                    lamps[j] = 1\n        \n        if all(lamps):\n            return \"YES\"\n    \n    return \"NO\"\n\ndef main():\n    n, m = map(int, input().split())\n    switches = []\n    for _ in range(n):\n        switches.append(input().strip())\n    \n    print(solve(n, m, switches))\n\nif __name__ == \"__main__\":\n    main()",
-    "timestamp": "2025-08-05 17:33:27"
-  },
-  {
-    "model": "deepseek-v3",
-    "prompt_type": "zero_shot",
-    "language": "Python",
-    "code": "n, m = map(int, input().split())\nmatrix = []\nlamp_counts = [0] * m\n\nfor _ in range(n):\n    row = input().strip()\n    matrix.append(row)\n    for j in range(m):\n        if row[j] == '1':\n            lamp_counts[j] += 1\n\nfound = False\nfor i in range(n):\n    possible = True\n    for j in range(m):\n        if matrix[i][j] == '1' and lamp_counts[j] == 1:\n            possible = False\n            break\n    if possible:\n        found = True\n        break\n\nprint(\"YES\" if found else \"NO\")",
-    "timestamp": "2025-08-05 17:33:36"
-  },
-  {
-    "model": "gpt-4o",
+    "model": "deepseek-chat",
     "prompt_type": "zero_shot",
     "language": "python",
-    "code": "def can_ignore_a_switch(n, m, matrix):\n    # Create a list to store the count of switches turning on each lamp\n    lamp_counts = [0] * m\n    \n    # Count how many switches can turn on each lamp\n    for row in matrix:\n        for j in range(m):\n            if row[j] == '1':\n                lamp_counts[j] += 1\n                \n    # Check if there exists a switch that can be ignored\n    for i in range(n):\n        can_ignore = True\n        for j in range(m):\n            if matrix[i][j] == '1' and lamp_counts[j] == 1:\n                can_ignore = False\n                break\n        if can_ignore:\n            return \"YES\"\n    return \"NO\"\n\n# Read input\nn, m = map(int, input().split())\nmatrix = [input().strip() for _ in range(n)]\n\n# Output result\nprint(can_ignore_a_switch(n, m, matrix))",
-    "timestamp": "2025-08-12 21:55:22"
+    "code": "import sys\n\ninput = sys.stdin.readline\n\nn, m = map(int, input().strip().split())\nswitches = [input().strip() for _ in range(n)]\n\n# Count how many switches cover each lamp\ncover_count = [0] * m\nfor i in range(n):\n    for j in range(m):\n        if switches[i][j] == '1':\n            cover_count[j] += 1\n\n# Check if any switch can be removed\nfor i in range(n):\n    possible = True\n    for j in range(m):\n        if switches[i][j] == '1' and cover_count[j] == 1:\n            possible = False\n            break\n    if possible:\n        print(\"YES\")\n        sys.exit()\n\nprint(\"NO\")"
+  },
+  {
+    "model": "claude-sonnet-4-6",
+    "prompt_type": "zero_shot",
+    "language": "python",
+    "code": "n, m = map(int, input().split())\na = []\nfor _ in range(n):\n    row = input().strip()\n    a.append(row)\n\ncount = [0] * m\nfor i in range(n):\n    for j in range(m):\n        if a[i][j] == '1':\n            count[j] += 1\n\nfor i in range(n):\n    can_remove = True\n    for j in range(m):\n        if a[i][j] == '1' and count[j] == 1:\n            can_remove = False\n            break\n    if can_remove:\n        print(\"YES\")\n        exit()\n\nprint(\"NO\")"
+  },
+  {
+    "model": "gpt-5.4",
+    "prompt_type": "zero_shot",
+    "language": "python",
+    "code": "import sys\n\ndef main():\n    input = sys.stdin.readline\n    n, m = map(int, input().split())\n    rows = [input().strip() for _ in range(n)]\n\n    cnt = [0] * m\n    for s in rows:\n        for j, ch in enumerate(s):\n            if ch == '1':\n                cnt[j] += 1\n\n    for s in rows:\n        ok = True\n        for j, ch in enumerate(s):\n            if ch == '1' and cnt[j] == 1:\n                ok = False\n                break\n        if ok:\n            print(\"YES\")\n            return\n\n    print(\"NO\")\n\nif __name__ == \"__main__\":\n    main()"
   }
 ]

@@ -1,107 +1,74 @@
 [
   {
-    "model": "claude-3-5-haiku-20241022",
-    "prompt_type": "zero_shot",
-    "language": "C",
-    "code": "#include <stdio.h>\n#include <stdbool.h>\n\nbool canReachSortedState(int* p, int N) {\n    for (int i = 0; i < N; i++) {\n        if (p[i] != i + 1) {\n            break;\n        }\n        if (i == N - 1) {\n            return true;\n        }\n    }\n\n    for (int i = 1; i < N - 1; i++) {\n        if (p[i-1] > p[i] && p[i] > p[i+1]) {\n            int temp1 = p[i-1];\n            int temp2 = p[i];\n            int temp3 = p[i+1];\n\n            p[i-1] = temp3;\n            p[i] = temp2;\n            p[i+1] = temp1;\n\n            return canReachSortedState(p, N);\n        }\n    }\n\n    return false;\n}\n\nint main() {\n    int N;\n    scanf(\"%d\", &N);\n\n    int p[N];\n    for (int i = 0; i < N; i++) {\n        scanf(\"%d\", &p[i]);\n    }\n\n    printf(\"%s\\n\", canReachSortedState(p, N) ? \"YES\" : \"NO\");\n\n    return 0;\n}",
-    "timestamp": "2025-08-05 23:03:07"
-  },
-  {
-    "model": "deepseek-v3",
-    "prompt_type": "zero_shot",
-    "language": "C",
-    "code": "#include <stdio.h>\n\nint can_reach_sorted(int n, int p[]) {\n    for (int i = 0; i < n; i++) {\n        if (p[i] != i + 1) {\n            if (i > 0 && i < n - 1 && p[i - 1] == i + 1 && p[i + 1] == i) {\n                int temp = p[i - 1];\n                p[i - 1] = p[i + 1];\n                p[i + 1] = temp;\n            } else if (i > 0 && i < n - 1 && p[i + 1] == i + 1 && p[i - 1] == i + 2) {\n                int temp = p[i - 1];\n                p[i - 1] = p[i + 1];\n                p[i + 1] = temp;\n            } else {\n                return 0;\n            }\n        }\n    }\n    return 1;\n}\n\nint main() {\n    int n;\n    scanf(\"%d\", &n);\n    int p[n];\n    for (int i = 0; i < n; i++) {\n        scanf(\"%d\", &p[i]);\n    }\n    if (can_reach_sorted(n, p)) {\n        printf(\"Yes\\n\");\n    } else {\n        printf(\"No\\n\");\n    }\n    return 0;\n}",
-    "timestamp": "2025-08-05 23:03:50"
-  },
-  {
-    "model": "deepseek-v3",
-    "prompt_type": "zero_shot",
-    "language": "C++",
-    "code": "#include <iostream>\n#include <vector>\nusing namespace std;\n\nbool canSort(vector<int>& p) {\n    int n = p.size();\n    for (int i = 0; i < n; ++i) {\n        if (p[i] != i + 1) {\n            if (i + 2 < n && p[i] == i + 2 && p[i + 1] == i + 1 && p[i + 2] == i + 3) {\n                swap(p[i], p[i + 2]);\n            } else if (i + 2 < n && p[i] == i + 3 && p[i + 1] == i + 2 && p[i + 2] == i + 1) {\n                swap(p[i], p[i + 2]);\n            } else if (i > 0 && i + 1 < n && p[i - 1] == i + 1 && p[i] == i && p[i + 1] == i - 1) {\n                swap(p[i - 1], p[i + 1]);\n            } else if (i > 0 && i + 1 < n && p[i - 1] == i + 1 && p[i] == i - 1 && p[i + 1] == i) {\n                swap(p[i - 1], p[i + 1]);\n            } else {\n                return false;\n            }\n        }\n    }\n    return true;\n}\n\nint main() {\n    int N;\n    cin >> N;\n    vector<int> p(N);\n    for (int i = 0; i < N; ++i) {\n        cin >> p[i];\n    }\n    if (canSort(p)) {\n        cout << \"Yes\" << endl;\n    } else {\n        cout << \"No\" << endl;\n    }\n    return 0;\n}",
-    "timestamp": "2025-08-05 23:04:39"
-  },
-  {
-    "model": "deepseek-v3",
-    "prompt_type": "zero_shot",
-    "language": "Java",
-    "code": "import java.util.Scanner;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        int N = scanner.nextInt();\n        int[] p = new int[N + 1];\n        for (int i = 1; i <= N; i++) {\n            p[i] = scanner.nextInt();\n        }\n        \n        boolean possible = true;\n        for (int i = 1; i <= N; i++) {\n            if (Math.abs(p[i] - i) > 1) {\n                possible = false;\n                break;\n            }\n        }\n        \n        System.out.println(possible ? \"YES\" : \"NO\");\n    }\n}",
-    "timestamp": "2025-08-05 23:04:46"
-  },
-  {
-    "model": "claude-3-5-haiku-20241022",
-    "prompt_type": "zero_shot",
-    "language": "Java",
-    "code": "import java.util.*;\n\npublic class PermutationSorting {\n    public static boolean canReachSortedState(int[] p) {\n        int n = p.length;\n        \n        while (true) {\n            boolean modified = false;\n            \n            for (int i = 1; i < n - 1; i++) {\n                if (p[i-1] > p[i] && p[i] > p[i+1]) {\n                    // Reverse 3 elements\n                    int temp = p[i-1];\n                    p[i-1] = p[i+1];\n                    p[i+1] = temp;\n                    modified = true;\n                }\n            }\n            \n            if (!modified) break;\n        }\n        \n        // Check if final state matches indices\n        for (int i = 0; i < n; i++) {\n            if (p[i] != i + 1) return false;\n        }\n        \n        return true;\n    }\n\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        int n = scanner.nextInt();\n        int[] p = new int[n];\n        \n        for (int i = 0; i < n; i++) {\n            p[i] = scanner.nextInt();\n        }\n        \n        System.out.println(canReachSortedState(p) ? \"YES\" : \"NO\");\n    }\n}",
-    "timestamp": "2025-08-05 23:04:52"
-  },
-  {
-    "model": "claude-3-5-haiku-20241022",
-    "prompt_type": "zero_shot",
-    "language": "C++",
-    "code": "#include <iostream>\n#include <vector>\n#include <algorithm>\n\nusing namespace std;\n\nbool canReachSortedState(vector<int>& p) {\n    int n = p.size();\n    \n    while (true) {\n        bool found = false;\n        \n        for (int i = 1; i < n - 1; i++) {\n            if (p[i-1] > p[i] && p[i] > p[i+1]) {\n                swap(p[i-1], p[i+1]);\n                found = true;\n                break;\n            }\n        }\n        \n        if (!found) break;\n    }\n    \n    for (int i = 0; i < n; i++) {\n        if (p[i] != i + 1) return false;\n    }\n    \n    return true;\n}\n\nint main() {\n    int n;\n    cin >> n;\n    \n    vector<int> p(n);\n    for (int i = 0; i < n; i++) {\n        cin >> p[i];\n    }\n    \n    cout << (canReachSortedState(p) ? \"YES\" : \"NO\") << endl;\n    \n    return 0;\n}",
-    "timestamp": "2025-08-05 23:04:56"
-  },
-  {
-    "model": "gpt-4o",
-    "prompt_type": "zero_shot",
-    "language": "python",
-    "code": "def can_sort_permutation(N, permutation):\n    for i in range(N):\n        if (i + 1) % 2 != permutation[i] % 2:\n            return \"NO\"\n    return \"YES\"\n\n# Example usage:\nN = 5\npermutation = [1, 3, 5, 4, 2]\nprint(can_sort_permutation(N, permutation))",
-    "timestamp": "2025-08-13 13:28:45"
-  },
-  {
-    "model": "gpt-4o",
-    "prompt_type": "zero_shot",
-    "language": "java",
-    "code": "import java.util.Scanner;\n\npublic class PermutationSortability {\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n\n        int N = scanner.nextInt();\n        int[] p = new int[N];\n\n        for (int i = 0; i < N; i++) {\n            p[i] = scanner.nextInt();\n        }\n\n        if (canReachSortState(p)) {\n            System.out.println(\"Yes\");\n        } else {\n            System.out.println(\"No\");\n        }\n    }\n\n    private static boolean canReachSortState(int[] p) {\n        int inversions = 0;\n\n        for (int i = 0; i < p.length - 1; i++) {\n            for (int j = i + 1; j < p.length; j++) {\n                if (p[i] > p[j]) {\n                    inversions++;\n                }\n            }\n        }\n\n        return inversions % 2 == 0;\n    }\n}",
-    "timestamp": "2025-08-13 13:28:49"
-  },
-  {
-    "model": "gpt-4o",
+    "model": "claude-sonnet-4-6",
     "prompt_type": "zero_shot",
     "language": "c",
-    "code": "#include <stdio.h>\n\nint isIdentityPermutation(int *p, int N) {\n    for (int i = 1; i <= N; i++) {\n        if (p[i] != i) {\n            return 0;\n        }\n    }\n    return 1;\n}\n\nint canReachIdentity(int *p, int N) {\n    while (1) {\n        int changed = 0;\n        for (int i = 2; i <= N-1; i++) {\n            if (p[i-1] > p[i] && p[i] > p[i+1]) {\n                int temp = p[i-1];\n                p[i-1] = p[i+1];\n                p[i+1] = temp;\n                changed = 1;\n            }\n        }\n        if (!changed) break;\n    }\n    return isIdentityPermutation(p, N);\n}\n\nint main() {\n    int N;\n    scanf(\"%d\", &N);\n    int p[N+1];\n    for (int i = 1; i <= N; i++) {\n        scanf(\"%d\", &p[i]);\n    }\n    if (canReachIdentity(p, N)) {\n        printf(\"YES\\n\");\n    } else {\n        printf(\"NO\\n\");\n    }\n    return 0;\n}",
-    "timestamp": "2025-08-13 13:28:53"
+    "code": "#include <stdio.h>\n\nint main() {\n    int n;\n    scanf(\"%d\", &n);\n    int p[100005];\n    for (int i = 1; i <= n; i++) scanf(\"%d\", &p[i]);\n    \n    long long inv = 0;\n    for (int i = 1; i <= n; i++)\n        for (int j = i+1; j <= n; j++)\n            if (p[i] > p[j]) inv++;\n    \n    if (inv % 3 == 0) printf(\"Yes\\n\");\n    else printf(\"No\\n\");\n    \n    return 0;\n}"
   },
   {
-    "model": "gpt-4o",
+    "model": "deepseek-chat",
+    "prompt_type": "zero_shot",
+    "language": "c",
+    "code": "#include <stdio.h>\n\nint main() {\n    int n;\n    scanf(\"%d\", &n);\n    int p[n];\n    for (int i = 0; i < n; i++) {\n        scanf(\"%d\", &p[i]);\n    }\n    for (int i = 0; i < n; i++) {\n        if ((p[i] % 2) != ((i + 1) % 2)) {\n            printf(\"NO\\n\");\n            return 0;\n        }\n    }\n    printf(\"YES\\n\");\n    return 0;\n}"
+  },
+  {
+    "model": "gpt-5.4",
+    "prompt_type": "zero_shot",
+    "language": "c",
+    "code": "#include <stdio.h>\n#include <stdlib.h>\n\nint main(void) {\n    int N;\n    if (scanf(\"%d\", &N) != 1) return 0;\n\n    int *p = (int *)malloc((N + 1) * sizeof(int));\n    if (!p) return 0;\n\n    long long inv_parity = 0; /* inversion count mod 2 */\n\n    for (int i = 1; i <= N; i++) {\n        scanf(\"%d\", &p[i]);\n        if (((long long)(p[i] - i)) & 1LL) {\n            inv_parity ^= 1;\n        }\n    }\n\n    /* \n       Each allowed operation reverses a strictly decreasing triple:\n       (a,b,c) with a>b>c -> (c,b,a).\n       This changes the permutation by one swap of positions i-1 and i+1,\n       so inversion parity flips each move.\n\n       Also, after every move, each element stays on the same parity of index\n       (positions i-1 and i+1 have same parity, and i stays fixed).\n       Therefore, for every value x, parity(position of x) is invariant.\n       Since in the target permutation value x must be at position x,\n       necessary condition: current position of x has same parity as x,\n       i.e. p[i] and i have same parity for all i.\n\n       This condition is also sufficient:\n       with the parity-position condition satisfied, the permutation splits into\n       independent permutations on odd and even positions. The total inversion\n       parity is then even, and by the allowed local moves one can realize the\n       needed adjacent swaps within each parity class, so sorting is possible.\n\n       Thus the answer is YES iff p[i] % 2 == i % 2 for all i.\n    */\n\n    for (int i = 1; i <= N; i++) {\n        if (((p[i] - i) & 1) != 0) {\n            printf(\"No\\n\");\n            free(p);\n            return 0;\n        }\n    }\n\n    printf(\"Yes\\n\");\n    free(p);\n    return 0;\n}"
+  },
+  {
+    "model": "deepseek-chat",
     "prompt_type": "zero_shot",
     "language": "c++",
-    "code": "#include <iostream>\n#include <vector>\n\nbool canBeSorted(std::vector<int>& p) {\n    int inversions = 0;\n    int n = p.size();\n    for (int i = 0; i < n; ++i) {\n        for (int j = i + 1; j < n; ++j) {\n            if (p[i] > p[j]) {\n                ++inversions;\n            }\n        }\n    }\n    return inversions % 2 == 0;\n}\n\nint main() {\n    int N;\n    std::cin >> N;\n    std::vector<int> p(N);\n    for (int i = 0; i < N; ++i) {\n        std::cin >> p[i];\n    }\n    \n    if (canBeSorted(p)) {\n        std::cout << \"Yes\\n\";\n    } else {\n        std::cout << \"No\\n\";\n    }\n    \n    return 0;\n}",
-    "timestamp": "2025-08-13 13:28:56"
+    "code": "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    ios::sync_with_stdio(false);\n    cin.tie(nullptr);\n    \n    int N;\n    cin >> N;\n    vector<int> p(N);\n    for (int i = 0; i < N; i++) cin >> p[i];\n    \n    long long inv = 0;\n    // Count inversions using Fenwick tree\n    vector<int> bit(N + 1, 0);\n    auto add = [&](int idx, int val) {\n        for (; idx <= N; idx += idx & -idx)\n            bit[idx] += val;\n    };\n    auto sum = [&](int idx) {\n        long long res = 0;\n        for (; idx > 0; idx -= idx & -idx)\n            res += bit[idx];\n        return res;\n    };\n    \n    for (int i = 0; i < N; i++) {\n        inv += i - sum(p[i]);\n        add(p[i], 1);\n    }\n    \n    if (inv % 2 == 0) cout << \"Yes\\n\";\n    else cout << \"No\\n\";\n    \n    return 0;\n}"
   },
   {
-    "model": "claude-3-5-haiku-20241022",
+    "model": "claude-sonnet-4-6",
+    "prompt_type": "zero_shot",
+    "language": "c++",
+    "code": "#include <bits/stdc++.h>\nusing namespace std;\nint main(){\n    int n;\n    cin>>n;\n    vector<int> p(n);\n    for(auto &x:p) cin>>x;\n    long long inv=0;\n    for(int i=0;i<n;i++)\n        for(int j=i+1;j<n;j++)\n            if(p[i]>p[j]) inv++;\n    cout<<(inv%3==0?\"Yes\":\"No\")<<endl;\n}"
+  },
+  {
+    "model": "gpt-5.4",
+    "prompt_type": "zero_shot",
+    "language": "c++",
+    "code": "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    ios::sync_with_stdio(false);\n    cin.tie(nullptr);\n\n    int N;\n    cin >> N;\n    vector<int> p(N + 1);\n    for (int i = 1; i <= N; ++i) cin >> p[i];\n\n    // Operation:\n    // if (a, b, c) are consecutive and a > b > c,\n    // we can transform them into (c, b, a).\n    //\n    // This swaps positions i-1 and i+1, keeping the middle fixed.\n    // Therefore each number always stays on the same parity of position.\n    // So a necessary condition to reach identity is:\n    // for every position i, p[i] and i have the same parity.\n    //\n    // It is also sufficient:\n    // considering only odd positions and only even positions separately,\n    // the operation acts like an adjacent swap inside each parity subsequence,\n    // and whenever two same-parity elements are inverted, the corresponding\n    // three consecutive values are strictly decreasing, so we can fix inversions.\n    // Hence identity is reachable iff parity matches for all positions.\n\n    for (int i = 1; i <= N; ++i) {\n        if ((p[i] & 1) != (i & 1)) {\n            cout << \"No\\n\";\n            return 0;\n        }\n    }\n\n    cout << \"Yes\\n\";\n    return 0;\n}"
+  },
+  {
+    "model": "deepseek-chat",
+    "prompt_type": "zero_shot",
+    "language": "java",
+    "code": "import java.util.Scanner;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        int n = sc.nextInt();\n        int[] p = new int[n + 1];\n        for (int i = 1; i <= n; i++) {\n            p[i] = sc.nextInt();\n        }\n        \n        for (int i = 1; i <= n; i++) {\n            if (p[i] % 2 != i % 2) {\n                System.out.println(\"No\");\n                return;\n            }\n        }\n        System.out.println(\"Yes\");\n    }\n}"
+  },
+  {
+    "model": "claude-sonnet-4-6",
+    "prompt_type": "zero_shot",
+    "language": "java",
+    "code": "import java.util.*;\npublic class Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        int n = sc.nextInt();\n        int[] p = new int[n];\n        for (int i = 0; i < n; i++) p[i] = sc.nextInt();\n        // BFS/DFS for small n, need pattern for large n\n        // Use BFS\n        String start = Arrays.toString(p);\n        String goal = Arrays.toString(java.util.stream.IntStream.rangeClosed(1,n).toArray());\n        if (start.equals(goal)) { System.out.println(\"Yes\"); return; }\n        Set<String> visited = new HashSet<>();\n        Queue<int[]> queue = new LinkedList<>();\n        queue.add(p);\n        visited.add(start);\n        while (!queue.isEmpty()) {\n            int[] cur = queue.poll();\n            for (int i = 1; i < n-1; i++) {\n                if (cur[i-1]>cur[i] && cur[i]>cur[i+1]) {\n                    int[] next = cur.clone();\n                    int tmp=next[i-1]; next[i-1]=next[i+1]; next[i+1]=tmp;\n                    String ns = Arrays.toString(next);\n                    if (ns.equals(goal)) { System.out.println(\"Yes\"); return; }\n                    if (!visited.contains(ns)) { visited.add(ns); queue.add(next); }\n                }\n            }\n        }\n        System.out.println(\"No\");\n    }\n}"
+  },
+  {
+    "model": "gpt-5.4",
+    "prompt_type": "zero_shot",
+    "language": "java",
+    "code": "import java.io.*;\nimport java.util.*;\n\npublic class Main {\n    public static void main(String[] args) throws Exception {\n        FastScanner fs = new FastScanner(System.in);\n        int N = fs.nextInt();\n        int[] p = new int[N];\n        for (int i = 0; i < N; i++) p[i] = fs.nextInt();\n\n        // In one operation, a decreasing triple (a>b>c) becomes (c,b,a).\n        // This swaps positions i-1 and i+1, so each element keeps the parity\n        // of its position forever. Therefore, a necessary condition is:\n        // for every value x, position(x) % 2 == x % 2.\n        //\n        // It is also sufficient:\n        // considering odd and even positions separately, the operation acts like\n        // swapping adjacent elements within one parity subsequence whenever the\n        // middle element lies between them. This allows elimination of inversions,\n        // and any permutation satisfying the parity condition can be sorted.\n        //\n        // So we only need to check parity of value and position.\n\n        for (int i = 0; i < N; i++) {\n            int pos1 = i + 1; // 1-based position\n            if ((p[i] & 1) != (pos1 & 1)) {\n                System.out.println(\"No\");\n                return;\n            }\n        }\n        System.out.println(\"Yes\");\n    }\n\n    static class FastScanner {\n        private final InputStream in;\n        private final byte[] buffer = new byte[1 << 16];\n        private int ptr = 0, len = 0;\n\n        FastScanner(InputStream is) {\n            in = is;\n        }\n\n        private int read() throws IOException {\n            if (ptr >= len) {\n                len = in.read(buffer);\n                ptr = 0;\n                if (len <= 0) return -1;\n            }\n            return buffer[ptr++];\n        }\n\n        int nextInt() throws IOException {\n            int c;\n            do {\n                c = read();\n            } while (c <= ' ' && c != -1);\n\n            int sign = 1;\n            if (c == '-') {\n                sign = -1;\n                c = read();\n            }\n\n            int val = 0;\n            while (c > ' ') {\n                val = val * 10 + (c - '0');\n                c = read();\n            }\n            return val * sign;\n        }\n    }\n}"
+  },
+  {
+    "model": "deepseek-chat",
     "prompt_type": "zero_shot",
     "language": "python",
-    "code": "def can_reach_sorted_state(perm):\n    N = len(perm)\n    \n    def can_sort(p):\n        for i in range(1, N-1):\n            if p[i-1] > p[i] > p[i+1]:\n                new_p = p[:i-1] + p[i-1:i+2][::-1] + p[i+2:]\n                if tuple(new_p) == tuple(sorted(new_p)):\n                    return True\n                if can_sort(new_p):\n                    return True\n        return tuple(p) == tuple(sorted(p))\n    \n    return can_sort(perm)\n\ndef main():\n    N = int(input())\n    perm = list(map(int, input().split()))\n    \n    print(\"YES\" if can_reach_sorted_state(perm) else \"NO\")\n\nif __name__ == \"__main__\":\n    main()",
-    "timestamp": "2025-08-13 13:29:01"
+    "code": "n = int(input())\np = list(map(int, input().split()))\n\n# We will try to sort using allowed operations\n# Since operation only works on strictly decreasing triple,\n# we can simulate from left to right.\n\nfor i in range(n - 2):\n    # If we find decreasing triple, reverse it\n    if p[i] > p[i + 1] > p[i + 2]:\n        p[i], p[i + 1], p[i + 2] = p[i + 2], p[i + 1], p[i]\n        # After reversing, go back to check previous positions\n        if i >= 2:\n            i -= 2\n\n# After one pass, we may need more passes because earlier changes affect later checks\n# So run full simulation until no changes\nchanged = True\nwhile changed:\n    changed = False\n    for i in range(n - 2):\n        if p[i] > p[i + 1] > p[i + 2]:\n            p[i], p[i + 1], p[i + 2] = p[i + 2], p[i + 1], p[i]\n            changed = True\n\n# Check result\nif all(p[i] == i + 1 for i in range(n)):\n    print(\"YES\")\nelse:\n    print(\"NO\")"
   },
   {
-    "model": "deepseek-v3",
+    "model": "claude-sonnet-4-6",
     "prompt_type": "zero_shot",
     "language": "python",
-    "code": "def can_reach_sorted_state(N, permutation):\n    for i in range(N):\n        if permutation[i] != i + 1:\n            if i == 0 or i == N - 1:\n                return False\n            if not (permutation[i-1] == i + 1 and permutation[i] == i and permutation[i+1] == i - 1):\n                return False\n            permutation[i-1], permutation[i], permutation[i+1] = permutation[i+1], permutation[i], permutation[i-1]\n    return True",
-    "timestamp": "2025-08-13 13:29:04"
+    "code": "from itertools import permutations\nfrom collections import deque\n\ndef solve():\n    import sys\n    input_data = sys.stdin.read().split()\n    n = int(input_data[0])\n    p = list(map(int, input_data[1:n+1]))\n    \n    # Count inversions\n    inv = 0\n    for i in range(n):\n        for j in range(i+1, n):\n            if p[i] > p[j]:\n                inv += 1\n    \n    if inv % 3 == 0:\n        print(\"YES\")\n    else:\n        print(\"NO\")\n\nsolve()"
   },
   {
-    "model": "gpt-4o",
+    "model": "gpt-5.4",
     "prompt_type": "zero_shot",
-    "language": "js",
-    "code": "function isSortablePermutation(permutation) {\n    let inversions = 0;\n    for (let i = 0; i < permutation.length; i++) {\n        for (let j = i + 1; j < permutation.length; j++) {\n            if (permutation[i] > permutation[j]) {\n                inversions++;\n            }\n        }\n    }\n    return inversions % 2 === 0;\n}",
-    "timestamp": "2025-08-13 13:29:25"
-  },
-  {
-    "model": "claude-3-5-haiku-20241022",
-    "prompt_type": "zero_shot",
-    "language": "js",
-    "code": "function canReachSortedState(permutation) {\n    const n = permutation.length;\n    const target = Array.from({length: n}, (_, i) => i + 1);\n    \n    function canTransform(arr) {\n        for (let i = 1; i < arr.length - 1; i++) {\n            if (arr[i-1] > arr[i] && arr[i] > arr[i+1]) {\n                const newArr = [...arr];\n                [newArr[i-1], newArr[i], newArr[i+1]] = [newArr[i+1], newArr[i], newArr[i-1]];\n                \n                if (JSON.stringify(newArr) === JSON.stringify(target)) return true;\n                if (canTransform(newArr)) return true;\n            }\n        }\n        return false;\n    }\n    \n    return JSON.stringify(permutation) === JSON.stringify(target) || canTransform(permutation);\n}",
-    "timestamp": "2025-08-13 13:29:29"
-  },
-  {
-    "model": "deepseek-v3",
-    "prompt_type": "zero_shot",
-    "language": "js",
-    "code": "function canReachIdentityPermutation(permutation) {\n    for (let i = 0; i < permutation.length; i++) {\n        if (permutation[i] !== i + 1) {\n            return false;\n        }\n    }\n    return true;\n}\n\nfunction canSort(permutation) {\n    const n = permutation.length;\n    for (let i = 0; i < n; i++) {\n        if (permutation[i] === i + 1) continue;\n        let pos = -1;\n        for (let j = i; j < n; j++) {\n            if (permutation[j] === i + 1) {\n                pos = j;\n                break;\n            }\n        }\n        if (pos === -1) return false;\n        while (pos > i) {\n            if (pos < 2) return false;\n            if (permutation[pos - 2] > permutation[pos - 1] && permutation[pos - 1] > permutation[pos]) {\n                [permutation[pos - 2], permutation[pos]] = [permutation[pos], permutation[pos - 2]];\n                pos -= 2;\n            } else if (pos >= i + 1 && permutation[pos - 1] > permutation[pos] && permutation[pos] > permutation[pos + 1]) {\n                [permutation[pos - 1], permutation[pos + 1]] = [permutation[pos + 1], permutation[pos - 1]];\n                pos -= 1;\n            } else {\n                return false;\n            }\n        }\n    }\n    return true;\n}\n\nfunction solve() {\n    const readline = require('readline');\n    const rl = readline.createInterface({\n        input: process.stdin,\n        output: process.stdout\n    });\n\n    let input = [];\n    rl.on('line', (line) => {\n        input.push(line);\n    });\n\n    rl.on('close', () => {\n        const T = parseInt(input[0]);\n        let index = 1;\n        for (let t = 0; t < T; t++) {\n            const N = parseInt(input[index++]);\n            const permutation = input[index++].split(' ').map(Number);\n            if (canReachIdentityPermutation(permutation)) {\n                console.log(\"Yes\");\n            } else {\n                const result = canSort([...permutation]) ? \"Yes\" : \"No\";\n                console.log(result);\n            }\n        }\n    });\n}\n\nsolve();",
-    "timestamp": "2025-08-13 13:29:43"
+    "language": "python",
+    "code": "import sys\n\ndef main():\n    data = sys.stdin.read().strip().split()\n    if not data:\n        return\n    n = int(data[0])\n    p = list(map(int, data[1:1+n]))\n\n    # The operation transforms a decreasing triple (a,b,c) into (c,b,a),\n    # which is exactly one adjacent swap of a and b plus one adjacent swap of b and c.\n    # Hence inversion parity is preserved.\n    #\n    # Also, every allowed move strictly decreases the inversion count by 2,\n    # so the sorted permutation is reachable iff the initial inversion count is even.\n\n    inv_parity = 0\n    for i in range(n):\n        pi = p[i]\n        for j in range(i + 1, n):\n            if pi > p[j]:\n                inv_parity ^= 1\n\n    print(\"YES\" if inv_parity == 0 else \"NO\")\n\nif __name__ == \"__main__\":\n    main()"
   }
 ]

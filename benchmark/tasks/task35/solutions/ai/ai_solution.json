@@ -1,23 +1,20 @@
 [
   {
-    "model": "claude-3-5-haiku-20241022",
-    "prompt_type": "zero_shot",
-    "language": "Python",
-    "code": "def max_team_size(l, r, a):\n    max_same_hand = min(l, r)\n    team_size = 2 * max_same_hand\n    \n    remaining_a = a\n    \n    if l < r:\n        diff = r - l\n        extra_on_right = min(diff, remaining_a)\n        team_size += 2 * extra_on_right\n        remaining_a -= extra_on_right\n    elif r < l:\n        diff = l - r\n        extra_on_left = min(diff, remaining_a)\n        team_size += 2 * extra_on_left\n        remaining_a -= extra_on_left\n    \n    team_size += min(remaining_a // 2 * 2, remaining_a)\n    \n    return team_size\n\nl, r, a = map(int, input().split())\nprint(max_team_size(l, r, a))",
-    "timestamp": "2025-08-05 17:32:26"
-  },
-  {
-    "model": "deepseek-v3",
-    "prompt_type": "zero_shot",
-    "language": "Python",
-    "code": "l, r, a = map(int, input().split())\n\nmin_lr = min(l, r)\nmax_lr = max(l, r)\ndiff = max_lr - min_lr\n\nif a >= diff:\n    remaining_a = a - diff\n    total = 2 * (min_lr + diff) + (remaining_a // 2) * 2\nelse:\n    total = 2 * (min_lr + a)\n\nprint(total)",
-    "timestamp": "2025-08-05 17:32:33"
-  },
-  {
-    "model": "gpt-4o",
+    "model": "deepseek-chat",
     "prompt_type": "zero_shot",
     "language": "python",
-    "code": "def max_team_size(l, r, a):\n    min_lr = min(l, r)\n    max_lr = max(l, r)\n    total = min_lr * 2\n    remaining_ambidexters = a - (max_lr - min_lr)\n\n    if remaining_ambidexters >= 0:\n        total += (max_lr - min_lr) * 2\n        total += (remaining_ambidexters // 2) * 2\n    else:\n        total += (a * 2)\n\n    return total\n\n# Example usage:\nprint(max_team_size(1, 4, 2))  # Output: 6\nprint(max_team_size(5, 5, 5))  # Output: 14\nprint(max_team_size(0, 2, 0))  # Output: 0",
-    "timestamp": "2025-08-12 21:53:52"
+    "code": "l, r, a = map(int, input().split())\n\n# Step 1: Pair as many left and right directly as possible\npairs = min(l, r)\nl -= pairs\nr -= pairs\n\n# Step 2: Use ambidexters to balance the remaining difference\ndiff = max(l, r)  # only one of them is non-zero now\nif a >= diff:\n    a -= diff\n    pairs += diff\nelse:\n    pairs += a\n    a = 0\n\n# Step 3: Remaining ambidexters can be split equally to both sides\npairs += a // 2\n\n# Each pair contributes 2 players\nprint(pairs * 2)"
+  },
+  {
+    "model": "claude-sonnet-4-6",
+    "prompt_type": "zero_shot",
+    "language": "python",
+    "code": "l, r, a = map(int, input().split())\n\n# First, balance l and r using ambidexters\nif l < r:\n    diff = r - l\n    use = min(diff, a)\n    l += use\n    a -= use\nelif r < l:\n    diff = l - r\n    use = min(diff, a)\n    r += use\n    a -= use\n\n# Now l and r might still be unequal, but we've used as many ambidexters as possible\n# If l == r, distribute remaining ambidexters in pairs\n# If l != r (meaning we ran out of ambidexters), take min(l,r) from each side\n\n# After balancing, l should equal r (or one side was larger and we used all a)\n# Actually after the above, if l > r, we couldn't fully balance (a was 0)\n# Let's just take min(l, r) pairs plus pairs from remaining ambidexters\n\n# At this point, l and r are balanced as much as possible\n# Add remaining ambidexters in pairs (split evenly between left and right)\npairs = a // 2\nl += pairs\nr += pairs\n\n# The team size is 2 * min(l, r)\nprint(2 * min(l, r))"
+  },
+  {
+    "model": "gpt-5.4",
+    "prompt_type": "zero_shot",
+    "language": "python",
+    "code": "import sys\n\ndef main():\n    l, r, a = map(int, sys.stdin.readline().split())\n\n    # First, use ambidexters to balance the smaller side up to the larger side.\n    x = min(abs(l - r), a)\n    if l < r:\n        l += x\n    else:\n        r += x\n    a -= x\n\n    # Remaining ambidexters can be split equally between both sides.\n    team = l + r + (a // 2) * 2\n    print(team)\n\nif __name__ == \"__main__\":\n    main()"
   }
 ]

@@ -1,86 +1,74 @@
 [
   {
-    "model": "deepseek-v3",
-    "prompt_type": "zero_shot",
-    "language": "C",
-    "code": "#include <stdio.h>\n#include <stdbool.h>\n\nint count = 0;\n\nvoid backtrack(int n, int s, int pos, int sum, bool used[]) {\n    if (pos > n) {\n        if (sum == s) {\n            count++;\n        }\n        return;\n    }\n    for (int i = 0; i <= 9; i++) {\n        if (!used[i]) {\n            used[i] = true;\n            backtrack(n, s, pos + 1, sum + pos * i, used);\n            used[i] = false;\n        }\n    }\n}\n\nint main() {\n    int n, s;\n    scanf(\"%d %d\", &n, &s);\n    bool used[10] = {false};\n    backtrack(n, s, 1, 0, used);\n    printf(\"%d\\n\", count);\n    return 0;\n}",
-    "timestamp": "2025-08-05 18:26:05"
-  },
-  {
-    "model": "claude-3-5-haiku-20241022",
-    "prompt_type": "zero_shot",
-    "language": "Java",
-    "code": "import java.util.*;\n\npublic class UniqueSequences {\n    public static void count(int n, int s) {\n        System.out.println(solve(n, s));\n    }\n\n    private static int solve(int n, int s) {\n        return backtrack(n, s, 0, 0, 0, new boolean[10]);\n    }\n\n    private static int backtrack(int n, int s, int index, int currentSum, int used, boolean[] visited) {\n        if (index == n) {\n            return currentSum == s ? 1 : 0;\n        }\n\n        int count = 0;\n        for (int i = 0; i < 10; i++) {\n            if (!visited[i]) {\n                visited[i] = true;\n                count += backtrack(n, s, index + 1, currentSum + (index + 1) * i, used | (1 << i), visited);\n                visited[i] = false;\n            }\n        }\n        return count;\n    }\n\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        int n = scanner.nextInt();\n        int s = scanner.nextInt();\n        count(n, s);\n        scanner.close();\n    }\n}",
-    "timestamp": "2025-08-05 18:26:10"
-  },
-  {
-    "model": "deepseek-v3",
-    "prompt_type": "zero_shot",
-    "language": "C++",
-    "code": "#include <iostream>\n#include <vector>\nusing namespace std;\n\nint count = 0;\n\nvoid backtrack(int n, int s, int pos, int current_sum, vector<bool>& used) {\n    if (pos > n) {\n        if (current_sum == s) {\n            count++;\n        }\n        return;\n    }\n    \n    for (int digit = 0; digit <= 9; digit++) {\n        if (!used[digit]) {\n            used[digit] = true;\n            backtrack(n, s, pos + 1, current_sum + pos * digit, used);\n            used[digit] = false;\n        }\n    }\n}\n\nint main() {\n    int n, s;\n    cin >> n >> s;\n    vector<bool> used(10, false);\n    backtrack(n, s, 1, 0, used);\n    cout << count << endl;\n    return 0;\n}",
-    "timestamp": "2025-08-05 18:26:19"
-  },
-  {
-    "model": "claude-3-5-haiku-20241022",
-    "prompt_type": "zero_shot",
-    "language": "C",
-    "code": "#include <stdio.h>\n#include <string.h>\n\nint sequence[10];\nint used[10];\nint count = 0;\n\nvoid backtrack(int index, int n, int sum, int target) {\n    if (index == n) {\n        if (sum == target) {\n            count++;\n        }\n        return;\n    }\n\n    for (int i = 0; i < 10; i++) {\n        if (!used[i]) {\n            sequence[index] = i;\n            used[i] = 1;\n            backtrack(index + 1, n, sum + (index + 1) * i, target);\n            used[i] = 0;\n        }\n    }\n}\n\nint main() {\n    int n, s;\n    scanf(\"%d %d\", &n, &s);\n\n    count = 0;\n    memset(used, 0, sizeof(used));\n    backtrack(0, n, 0, s);\n\n    printf(\"%d\\n\", count);\n    return 0;\n}",
-    "timestamp": "2025-08-05 18:26:23"
-  },
-  {
-    "model": "claude-3-5-haiku-20241022",
-    "prompt_type": "zero_shot",
-    "language": "C++",
-    "code": "#include <iostream>\n#include <vector>\n#include <set>\n\nusing namespace std;\n\nint countSequences(int n, int s) {\n    int count = 0;\n    \n    vector<int> sequence(n);\n    set<int> used;\n    \n    function<void(int, int)> backtrack = [&](int index, int currentSum) {\n        if (index == n) {\n            if (currentSum == s) {\n                count++;\n            }\n            return;\n        }\n        \n        for (int num = 0; num <= 9; num++) {\n            if (used.find(num) == used.end()) {\n                sequence[index] = num;\n                used.insert(num);\n                \n                backtrack(index + 1, currentSum + (index + 1) * num);\n                \n                used.erase(num);\n            }\n        }\n    };\n    \n    backtrack(0, 0);\n    \n    return count;\n}\n\nint main() {\n    int n, s;\n    cin >> n >> s;\n    \n    int result = countSequences(n, s);\n    cout << result << endl;\n    \n    return 0;\n}",
-    "timestamp": "2025-08-05 18:26:29"
-  },
-  {
-    "model": "deepseek-v3",
-    "prompt_type": "zero_shot",
-    "language": "Java",
-    "code": "import java.util.Scanner;\n\npublic class UniqueSequences {\n    private static int count = 0;\n\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        int n = scanner.nextInt();\n        int s = scanner.nextInt();\n        boolean[] used = new boolean[10];\n        calculateSequences(n, s, 0, 0, used);\n        System.out.println(count);\n    }\n\n    private static void calculateSequences(int n, int s, int pos, int currentSum, boolean[] used) {\n        if (pos == n) {\n            if (currentSum == s) {\n                count++;\n            }\n            return;\n        }\n\n        for (int digit = 0; digit <= 9; digit++) {\n            if (!used[digit]) {\n                used[digit] = true;\n                calculateSequences(n, s, pos + 1, currentSum + (pos + 1) * digit, used);\n                used[digit] = false;\n            }\n        }\n    }\n}",
-    "timestamp": "2025-08-05 18:26:40"
-  },
-  {
-    "model": "gpt-4o",
-    "prompt_type": "zero_shot",
-    "language": "python",
-    "code": "from itertools import permutations\n\ndef count_unique_sequences(n, s):\n    digits = list(range(10))\n    count = 0\n\n    for perm in permutations(digits, n):\n        sum_value = sum((i+1) * perm[i] for i in range(n))\n        if sum_value == s:\n            count += 1\n    \n    return count\n\n# Example usage:\nn = int(input(\"Enter n: \"))\ns = int(input(\"Enter s: \"))\nresult = count_unique_sequences(n, s)\nprint(result)",
-    "timestamp": "2025-08-12 23:14:34"
-  },
-  {
-    "model": "gpt-4o",
-    "prompt_type": "zero_shot",
-    "language": "java",
-    "code": "import java.util.HashSet;\nimport java.util.Scanner;\nimport java.util.Set;\n\npublic class UniqueSequences {\n\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        int n = scanner.nextInt();\n        int s = scanner.nextInt();\n        scanner.close();\n\n        System.out.println(countSequences(n, s, new boolean[10], 0, 0));\n    }\n\n    private static int countSequences(int n, int s, boolean[] used, int currentIndex, int currentSum) {\n        if (currentIndex == n) {\n            return currentSum == s ? 1 : 0;\n        }\n\n        int count = 0;\n        for (int digit = 0; digit <= 9; digit++) {\n            if (!used[digit]) {\n                used[digit] = true;\n                count += countSequences(n, s, used, currentIndex + 1, currentSum + (currentIndex + 1) * digit);\n                used[digit] = false;\n            }\n        }\n        return count;\n    }\n}",
-    "timestamp": "2025-08-12 23:14:39"
-  },
-  {
-    "model": "gpt-4o",
+    "model": "deepseek-chat",
     "prompt_type": "zero_shot",
     "language": "c",
-    "code": "#include <stdio.h>\n\nint isUnique(int arr[], int len) {\n    int freq[10] = {0}; // Digits 0-9\n    for (int i = 0; i < len; i++) {\n        if (freq[arr[i]] > 0) return 0;\n        freq[arr[i]]++;\n    }\n    return 1;\n}\n\nint countSequences(int index, int n, int s, int currentSum, int usedDigits[], int sequence[]) {\n    if (index > n) {\n        if (currentSum == s && isUnique(sequence, n)) {\n            return 1;\n        }\n        return 0;\n    }\n\n    int count = 0;\n    for (int i = 0; i <= 9; i++) {\n        if (!usedDigits[i]) {\n            usedDigits[i] = 1;\n            sequence[index - 1] = i;\n            count += countSequences(index + 1, n, s, currentSum + index * i, usedDigits, sequence);\n            usedDigits[i] = 0;\n        }\n    }\n    return count;\n}\n\nint main() {\n    int n, s;\n    scanf(\"%d %d\", &n, &s);\n\n    int usedDigits[10] = {0};\n    int sequence[n];\n\n    int result = countSequences(1, n, s, 0, usedDigits, sequence);\n    printf(\"%d\\n\", result);\n\n    return 0;\n}",
-    "timestamp": "2025-08-12 23:14:50"
+    "code": "#include <stdio.h>\n\nint n, s, count;\nint used[10];\n\nvoid dfs(int pos, int sum) {\n    if (pos == n) {\n        if (sum == s) count++;\n        return;\n    }\n    // Prune: even if we add max possible weights for remaining positions, can't reach s\n    int remaining = n - pos;\n    int max_possible = sum + (9 * (pos + 1)) + (9 * (pos + 2)) / 2 * remaining;\n    if (max_possible < s) return;\n    \n    for (int d = 0; d <= 9; d++) {\n        if (!used[d]) {\n            used[d] = 1;\n            dfs(pos + 1, sum + (pos + 1) * d);\n            used[d] = 0;\n        }\n    }\n}\n\nint main() {\n    scanf(\"%d %d\", &n, &s);\n    count = 0;\n    dfs(0, 0);\n    printf(\"%d\\n\", count);\n    return 0;\n}"
   },
   {
-    "model": "claude-3-5-haiku-20241022",
+    "model": "claude-sonnet-4-6",
+    "prompt_type": "zero_shot",
+    "language": "c",
+    "code": "#include <stdio.h>\n\nint n, s;\nint used[10];\nint count;\n\nvoid solve(int pos, int current_sum) {\n    if (pos > n) {\n        if (current_sum == s) {\n            count++;\n        }\n        return;\n    }\n    for (int d = 0; d <= 9; d++) {\n        if (!used[d]) {\n            used[d] = 1;\n            solve(pos + 1, current_sum + pos * d);\n            used[d] = 0;\n        }\n    }\n}\n\nint main() {\n    while (scanf(\"%d %d\", &n, &s) == 2) {\n        count = 0;\n        for (int i = 0; i < 10; i++) used[i] = 0;\n        solve(1, 0);\n        printf(\"%d\\n\", count);\n    }\n    return 0;\n}"
+  },
+  {
+    "model": "gpt-5.4",
+    "prompt_type": "zero_shot",
+    "language": "c",
+    "code": "#include <stdio.h>\n#include <string.h>\n\nlong long dp[11][1024][1001];\n\nint main(void) {\n    int n, s;\n    if (scanf(\"%d %d\", &n, &s) != 2) return 0;\n\n    if (n < 0 || n > 10 || s < 0) {\n        printf(\"0\\n\");\n        return 0;\n    }\n\n    memset(dp, 0, sizeof(dp));\n    dp[0][0][0] = 1;\n\n    for (int pos = 0; pos < n; pos++) {\n        int weight = pos + 1;\n        for (int mask = 0; mask < (1 << 10); mask++) {\n            for (int sum = 0; sum <= s; sum++) {\n                long long cur = dp[pos][mask][sum];\n                if (!cur) continue;\n\n                for (int digit = 0; digit <= 9; digit++) {\n                    if (mask & (1 << digit)) continue; // no repeated digits\n                    int nsum = sum + weight * digit;\n                    if (nsum <= s) {\n                        dp[pos + 1][mask | (1 << digit)][nsum] += cur;\n                    }\n                }\n            }\n        }\n    }\n\n    long long ans = 0;\n    for (int mask = 0; mask < (1 << 10); mask++) {\n        ans += dp[n][mask][s];\n    }\n\n    printf(\"%lld\\n\", ans);\n    return 0;\n}"
+  },
+  {
+    "model": "deepseek-chat",
+    "prompt_type": "zero_shot",
+    "language": "java",
+    "code": "import java.util.*;\n\npublic class Main {\n    static int n, s;\n    static int count = 0;\n    static boolean[] used = new boolean[10];\n\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        n = sc.nextInt();\n        s = sc.nextInt();\n        sc.close();\n\n        if (n > 10) {\n            System.out.println(0);\n            return;\n        }\n\n        backtrack(0, 0);\n        System.out.println(count);\n    }\n\n    static void backtrack(int idx, int currentSum) {\n        if (idx == n) {\n            if (currentSum == s) {\n                count++;\n            }\n            return;\n        }\n\n        for (int digit = 0; digit <= 9; digit++) {\n            if (!used[digit]) {\n                used[digit] = true;\n                backtrack(idx + 1, currentSum + (idx + 1) * digit);\n                used[digit] = false;\n            }\n        }\n    }\n}"
+  },
+  {
+    "model": "claude-sonnet-4-6",
+    "prompt_type": "zero_shot",
+    "language": "java",
+    "code": "import java.util.*;\n\npublic class Main {\n    static int n, s;\n    static long[][] memo;\n    \n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        while (sc.hasNextInt()) {\n            n = sc.nextInt();\n            s = sc.nextInt();\n            // memo[mask][sum]: number of ways from current state\n            // max sum = 9*(1+2+...+n) = 9*n*(n+1)/2\n            int maxSum = 9 * n * (n + 1) / 2;\n            memo = new long[1 << 10][maxSum + 1];\n            for (long[] row : memo) Arrays.fill(row, -1);\n            System.out.println(solve(0, 0, 0, maxSum));\n        }\n    }\n    \n    static long solve(int pos, int mask, int curSum, int maxSum) {\n        if (pos == n) {\n            return curSum == s ? 1 : 0;\n        }\n        if (curSum > s) return 0;\n        if (memo[mask][curSum] != -1) return memo[mask][curSum];\n        \n        long count = 0;\n        for (int d = 0; d <= 9; d++) {\n            if ((mask & (1 << d)) == 0) {\n                int newSum = curSum + (pos + 1) * d;\n                if (newSum <= s) {\n                    count += solve(pos + 1, mask | (1 << d), newSum, maxSum);\n                }\n            }\n        }\n        memo[mask][curSum] = count;\n        return count;\n    }\n}"
+  },
+  {
+    "model": "gpt-5.4",
+    "prompt_type": "zero_shot",
+    "language": "java",
+    "code": "import java.io.*;\nimport java.util.*;\n\npublic class Main {\n    static int n, s;\n    static long count = 0;\n\n    static void dfs(int pos, int sum, boolean[] used) {\n        if (pos > n) {\n            if (sum == s) count++;\n            return;\n        }\n\n        // Pruning: if already exceeded, no need to continue\n        if (sum > s) return;\n\n        for (int digit = 0; digit <= 9; digit++) {\n            if (!used[digit]) {\n                int newSum = sum + pos * digit;\n                if (newSum <= s) {\n                    used[digit] = true;\n                    dfs(pos + 1, newSum, used);\n                    used[digit] = false;\n                }\n            }\n        }\n    }\n\n    public static void main(String[] args) throws Exception {\n        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));\n        StringTokenizer st = new StringTokenizer(br.readLine());\n\n        n = Integer.parseInt(st.nextToken());\n        s = Integer.parseInt(st.nextToken());\n\n        if (n > 10) {\n            System.out.println(0);\n            return;\n        }\n\n        boolean[] used = new boolean[10];\n        dfs(1, 0, used);\n\n        System.out.println(count);\n    }\n}"
+  },
+  {
+    "model": "deepseek-chat",
     "prompt_type": "zero_shot",
     "language": "python",
-    "code": "def count_sequences(n, s):\n    def backtrack(index, current_sum, used_digits):\n        if index == n:\n            return 1 if current_sum == s else 0\n        \n        count = 0\n        for digit in range(10):\n            if digit not in used_digits:\n                new_sum = current_sum + (index + 1) * digit\n                if new_sum <= s:\n                    count += backtrack(index + 1, new_sum, used_digits | {digit})\n        \n        return count\n\n    return backtrack(0, 0, set())\n\nn, s = map(int, input().split())\nprint(count_sequences(n, s))",
-    "timestamp": "2025-08-12 23:14:58"
+    "code": "def solve():\n    import sys\n    from itertools import permutations\n\n    data = sys.stdin.read().strip().split()\n    if not data:\n        return\n    n = int(data[0])\n    s = int(data[1])\n    \n    digits = list(range(10))\n    count = 0\n    \n    for perm in permutations(digits, n):\n        total = 0\n        for i, val in enumerate(perm, start=1):\n            total += i * val\n        if total == s:\n            count += 1\n    \n    print(count)\n\nif __name__ == \"__main__\":\n    solve()"
   },
   {
-    "model": "deepseek-v3",
+    "model": "claude-sonnet-4-6",
     "prompt_type": "zero_shot",
     "language": "python",
-    "code": "import itertools\n\nn, s = map(int, input().split())\ndigits = list(range(10))\ncount = 0\n\nfor perm in itertools.permutations(digits, n):\n    total = 0\n    for i in range(n):\n        total += (i + 1) * perm[i]\n    if total == s:\n        count += 1\n\nprint(count)",
-    "timestamp": "2025-08-12 23:15:06"
+    "code": "from functools import lru_cache\n\ndef solve():\n    import sys\n    input_data = sys.stdin.read().split()\n    idx = 0\n    results = []\n    while idx < len(input_data):\n        n = int(input_data[idx]); s = int(input_data[idx+1])\n        idx += 2\n        \n        # Count sequences of n distinct digits from 0-9\n        # where sum i*k_i = s (i from 1 to n)\n        \n        @lru_cache(maxsize=None)\n        def dp(pos, used_mask, remaining):\n            # pos: current position (1-indexed), from 1 to n\n            # used_mask: bitmask of used digits\n            # remaining: remaining sum needed\n            if pos == n + 1:\n                return 1 if remaining == 0 else 0\n            if remaining < 0:\n                return 0\n            total = 0\n            for d in range(10):\n                if not (used_mask & (1 << d)):\n                    new_remaining = remaining - pos * d\n                    if new_remaining >= 0:\n                        total += dp(pos + 1, used_mask | (1 << d), new_remaining)\n            return total\n        \n        result = dp(1, 0, s)\n        dp.cache_clear()\n        results.append(result)\n    \n    for r in results:\n        print(r)\n\nsolve()"
   },
   {
-    "model": "gpt-4o",
+    "model": "gpt-5.4",
+    "prompt_type": "zero_shot",
+    "language": "python",
+    "code": "import sys\n\ndef main():\n    data = sys.stdin.read().strip().split()\n    if not data:\n        return\n    n, s = map(int, data)\n\n    # Digits are from 0..9, all must be distinct.\n    if n > 10:\n        print(0)\n        return\n\n    # dp[mask][sum] = number of ways to assign digits to first popcount(mask) positions\n    # using exactly the digits in mask, obtaining weighted sum = sum.\n    max_mask = 1 << 10\n    dp = [dict() for _ in range(max_mask)]\n    dp[0][0] = 1\n\n    for mask in range(max_mask):\n        used = mask.bit_count()\n        if used >= n:\n            continue\n        pos = used + 1  # next position index (1-based)\n        for cur_sum, cnt in dp[mask].items():\n            for d in range(10):\n                if not (mask >> d) & 1:\n                    new_sum = cur_sum + pos * d\n                    if new_sum > s:\n                        continue\n                    new_mask = mask | (1 << d)\n                    dp[new_mask][new_sum] = dp[new_mask].get(new_sum, 0) + cnt\n\n    ans = 0\n    for mask in range(max_mask):\n        if mask.bit_count() == n:\n            ans += dp[mask].get(s, 0)\n\n    print(ans)\n\nif __name__ == \"__main__\":\n    main()"
+  },
+  {
+    "model": "deepseek-chat",
     "prompt_type": "zero_shot",
     "language": "c++",
-    "code": "#include <iostream>\n#include <vector>\n#include <unordered_set>\n\nusing namespace std;\n\nclass UniqueSequenceCounter {\npublic:\n    int countSequences(int n, int s) {\n        return backtrack(n, s, 1, unordered_set<int>());\n    }\n\nprivate:\n    int backtrack(int n, int remaining, int start, unordered_set<int> used) {\n        if (n == 0) {\n            return remaining == 0 ? 1 : 0;\n        }\n        \n        int count = 0;\n        for (int digit = start; digit <= 9; ++digit) {\n            if (used.find(digit) == used.end()) {\n                used.insert(digit);\n                count += backtrack(n - 1, remaining - n * digit, digit + 1, used);\n                used.erase(digit);\n            }\n        }\n        return count;\n    }\n};\n\nint main() {\n    int n, s;\n    cin >> n >> s;\n    UniqueSequenceCounter counter;\n    cout << counter.countSequences(n, s) << endl;\n    return 0;\n}",
-    "timestamp": "2025-08-13 10:49:20"
+    "code": "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    ios::sync_with_stdio(false);\n    cin.tie(nullptr);\n    \n    int n, s;\n    cin >> n >> s;\n    \n    // dp[mask][sum] - number of ways using digits in mask to get sum\n    vector<vector<int>> dp(1 << 10, vector<int>(s + 1, 0));\n    dp[0][0] = 1;\n    \n    for (int mask = 0; mask < (1 << 10); mask++) {\n        int pos = __builtin_popcount(mask); // how many digits already placed (1-indexed position)\n        if (pos >= n) continue; // too many digits\n        for (int sum = 0; sum <= s; sum++) {\n            if (dp[mask][sum] == 0) continue;\n            for (int d = 0; d <= 9; d++) {\n                if (mask & (1 << d)) continue; // digit already used\n                int new_sum = sum + (pos + 1) * d;\n                if (new_sum > s) continue;\n                dp[mask | (1 << d)][new_sum] += dp[mask][sum];\n            }\n        }\n    }\n    \n    int ans = 0;\n    for (int mask = 0; mask < (1 << 10); mask++) {\n        if (__builtin_popcount(mask) == n) {\n            ans += dp[mask][s];\n        }\n    }\n    \n    cout << ans << \"\\n\";\n    return 0;\n}"
+  },
+  {
+    "model": "claude-sonnet-4-6",
+    "prompt_type": "zero_shot",
+    "language": "c++",
+    "code": "#include <bits/stdc++.h>\nusing namespace std;\n\nint n, s;\nbool used[10];\nint count_seq;\n\nvoid solve(int pos, int current_sum) {\n    if (pos > n) {\n        if (current_sum == s) count_seq++;\n        return;\n    }\n    for (int d = 0; d <= 9; d++) {\n        if (!used[d]) {\n            used[d] = true;\n            solve(pos + 1, current_sum + pos * d);\n            used[d] = false;\n        }\n    }\n}\n\nint main() {\n    while (cin >> n >> s) {\n        memset(used, false, sizeof(used));\n        count_seq = 0;\n        solve(1, 0);\n        cout << count_seq << endl;\n    }\n    return 0;\n}"
+  },
+  {
+    "model": "gpt-5.4",
+    "prompt_type": "zero_shot",
+    "language": "c++",
+    "code": "#include <bits/stdc++.h>\nusing namespace std;\n\nlong long dp[11][11][386]; \n// dp[pos][mask][sum]:\n// pos = how many positions already assigned (0..n)\n// mask = used digits\n// sum = current weighted sum\n\nint main() {\n    ios::sync_with_stdio(false);\n    cin.tie(nullptr);\n\n    int n, s;\n    cin >> n >> s;\n\n    // Maximum possible weighted sum for n<=10:\n    // choose distinct digits 0..9, sum of i*digit\n    // safe bound already covered by 386.\n    memset(dp, 0, sizeof(dp));\n    dp[0][0][0] = 1;\n\n    for (int pos = 0; pos < n; ++pos) {\n        int weight = pos + 1;\n        for (int mask = 0; mask < (1 << 10); ++mask) {\n            for (int sum = 0; sum <= s; ++sum) {\n                if (dp[pos][mask][sum] == 0) continue;\n                for (int digit = 0; digit <= 9; ++digit) {\n                    if (mask & (1 << digit)) continue; // no repeats\n                    int nsum = sum + weight * digit;\n                    if (nsum > s) continue;\n                    dp[pos + 1][mask | (1 << digit)][nsum] += dp[pos][mask][sum];\n                }\n            }\n        }\n    }\n\n    long long ans = 0;\n    for (int mask = 0; mask < (1 << 10); ++mask) {\n        ans += dp[n][mask][s];\n    }\n\n    cout << ans << '\\n';\n    return 0;\n}"
   }
 ]

@@ -1,86 +1,74 @@
 [
   {
-    "model": "claude-3-5-haiku-20241022",
-    "prompt_type": "zero_shot",
-    "language": "C",
-    "code": "#include <stdio.h>\n#include <string.h>\n\nint is_miko_mi_string(char* s) {\n    int len = strlen(s);\n    \n    for (int a_len = 1; a_len <= len/2; a_len++) {\n        for (int b_len = 1; b_len <= (len - 3*a_len)/2; b_len++) {\n            if (len == 3*a_len + 2*b_len) {\n                int valid = 1;\n                \n                // Check first A\n                for (int i = 0; i < a_len; i++) {\n                    if (s[i] != s[2*a_len + 2*b_len + i]) {\n                        valid = 0;\n                        break;\n                    }\n                }\n                \n                // Check B \n                if (valid) {\n                    for (int i = 0; i < b_len; i++) {\n                        if (s[a_len + i] != s[a_len + b_len + a_len + i]) {\n                            valid = 0;\n                            break;\n                        }\n                    }\n                }\n                \n                // Final pattern check\n                if (valid) {\n                    int pattern_match = 1;\n                    for (int i = 0; i < a_len; i++) {\n                        if (s[i] != s[a_len + b_len + i]) {\n                            pattern_match = 0;\n                            break;\n                        }\n                    }\n                    \n                    if (pattern_match) {\n                        printf(\"Love \");\n                        for (int i = 0; i < a_len; i++) \n                            printf(\"%c\", s[i]);\n                        printf(\" \");\n                        for (int i = 0; i < b_len; i++) \n                            printf(\"%c\", s[a_len + i]);\n                        printf(\"!\\n\");\n                        return 1;\n                    }\n                }\n            }\n        }\n    }\n    \n    printf(\"mitomerarenaiWA\\n\");\n    return 0;\n}\n\nint main() {\n    char s[1001];\n    scanf(\"%s\", s);\n    is_miko_mi_string(s);\n    return 0;\n}",
-    "timestamp": "2025-08-05 21:58:09"
-  },
-  {
-    "model": "deepseek-v3",
-    "prompt_type": "zero_shot",
-    "language": "C",
-    "code": "#include <stdio.h>\n#include <string.h>\n\nint main() {\n    char S[1001];\n    scanf(\"%s\", S);\n    int len = strlen(S);\n    int found = 0;\n    char A[1001], B[1001];\n\n    for (int a_len = 1; a_len <= len / 3; a_len++) {\n        if (len % (2 * a_len + 1) != 0) continue;\n        int b_len = (len - 3 * a_len) / 2;\n        if (b_len <= 0) continue;\n\n        strncpy(A, S, a_len);\n        A[a_len] = '\\0';\n\n        strncpy(B, S + a_len, b_len);\n        B[b_len] = '\\0';\n\n        int pos = a_len + b_len;\n        if (strncmp(S + pos, A, a_len) != 0) continue;\n        pos += a_len;\n        if (strncmp(S + pos, B, b_len) != 0) continue;\n        pos += b_len;\n        if (strncmp(S + pos, A, a_len) != 0) continue;\n\n        found = 1;\n        printf(\"Love %s%s!\\n\", A, B);\n        break;\n    }\n\n    if (!found) {\n        printf(\"mitomerarenaiWA\\n\");\n    }\n\n    return 0;\n}",
-    "timestamp": "2025-08-05 21:58:24"
-  },
-  {
-    "model": "deepseek-v3",
-    "prompt_type": "zero_shot",
-    "language": "C++",
-    "code": "#include <iostream>\n#include <string>\n\nusing namespace std;\n\nint main() {\n    string S;\n    cin >> S;\n    int n = S.length();\n    bool found = false;\n    string A, B;\n\n    for (int a_len = 1; a_len <= n / 3 && !found; ++a_len) {\n        A = S.substr(0, a_len);\n        int remaining_len = n - 3 * a_len;\n        if (remaining_len <= 0) continue;\n        if (remaining_len % 2 != 0) continue;\n        int b_len = remaining_len / 2;\n        B = S.substr(a_len, b_len);\n        string reconstructed = A + B + A + B + A;\n        if (reconstructed == S) {\n            found = true;\n            break;\n        }\n    }\n\n    if (found) {\n        cout << \"Love \" << A << B << \"!\" << endl;\n    } else {\n        cout << \"mitomerarenaiWA\" << endl;\n    }\n\n    return 0;\n}",
-    "timestamp": "2025-08-05 21:58:36"
-  },
-  {
-    "model": "deepseek-v3",
-    "prompt_type": "zero_shot",
-    "language": "Java",
-    "code": "import java.util.Scanner;\n\npublic class MikoMiString {\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        String S = scanner.next();\n        boolean found = false;\n        int n = S.length();\n        \n        for (int aLen = 1; aLen <= n / 3; aLen++) {\n            String A = S.substring(0, aLen);\n            int remainingLen = n - 3 * aLen;\n            if (remainingLen <= 0) continue;\n            if (remainingLen % 2 != 0) continue;\n            int bLen = remainingLen / 2;\n            if (bLen <= 0) continue;\n            String B = S.substring(aLen, aLen + bLen);\n            String reconstructed = A + B + A + B + A;\n            if (reconstructed.equals(S)) {\n                System.out.println(\"Love \" + A + B + \"!\");\n                found = true;\n                break;\n            }\n        }\n        \n        if (!found) {\n            System.out.println(\"mitomerarenaiWA\");\n        }\n    }\n}",
-    "timestamp": "2025-08-05 21:58:48"
-  },
-  {
-    "model": "claude-3-5-haiku-20241022",
-    "prompt_type": "zero_shot",
-    "language": "Java",
-    "code": "import java.util.Scanner;\n\npublic class MikoMiString {\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        String s = scanner.nextLine();\n        \n        boolean found = false;\n        for (int i = 1; i <= s.length() / 2; i++) {\n            for (int j = 1; j <= (s.length() - 3 * i) / 2; j++) {\n                String A = s.substring(0, i);\n                String B = s.substring(i, i + j);\n                \n                if (s.equals(A + B + A + B + A)) {\n                    System.out.println(\"Love \" + A + B + \"!\");\n                    found = true;\n                    break;\n                }\n            }\n            if (found) break;\n        }\n        \n        if (!found) {\n            System.out.println(\"mitomerarenaiWA\");\n        }\n        \n        scanner.close();\n    }\n}",
-    "timestamp": "2025-08-05 21:58:52"
-  },
-  {
-    "model": "claude-3-5-haiku-20241022",
-    "prompt_type": "zero_shot",
-    "language": "C++",
-    "code": "#include <iostream>\n#include <string>\nusing namespace std;\n\nint main() {\n    string s;\n    cin >> s;\n    \n    int n = s.length();\n    bool found = false;\n    \n    for (int i = 1; i <= n/2; i++) {\n        for (int j = 1; j <= (n-3*i)/2; j++) {\n            string A = s.substr(0, i);\n            string B = s.substr(i, j);\n            \n            if (s == A + B + A + B + A) {\n                cout << \"Love \" << A + B << \"!\" << endl;\n                found = true;\n                break;\n            }\n        }\n        if (found) break;\n    }\n    \n    if (!found) {\n        cout << \"mitomerarenaiWA\" << endl;\n    }\n    \n    return 0;\n}",
-    "timestamp": "2025-08-05 21:58:56"
-  },
-  {
-    "model": "gpt-4o",
-    "prompt_type": "zero_shot",
-    "language": "python",
-    "code": "def miko_mi_string(S):\n    n = len(S)\n    for i in range(1, n // 2):  # Look for potential A strings\n        for j in range(1, n - 2 * i + 1):  # Look for potential B strings\n            A = S[:i]\n            B = S[i:i+j]\n            if S == A + B + A + B + A:\n                return f'Love {A}{B}!'\n    return 'mitomerarenaiWA'\n\n# Example usage:\n# print(miko_mi_string(\"abababa\"))  # Should output: Love ab!",
-    "timestamp": "2025-08-13 08:21:21"
-  },
-  {
-    "model": "gpt-4o",
+    "model": "deepseek-chat",
     "prompt_type": "zero_shot",
     "language": "java",
-    "code": "import java.util.*;\n\npublic class MikoMiString {\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        String S = scanner.nextLine();\n        scanner.close();\n        \n        int n = S.length();\n        for (int lenA = 1; lenA < n; lenA++) {\n            String A = S.substring(0, lenA);\n            for (int lenB = 1; lenA + lenB < n; lenB++) {\n                if (n == 2 * lenA + 3 * lenB) {\n                    String B = S.substring(lenA, lenA + lenB);\n                    String pattern = A + B + A + B + A;\n                    if (S.equals(pattern)) {\n                        System.out.println(\"Love \" + A + B + \"!\");\n                        return;\n                    }\n                }\n            }\n        }\n        \n        System.out.println(\"mitomerarenaiWA\");\n    }\n}",
-    "timestamp": "2025-08-13 08:21:26"
+    "code": "import java.util.Scanner;\n\npublic class MikoMiString {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        String S = sc.next();\n        sc.close();\n\n        int n = S.length();\n        \n        // Try all possible lengths for A and B\n        for (int lenA = 1; lenA <= n / 3; lenA++) {\n            for (int lenB = 1; lenB <= n / 3; lenB++) {\n                if (2 * lenA + 3 * lenB != n) continue;\n                String A = S.substring(0, lenA);\n                String B = S.substring(lenA, lenA + lenB);\n                \n                // Build ABABA\n                String candidate = A + B + A + B + A;\n                if (candidate.equals(S)) {\n                    System.out.println(\"Love \" + A + \" \" + B + \"!\");\n                    return;\n                }\n            }\n        }\n        System.out.println(\"mitomerarenaiWA\");\n    }\n}"
   },
   {
-    "model": "gpt-4o",
+    "model": "claude-sonnet-4-6",
     "prompt_type": "zero_shot",
-    "language": "c",
-    "code": "#include <stdio.h>\n#include <string.h>\n\nvoid findMikoMiString(char *S) {\n    int length = strlen(S);\n    for (int lenA = 1; lenA <= length / 3; lenA++) {\n        for (int lenB = 1; lenB <= (length - lenA) / 2; lenB++) {\n            if (lenA + 2 * lenB != length) continue; // ABABA must be of length lenA + 2*lenB\n            char A[lenA + 1];\n            char B[lenB + 1];\n            strncpy(A, S, lenA);\n            A[lenA] = '\\0';\n            strncpy(B, S + lenA, lenB);\n            B[lenB] = '\\0';\n            if (strncmp(A, S + lenA + lenB, lenA) == 0 && \n                strncmp(B, S + lenA, lenB) == 0 && \n                strncmp(B, S + lenA + lenB + lenA, lenB) == 0) {\n                printf(\"Love %s%s!\\n\", A, B);\n                return;\n            }\n        }\n    }\n    printf(\"mitomerarenaiWA\\n\");\n}\n\nint main() {\n    char S[101];  // Assuming the max length of the string is 100\n    scanf(\"%100s\", S);\n    findMikoMiString(S);\n    return 0;\n}",
-    "timestamp": "2025-08-13 08:21:29"
+    "language": "java",
+    "code": "import java.util.*;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        String S = sc.next();\n        int n = S.length();\n        \n        // S = ABABA, |S| = 3*la + 2*lb\n        // la >= 1, lb >= 1\n        // So 3*la + 2*lb = n => lb = (n - 3*la) / 2\n        \n        String bestA = null, bestB = null;\n        \n        for (int la = 1; la * 3 + 2 <= n; la++) {\n            int rem = n - 3 * la;\n            if (rem <= 0) break;\n            if (rem % 2 != 0) continue;\n            int lb = rem / 2;\n            if (lb < 1) continue;\n            \n            // Verify: S = A B A B A\n            // positions: A=[0,la), B=[la,la+lb), A=[la+lb,2la+lb), B=[2la+lb,2la+2lb), A=[2la+2lb,3la+2lb)\n            String A = S.substring(0, la);\n            String B = S.substring(la, la + lb);\n            \n            int pos = 0;\n            boolean valid = true;\n            \n            // Check first A\n            if (!S.substring(pos, pos + la).equals(A)) valid = false;\n            pos += la;\n            // Check first B\n            if (valid && !S.substring(pos, pos + lb).equals(B)) valid = false;\n            pos += lb;\n            // Check second A\n            if (valid && !S.substring(pos, pos + la).equals(A)) valid = false;\n            pos += la;\n            // Check second B\n            if (valid && !S.substring(pos, pos + lb).equals(B)) valid = false;\n            pos += lb;\n            // Check third A\n            if (valid && !S.substring(pos, pos + la).equals(A)) valid = false;\n            \n            if (valid) {\n                bestA = A;\n                bestB = B;\n                break; // smallest la first\n            }\n        }\n        \n        if (bestA != null) {\n            System.out.println(\"Love \" + bestA + bestB + \"!\");\n        } else {\n            System.out.println(\"mitomerarenaiWA\");\n        }\n    }\n}"
   },
   {
-    "model": "claude-3-5-haiku-20241022",
+    "model": "gpt-5.4",
     "prompt_type": "zero_shot",
-    "language": "python",
-    "code": "def solve_miko_mi(s):\n    n = len(s)\n    \n    for i in range(1, n // 2 + 1):\n        for j in range(1, (n - 3 * i) // 2 + 1):\n            a = s[:i]\n            b = s[i:i+j]\n            \n            if a + b + a + b + a == s:\n                return f'Love {a}{b}!'\n    \n    return 'mitomerarenaiWA'\n\n# Read input\ns = input().strip()\n\n# Print result\nprint(solve_miko_mi(s))",
-    "timestamp": "2025-08-13 08:21:36"
+    "language": "java",
+    "code": "import java.io.*;\nimport java.util.*;\n\npublic class Main {\n    public static void main(String[] args) throws Exception {\n        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));\n        String S = br.readLine();\n        \n        int n = S.length();\n        \n        // S = A B A B A\n        // Let |A| = a, |B| = b, both >= 1\n        // Then 3a + 2b = n\n        // We need the smallest possible A, and then smallest possible B.\n        // Since A is a prefix of S, once a is fixed A is determined.\n        // Check a from smallest to largest.\n        for (int a = 1; a < n; a++) {\n            int rem = n - 3 * a;\n            if (rem <= 0) break;\n            if (rem % 2 != 0) continue;\n            \n            int b = rem / 2;\n            if (b <= 0) continue;\n            \n            String A = S.substring(0, a);\n            String B = S.substring(a, a + b);\n            \n            StringBuilder sb = new StringBuilder();\n            sb.append(A).append(B).append(A).append(B).append(A);\n            \n            if (sb.toString().equals(S)) {\n                System.out.println(\"Love \" + A + B + \"!\");\n                return;\n            }\n        }\n        \n        System.out.println(\"mitomerarenaiWA\");\n    }\n}"
   },
   {
-    "model": "deepseek-v3",
-    "prompt_type": "zero_shot",
-    "language": "python",
-    "code": "def is_miko_mi(s):\n    n = len(s)\n    for a_len in range(1, n // 3 + 1):\n        if n - 2 * a_len <= 0:\n            continue\n        b_len = n - 3 * a_len\n        if b_len <= 0:\n            continue\n        A = s[:a_len]\n        B = s[a_len:a_len + b_len]\n        if s == A + B + A + B + A:\n            return f'Love {A}{B}!'\n    return 'mitomerarenaiWA'\n\nS = input().strip()\nprint(is_miko_mi(S))",
-    "timestamp": "2025-08-13 08:21:43"
-  },
-  {
-    "model": "gpt-4o",
+    "model": "deepseek-chat",
     "prompt_type": "zero_shot",
     "language": "c++",
-    "code": "#include <iostream>\n#include <string>\n\nbool isPrefixAndSuffixEqual(const std::string& str, const std::string& prefix, const std::string& suffix) {\n    return prefix == suffix;\n}\n\nstd::string findMikoMiString(const std::string& s) {\n    int n = s.length();\n    for (int lenA = 1; lenA <= n / 2; ++lenA) {\n        std::string A = s.substr(0, lenA);\n        for (int lenB = 1; lenB <= n; ++lenB) {\n            std::string B = s.substr(lenA, lenB);\n            std::string constructed = A + B + A + B + A;\n            if (constructed == s) {\n                return \"Love \" + A + B + \"!\";\n            }\n        }\n    }\n    return \"mitomerarenaiWA\";\n}\n\nint main() {\n    std::string s;\n    std::cin >> s;\n\n    std::cout << findMikoMiString(s) << std::endl;\n    return 0;\n}",
-    "timestamp": "2025-08-13 11:45:09"
+    "code": "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    ios::sync_with_stdio(false);\n    cin.tie(nullptr);\n    \n    string s;\n    cin >> s;\n    int n = s.size();\n    \n    // We need the form: A B A B A\n    // length of A = lenA, length of B = lenB\n    // total length = 3*lenA + 2*lenB\n    // We want the smallest possible A and B, so we try small lengths first.\n    \n    for (int lenA = 1; 3 * lenA + 2 <= n; ++lenA) {\n        for (int lenB = 1; 3 * lenA + 2 * lenB <= n; ++lenB) {\n            if (3 * lenA + 2 * lenB != n) continue;\n            string A = s.substr(0, lenA);\n            string B = s.substr(lenA, lenB);\n            \n            // Check ABABA pattern\n            string p1 = s.substr(0, lenA);\n            string p2 = s.substr(lenA, lenB);\n            string p3 = s.substr(lenA + lenB, lenA);\n            string p4 = s.substr(2 * lenA + lenB, lenB);\n            string p5 = s.substr(2 * lenA + 2 * lenB, lenA);\n            \n            if (A == p1 && B == p2 && A == p3 && B == p4 && A == p5) {\n                cout << \"Love \" << A << \" \" << B << \"!\" << \"\\n\";\n                return 0;\n            }\n        }\n    }\n    \n    cout << \"mitomerarenaiWA\" << \"\\n\";\n    return 0;\n}"
+  },
+  {
+    "model": "claude-sonnet-4-6",
+    "prompt_type": "zero_shot",
+    "language": "c++",
+    "code": "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    string s;\n    cin >> s;\n    int n = s.size();\n    \n    for (int a = 1; 3*a + 2 <= n; a++) {\n        int rem = n - 3*a;\n        if (rem % 2 != 0) continue;\n        int b = rem / 2;\n        if (b < 1) continue;\n        \n        string A = s.substr(0, a);\n        string B = s.substr(a, b);\n        \n        // Check: ABABA\n        // positions: A[0..a-1], B[a..a+b-1], A[a+b..2a+b-1], B[2a+b..2a+2b-1], A[2a+2b..3a+2b-1]\n        bool ok = true;\n        // Check second A\n        if (s.substr(a+b, a) != A) ok = false;\n        // Check second B\n        if (ok && s.substr(2*a+b, b) != B) ok = false;\n        // Check third A\n        if (ok && s.substr(2*a+2*b, a) != A) ok = false;\n        \n        if (ok) {\n            cout << \"Love \" << A << B << \"!\" << endl;\n            return 0;\n        }\n    }\n    \n    cout << \"mitomerarenaiWA\" << endl;\n    return 0;\n}"
+  },
+  {
+    "model": "gpt-5.4",
+    "prompt_type": "zero_shot",
+    "language": "c++",
+    "code": "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    ios::sync_with_stdio(false);\n    cin.tie(nullptr);\n\n    string S;\n    cin >> S;\n    int n = (int)S.size();\n\n    // S = ABABA\n    // Let |A| = a, |B| = b, with a,b >= 1\n    // Then 3a + 2b = n\n    // We need the smallest possible A, then B follows uniquely.\n    for (int a = 1; a <= n; ++a) {\n        int rem = n - 3 * a;\n        if (rem <= 0) break;\n        if (rem % 2 != 0) continue;\n        int b = rem / 2;\n        if (b <= 0) continue;\n\n        string A = S.substr(0, a);\n        string B = S.substr(a, b);\n\n        string T = A + B + A + B + A;\n        if (T == S) {\n            cout << \"Love \" << A << B << \"!\\n\";\n            return 0;\n        }\n    }\n\n    cout << \"mitomerarenaiWA\\n\";\n    return 0;\n}"
+  },
+  {
+    "model": "deepseek-chat",
+    "prompt_type": "zero_shot",
+    "language": "c",
+    "code": "#include <stdio.h>\n#include <string.h>\n\nint main() {\n    char s[100001];\n    scanf(\"%s\", s);\n    int n = strlen(s);\n    \n    for (int lenA = 1; lenA <= n; lenA++) {\n        int rem = n - 3 * lenA;\n        if (rem <= 0 || rem % 2 != 0) continue;\n        int lenB = rem / 2;\n        \n        // Check pattern: positions\n        // A = s[0..lenA-1]\n        // B = s[lenA..lenA+lenB-1]\n        // A = s[lenA+lenB..2*lenA+lenB-1]\n        // B = s[2*lenA+lenB..2*lenA+2*lenB-1]\n        // A = s[2*lenA+2*lenB..3*lenA+2*lenB-1]\n        \n        int ok = 1;\n        // Compare A parts\n        for (int i = 0; i < lenA; i++) {\n            if (s[i] != s[lenA + lenB + i] || s[i] != s[2*lenA + 2*lenB + i]) {\n                ok = 0;\n                break;\n            }\n        }\n        if (!ok) continue;\n        \n        // Compare B parts\n        for (int i = 0; i < lenB; i++) {\n            if (s[lenA + i] != s[2*lenA + lenB + i]) {\n                ok = 0;\n                break;\n            }\n        }\n        if (!ok) continue;\n        \n        // Found solution\n        char A[100001], B[100001];\n        strncpy(A, s, lenA);\n        A[lenA] = '\\0';\n        strncpy(B, s + lenA, lenB);\n        B[lenB] = '\\0';\n        printf(\"Love %s%s!\\n\", A, B);\n        return 0;\n    }\n    \n    printf(\"mitomerarenaiWA\\n\");\n    return 0;\n}"
+  },
+  {
+    "model": "claude-sonnet-4-6",
+    "prompt_type": "zero_shot",
+    "language": "c",
+    "code": "#include <stdio.h>\n#include <string.h>\n#include <stdlib.h>\n\nint main() {\n    char S[10001];\n    scanf(\"%s\", S);\n    int n = strlen(S);\n    \n    // S = ABABA, len = 3a + 2b\n    // a >= 1, b >= 1\n    // For each a from 1 upward:\n    \n    for (int a = 1; a <= n; a++) {\n        int rem = n - 3*a;\n        if (rem <= 0) break;\n        if (rem % 2 != 0) continue;\n        int b = rem / 2;\n        if (b < 1) continue;\n        \n        // Check: S[0..a-1] = A\n        // S[a..a+b-1] = B\n        // S[a+b..2a+b-1] = A\n        // S[2a+b..2a+2b-1] = B (don't need to check separately, but let's verify)\n        // S[2a+2b..3a+2b-1] = A\n        \n        // Check second A\n        int ok = 1;\n        for (int i = 0; i < a; i++) {\n            if (S[i] != S[a+b+i]) { ok = 0; break; }\n        }\n        if (!ok) continue;\n        \n        // Check third A\n        for (int i = 0; i < a; i++) {\n            if (S[i] != S[2*a+2*b+i]) { ok = 0; break; }\n        }\n        if (!ok) continue;\n        \n        // Check second B\n        for (int i = 0; i < b; i++) {\n            if (S[a+i] != S[2*a+b+i]) { ok = 0; break; }\n        }\n        if (!ok) continue;\n        \n        // Found! Output A and B\n        char A[10001], B[10001];\n        strncpy(A, S, a); A[a] = '\\0';\n        strncpy(B, S+a, b); B[b] = '\\0';\n        printf(\"Love %s%s!\\n\", A, B);\n        return 0;\n    }\n    \n    printf(\"mitomerarenaiWA\\n\");\n    return 0;\n}"
+  },
+  {
+    "model": "gpt-5.4",
+    "prompt_type": "zero_shot",
+    "language": "c",
+    "code": "#include <stdio.h>\n#include <string.h>\n\nint main(void) {\n    char s[1000005];\n    if (scanf(\"%1000000s\", s) != 1) return 0;\n\n    int n = (int)strlen(s);\n\n    for (int la = 1; la < n; la++) {\n        int rem = n - 3 * la;\n        if (rem <= 0) continue;\n        if (rem % 2 != 0) continue;\n\n        int lb = rem / 2;\n        if (lb <= 0) continue;\n\n        int ok = 1;\n\n        /* Compare A blocks: [0, la), [la+lb, la+lb+la), [2*la+2*lb, 3*la+2*lb) */\n        for (int i = 0; i < la; i++) {\n            if (s[i] != s[la + lb + i] || s[i] != s[2 * la + 2 * lb + i]) {\n                ok = 0;\n                break;\n            }\n        }\n\n        /* Compare B blocks: [la, la+lb), [2*la+lb, 2*la+2*lb) */\n        if (ok) {\n            for (int i = 0; i < lb; i++) {\n                if (s[la + i] != s[2 * la + lb + i]) {\n                    ok = 0;\n                    break;\n                }\n            }\n        }\n\n        if (ok) {\n            printf(\"Love AB!\\n\");\n            return 0;\n        }\n    }\n\n    printf(\"mitomerarenaiWA\\n\");\n    return 0;\n}"
+  },
+  {
+    "model": "deepseek-chat",
+    "prompt_type": "zero_shot",
+    "language": "python",
+    "code": "s = input().strip()\nn = len(s)\n\nfor la in range(1, n):\n    if 3 * la >= n:\n        break\n    for lb in range(1, n):\n        if 3 * la + 2 * lb != n:\n            continue\n        A = s[:la]\n        B = s[la:la+lb]\n        # Check pattern: A B A B A\n        if (s[la:la+lb] == B and\n            s[2*la+lb:3*la+lb] == A and\n            s[3*la+lb:] == B):\n            print(f\"Love {A} {B}!\")\n            exit()\n\nprint(\"mitomerarenaiWA\")"
+  },
+  {
+    "model": "claude-sonnet-4-6",
+    "prompt_type": "zero_shot",
+    "language": "python",
+    "code": "def solve():\n    S = input().strip()\n    n = len(S)\n    \n    # S = ABABA, |S| = 3a + 2b\n    # n = 3a + 2b => 2b = n - 3a => b = (n - 3a) / 2\n    # Need: a >= 1, b >= 1, n - 3a >= 2, n - 3a even\n    \n    result = None\n    \n    for a in range(1, n):\n        remaining = n - 3 * a\n        if remaining < 2:\n            break\n        if remaining % 2 != 0:\n            continue\n        b = remaining // 2\n        \n        # Check ABABA pattern\n        A1 = S[0:a]\n        B1 = S[a:a+b]\n        A2 = S[a+b:2*a+b]\n        B2 = S[2*a+b:2*a+2*b]\n        A3 = S[2*a+2*b:3*a+2*b]\n        \n        if A1 == A2 == A3 and B1 == B2:\n            result = (A1, B1)\n            break  # smallest a first, and for given a, b is determined\n    \n    if result:\n        A, B = result\n        print(f'Love {A}{B}!')\n    else:\n        print('mitomerarenaiWA')\n\nsolve()"
+  },
+  {
+    "model": "gpt-5.4",
+    "prompt_type": "zero_shot",
+    "language": "python",
+    "code": "import sys\n\ndef solve():\n    s = sys.stdin.readline().strip()\n    n = len(s)\n\n    # S = A B A B A\n    # Let |A| = a, |B| = b, both >= 1\n    # Then 3a + 2b = n\n    # We need the smallest possible A, then B accordingly.\n    for a in range(1, n + 1):\n        rem = n - 3 * a\n        if rem <= 0:\n            break\n        if rem % 2 != 0:\n            continue\n        b = rem // 2\n        if b <= 0:\n            continue\n\n        A = s[:a]\n        B = s[a:a+b]\n        if A + B + A + B + A == s:\n            print(\"Love AB!\")\n            print(A, B)\n            return\n\n    print(\"mitomerarenaiWA\")\n\nif __name__ == \"__main__\":\n    solve()"
   }
 ]

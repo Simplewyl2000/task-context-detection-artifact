@@ -1,107 +1,74 @@
 [
   {
-    "model": "claude-3-5-haiku-20241022",
-    "prompt_type": "zero_shot",
-    "language": "C",
-    "code": "#include <stdio.h>\n#include <stdlib.h>\n\nint min(int a, int b) {\n    return a < b ? a : b;\n}\n\nint time_gap(int a, int b) {\n    int diff = abs(a - b);\n    return min(diff, 24 - diff);\n}\n\nint main() {\n    int N, i, j;\n    scanf(\"%d\", &N);\n    \n    int* D = malloc((N + 1) * sizeof(int));\n    for (i = 0; i < N + 1; i++) {\n        scanf(\"%d\", &D[i]);\n    }\n    \n    int max_min_gap = 0;\n    for (i = 0; i < N + 1; i++) {\n        for (j = i + 1; j < N + 1; j++) {\n            int current_gap = time_gap(D[i], D[j]);\n            if (current_gap > max_min_gap) {\n                max_min_gap = current_gap;\n            }\n        }\n    }\n    \n    printf(\"%d\\n\", max_min_gap);\n    \n    free(D);\n    return 0;\n}",
-    "timestamp": "2025-08-05 23:12:02"
-  },
-  {
-    "model": "deepseek-v3",
-    "prompt_type": "zero_shot",
-    "language": "C",
-    "code": "#include <stdio.h>\n#include <stdlib.h>\n\nint min(int a, int b) {\n    return a < b ? a : b;\n}\n\nint max(int a, int b) {\n    return a > b ? a : b;\n}\n\nint compare(const void *a, const void *b) {\n    return (*(int*)a - *(int*)b);\n}\n\nint main() {\n    int N;\n    scanf(\"%d\", &N);\n    int D[N];\n    for (int i = 0; i < N; i++) {\n        scanf(\"%d\", &D[i]);\n    }\n    \n    qsort(D, N, sizeof(int), compare);\n    \n    int max_min_gap = 0;\n    for (int i = 0; i < N; i++) {\n        int current_gap = min(D[i], 24 - D[i]);\n        if (current_gap > max_min_gap) {\n            max_min_gap = current_gap;\n        }\n    }\n    \n    int min_gap = 24;\n    for (int i = 0; i < N - 1; i++) {\n        int gap = D[i + 1] - D[i];\n        gap = min(gap, 24 - gap);\n        if (gap < min_gap) {\n            min_gap = gap;\n        }\n    }\n    \n    int last_gap = D[N - 1] - D[0];\n    last_gap = min(last_gap, 24 - last_gap);\n    min_gap = min(min_gap, last_gap);\n    \n    printf(\"%d\\n\", max(min_gap, max_min_gap / 2));\n    \n    return 0;\n}",
-    "timestamp": "2025-08-05 23:12:22"
-  },
-  {
-    "model": "deepseek-v3",
-    "prompt_type": "zero_shot",
-    "language": "C++",
-    "code": "#include <iostream>\n#include <vector>\n#include <algorithm>\n#include <climits>\n\nusing namespace std;\n\nint main() {\n    int N;\n    cin >> N;\n    vector<int> D(N);\n    for (int i = 0; i < N; ++i) {\n        cin >> D[i];\n    }\n    \n    // Takahashi's time gap is 0, so we can insert it into the array\n    D.push_back(0);\n    sort(D.begin(), D.end());\n    \n    int max_min_gap = 0;\n    for (int i = 0; i < D.size(); ++i) {\n        for (int j = i + 1; j < D.size(); ++j) {\n            int gap = D[j] - D[i];\n            gap = min(gap, 24 - gap);\n            if (gap > max_min_gap) {\n                max_min_gap = gap;\n            }\n        }\n    }\n    \n    cout << max_min_gap << endl;\n    \n    return 0;\n}",
-    "timestamp": "2025-08-05 23:12:31"
-  },
-  {
-    "model": "deepseek-v3",
-    "prompt_type": "zero_shot",
-    "language": "Java",
-    "code": "import java.util.*;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        int N = sc.nextInt();\n        int[] D = new int[N];\n        for (int i = 0; i < N; i++) {\n            D[i] = sc.nextInt();\n        }\n        \n        Arrays.sort(D);\n        int maxMin = 0;\n        \n        for (int i = 0; i < N; i++) {\n            for (int j = i + 1; j < N; j++) {\n                int gap = Math.min(Math.abs(D[i] - D[j]), 24 - Math.abs(D[i] - D[j]));\n                if (gap > maxMin) {\n                    maxMin = gap;\n                }\n            }\n        }\n        \n        System.out.println(maxMin);\n    }\n}",
-    "timestamp": "2025-08-05 23:12:41"
-  },
-  {
-    "model": "claude-3-5-haiku-20241022",
-    "prompt_type": "zero_shot",
-    "language": "Java",
-    "code": "import java.util.*;\nimport java.io.*;\n\npublic class Main {\n    public static void main(String[] args) throws IOException {\n        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));\n        int N = Integer.parseInt(br.readLine());\n        int[] D = new int[N+1];\n        \n        for (int i = 0; i < N+1; i++) {\n            D[i] = Integer.parseInt(br.readLine());\n        }\n        \n        int maxMinGap = 0;\n        \n        for (int i = 0; i < N+1; i++) {\n            for (int j = i+1; j < N+1; j++) {\n                int gap = Math.min(Math.abs(D[i] - D[j]), 24 - Math.abs(D[i] - D[j]));\n                maxMinGap = Math.max(maxMinGap, gap);\n            }\n        }\n        \n        System.out.println(maxMinGap);\n    }\n}",
-    "timestamp": "2025-08-05 23:12:45"
-  },
-  {
-    "model": "claude-3-5-haiku-20241022",
-    "prompt_type": "zero_shot",
-    "language": "C++",
-    "code": "#include <iostream>\n#include <vector>\n#include <algorithm>\n#include <climits>\n\nusing namespace std;\n\nint main() {\n    int N;\n    cin >> N;\n    \n    vector<int> D(N+1);\n    for(int i = 0; i < N+1; i++) {\n        cin >> D[i];\n    }\n    \n    int maxMinGap = 0;\n    for(int i = 0; i < N+1; i++) {\n        for(int j = i+1; j < N+1; j++) {\n            int gap = min(abs(D[i] - D[j]), 24 - abs(D[i] - D[j]));\n            maxMinGap = max(maxMinGap, gap);\n        }\n    }\n    \n    cout << maxMinGap << endl;\n    \n    return 0;\n}",
-    "timestamp": "2025-08-05 23:12:52"
-  },
-  {
-    "model": "gpt-4o",
-    "prompt_type": "zero_shot",
-    "language": "python",
-    "code": "def max_min_time_gap(N, D):\n    max_gap = 0\n    for i in range(N):\n        for j in range(i+1, N+1):\n            time_gap_ij = min(abs(D[i] - D[j]), 24 - abs(D[i] - D[j]))\n            max_gap = max(max_gap, time_gap_ij)\n    return max_gap\n\n# Example usage:\nN = 4\nD = [0, 6, 12, 18, 3]\nprint(max_min_time_gap(N, D))",
-    "timestamp": "2025-08-13 14:07:06"
-  },
-  {
-    "model": "gpt-4o",
-    "prompt_type": "zero_shot",
-    "language": "java",
-    "code": "import java.util.Scanner;\n\npublic class CodeFestival {\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        int N = scanner.nextInt();\n        int[] D = new int[N + 1];\n        for (int i = 0; i <= N; i++) {\n            D[i] = scanner.nextInt();\n        }\n        scanner.close();\n\n        int maxTimeGap = 0;\n        for (int i = 0; i <= N; i++) {\n            for (int j = i + 1; j <= N; j++) {\n                int timeGap = Math.min(D[i], D[j]);\n                maxTimeGap = Math.max(maxTimeGap, timeGap);\n            }\n        }\n\n        System.out.println(maxTimeGap);\n    }\n}",
-    "timestamp": "2025-08-13 14:07:08"
-  },
-  {
-    "model": "gpt-4o",
+    "model": "deepseek-chat",
     "prompt_type": "zero_shot",
     "language": "c",
-    "code": "#include <stdio.h>\n\nint main() {\n    int N;\n    scanf(\"%d\", &N);\n    \n    int D[N+1];\n    for (int i = 0; i <= N; i++) {\n        scanf(\"%d\", &D[i]);\n    }\n    \n    int max_min_gap = 0;\n    for (int i = 0; i <= N; i++) {\n        for (int j = i + 1; j <= N; j++) {\n            int gap = D[i] < D[j] ? D[i] : D[j];\n            if (gap > max_min_gap) {\n                max_min_gap = gap;\n            }\n        }\n    }\n    \n    printf(\"%d\\n\", max_min_gap);\n    return 0;\n}",
-    "timestamp": "2025-08-13 14:07:10"
+    "code": "#include <stdio.h>\n#include <stdlib.h>\n\nint cmp(const void *a, const void *b) {\n    return *(int*)a - *(int*)b;\n}\n\nint min(int a, int b) {\n    return a < b ? a : b;\n}\n\nint main() {\n    int n;\n    scanf(\"%d\", &n);\n    int d[n];\n    for (int i = 0; i < n; i++) {\n        scanf(\"%d\", &d[i]);\n    }\n\n    int m = n + 1;\n    int a[m];\n    a[0] = 0;\n    for (int i = 0; i < n; i++) {\n        a[i+1] = d[i];\n    }\n\n    qsort(a, m, sizeof(int), cmp);\n\n    int ans = 0;\n    // Try all shifts\n    for (int start = 0; start < m; start++) {\n        int b[m];\n        for (int i = 0; i < m; i++) {\n            b[i] = a[(start + i) % m];\n        }\n        // Make circular by adding 24\n        int min_gap = 24;\n        for (int i = 0; i < m - 1; i++) {\n            int gap = b[i+1] - b[i];\n            if (gap < min_gap) min_gap = gap;\n        }\n        // last to first wrap\n        int wrap_gap = (24 - b[m-1]) + b[0];\n        if (wrap_gap < min_gap) min_gap = wrap_gap;\n\n        if (min_gap > ans) ans = min_gap;\n    }\n\n    printf(\"%d\\n\", ans);\n    return 0;\n}"
   },
   {
-    "model": "gpt-4o",
+    "model": "claude-sonnet-4-6",
+    "prompt_type": "zero_shot",
+    "language": "c",
+    "code": "#include <stdio.h>\n#include <stdlib.h>\n#include <string.h>\n\n#define MAXN 205\n\nint n;\nint D[105];\n// 2-SAT with 2*(n+1) variables\n// person 0 = Takahashi at position 0 (fixed)\n// person i (1..n): position D[i] or 24-D[i]\n\nint dist(int a, int b) {\n    int d = abs(a - b);\n    if (d > 12) d = 24 - d;\n    return d;\n}\n\n// 2-SAT\nint adj[MAXN][MAXN], deg[MAXN];\nint radj[MAXN][MAXN], rdeg[MAXN];\nint order[MAXN], ocnt;\nint comp[MAXN];\nint visited[MAXN];\n\nvoid dfs1(int v, int sz) { visited[v]=1; for(int i=0;i<deg[v];i++){int u=adj[v][i];if(!visited[u])dfs1(u,sz);} order[ocnt++]=v; }\nvoid dfs2(int v, int c) { comp[v]=c; for(int i=0;i<rdeg[v];i++){int u=radj[v][i];if(comp[u]<0)dfs2(u,c);} }\n\nint check(int m) {\n    int sz = 2*(n+1);\n    memset(deg,0,sizeof(deg)); memset(rdeg,0,sizeof(rdeg));\n    // positions: person i has pos[i][0]=D[i], pos[i][1]=24-D[i]; person 0 fixed at 0\n    // node 2i = person i choice 0, node 2i+1 = person i choice 1\n    int pos[105][2];\n    pos[0][0]=pos[0][1]=0;\n    for(int i=1;i<=n;i++){pos[i][0]=D[i];pos[i][1]=24-D[i];}\n    // add implication: if person 0 choice 0 conflicts with person i choice c, add clause\n    // For pair (i,j), choices (a,b): if dist < m, add clause NOT(i=a) OR NOT(j=b)\n    // i.e., (i=a) -> NOT(j=b), (j=b) -> NOT(i=a)\n    #define ADD(u,v) adj[u][deg[u]++]=v; radj[v][rdeg[v]++]=u;\n    for(int i=0;i<=n;i++) for(int j=i+1;j<=n;j++) for(int a=0;a<2;a++) for(int b=0;b<2;b++) {\n        if(dist(pos[i][a],pos[j][b])<m) { ADD(2*i+a,2*j+(1-b)); ADD(2*j+b,2*i+(1-a)); }\n    }\n    // person 0 is fixed at choice 0: force 2*0+0=true, so NOT(2*0+1): add 2*0+1 -> 2*0+0... just add unit: 1->0\n    ADD(1,0); // if choice1 then choice0 (contradiction forces choice0)\n    ocnt=0; memset(visited,0,sizeof(visited)); memset(comp,-1,sizeof(comp));\n    for(int i=0;i<sz;i++) if(!visited[i]) dfs1(i,sz);\n    int cc=0; for(int i=ocnt-1;i>=0;i--) if(comp[order[i]]<0) dfs2(order[i],cc++);\n    for(int i=0;i<=n;i++) if(comp[2*i]==comp[2*i+1]) return 0;\n    return 1;\n}\n\nint main(){\n    scanf(\"%d\",&n);\n    for(int i=1;i<=n;i++) scanf(\"%d\",&D[i]);\n    int ans=0;\n    for(int m=1;m<=12;m++) if(check(m)) ans=m;\n    printf(\"%d\\n\",ans);\n}"
+  },
+  {
+    "model": "gpt-5.4",
+    "prompt_type": "zero_shot",
+    "language": "c",
+    "code": "#include <stdio.h>\n#include <stdlib.h>\n\nstatic int max(int a, int b) { return a > b ? a : b; }\n\nint main(void) {\n    int N;\n    if (scanf(\"%d\", &N) != 1) return 0;\n\n    int cnt[13] = {0}; /* cnt[d] for d = 0..12 */\n    cnt[0] = 1;        /* Takahashi is fixed at 0 */\n\n    for (int i = 0; i < N; i++) {\n        int d;\n        scanf(\"%d\", &d);\n        cnt[d]++;\n    }\n\n    /* Immediate impossibility checks:\n       - more than one person at distance 0 or 12 => same clock position forced\n       - for 1..11, more than two people with same D => pigeonhole, collision forced\n    */\n    if (cnt[0] > 1 || cnt[12] > 1) {\n        printf(\"0\\n\");\n        return 0;\n    }\n    for (int d = 1; d <= 11; d++) {\n        if (cnt[d] > 2) {\n            printf(\"0\\n\");\n            return 0;\n        }\n    }\n\n    /* For each d in 1..11:\n       - if cnt[d] == 0: nothing\n       - if cnt[d] == 1: choose either +d or -d(=24-d)\n       - if cnt[d] == 2: both positions are forced, d and 24-d\n       cnt[12] == 1 means one person at 12.\n    */\n\n    int single[11], m = 0;\n    int fixed[24], fsz = 0;\n\n    fixed[fsz++] = 0;\n    if (cnt[12] == 1) fixed[fsz++] = 12;\n\n    for (int d = 1; d <= 11; d++) {\n        if (cnt[d] == 1) {\n            single[m++] = d;\n        } else if (cnt[d] == 2) {\n            fixed[fsz++] = d;\n            fixed[fsz++] = 24 - d;\n        }\n    }\n\n    int ans = 0;\n    int total_masks = 1 << m;\n\n    for (int mask = 0; mask < total_masks; mask++) {\n        int pos[24];\n        int sz = 0;\n\n        for (int i = 0; i < fsz; i++) pos[sz++] = fixed[i];\n\n        for (int i = 0; i < m; i++) {\n            int d = single[i];\n            if (mask & (1 << i)) pos[sz++] = d;\n            else pos[sz++] = 24 - d;\n        }\n\n        int best_min = 24;\n\n        for (int i = 0; i < sz; i++) {\n            for (int j = i + 1; j < sz; j++) {\n                int diff = pos[i] - pos[j];\n                if (diff < 0) diff = -diff;\n                int gap = diff < 24 - diff ? diff : 24 - diff;\n                if (gap < best_min) best_min = gap;\n            }\n        }\n\n        ans = max(ans, best_min);\n    }\n\n    printf(\"%d\\n\", ans);\n    return 0;\n}"
+  },
+  {
+    "model": "deepseek-chat",
+    "prompt_type": "zero_shot",
+    "language": "java",
+    "code": "import java.util.*;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        int N = sc.nextInt();\n        int[] times = new int[N + 1];\n        times[0] = 0; // Takahashi's time\n        for (int i = 1; i <= N; i++) {\n            times[i] = sc.nextInt();\n        }\n        Arrays.sort(times);\n\n        int[] doubled = new int[2 * (N + 1)];\n        for (int i = 0; i <= N; i++) {\n            doubled[i] = times[i];\n            doubled[i + N + 1] = times[i] + 24;\n        }\n\n        int low = 0, high = 12;\n        while (low < high) {\n            int mid = (low + high + 1) / 2;\n            if (canPlace(doubled, N + 1, mid)) {\n                low = mid;\n            } else {\n                high = mid - 1;\n            }\n        }\n        System.out.println(low);\n    }\n\n    static boolean canPlace(int[] arr, int total, int minGap) {\n        // arr is sorted and doubled with +24\n        // try to pick 'total' points with at least minGap between consecutive picks\n        int count = 1;\n        int last = arr[0];\n        for (int i = 1; i < arr.length && count < total; i++) {\n            if (arr[i] - last >= minGap) {\n                count++;\n                last = arr[i];\n            }\n        }\n        // check circular condition: first and last in circle\n        return count == total && (arr[0] + 24 - last >= minGap);\n    }\n}"
+  },
+  {
+    "model": "claude-sonnet-4-6",
+    "prompt_type": "zero_shot",
+    "language": "java",
+    "code": "import java.util.*;\n\npublic class Main {\n    static int N;\n    static int[] pos0, pos1; // two options for each person\n    \n    static int gap(int a, int b) {\n        int d = Math.abs(a - b) % 24;\n        return Math.min(d, 24 - d);\n    }\n    \n    // 2-SAT: variable i has literal 2i (true) and 2i+1 (false)\n    static int[] comp;\n    static List<Integer>[] adj, radj;\n    static int[] order;\n    static boolean[] visited;\n    static int idx;\n    \n    // ... (standard 2-SAT implementation)\n    \n    public static void main(String[] args) {\n        // read input, binary search, check feasibility\n    }\n}"
+  },
+  {
+    "model": "gpt-5.4",
+    "prompt_type": "zero_shot",
+    "language": "java",
+    "code": "import java.io.*;\nimport java.util.*;\n\npublic class Main {\n    static class FastScanner {\n        private final InputStream in = System.in;\n        private final byte[] buffer = new byte[1 << 16];\n        private int ptr = 0, len = 0;\n\n        private int read() throws IOException {\n            if (ptr >= len) {\n                len = in.read(buffer);\n                ptr = 0;\n                if (len <= 0) return -1;\n            }\n            return buffer[ptr++];\n        }\n\n        int nextInt() throws IOException {\n            int c;\n            do {\n                c = read();\n            } while (c <= ' ' && c != -1);\n            int sign = 1;\n            if (c == '-') {\n                sign = -1;\n                c = read();\n            }\n            int val = 0;\n            while (c > ' ') {\n                val = val * 10 + (c - '0');\n                c = read();\n            }\n            return val * sign;\n        }\n    }\n\n    static int N;\n    static int[] D;\n    static int[] pos;\n    static int M;\n\n    public static void main(String[] args) throws Exception {\n        FastScanner fs = new FastScanner();\n        N = fs.nextInt();\n        D = new int[N];\n        for (int i = 0; i < N; i++) D[i] = fs.nextInt();\n\n        // For each D_i:\n        // if D_i = 0 or 12, the position is fixed.\n        // otherwise choose either D_i or 24 - D_i.\n        pos = new int[N + 1];\n        pos[0] = 0; // Takahashi\n\n        ArrayList<Integer> flexible = new ArrayList<>();\n        for (int d : D) {\n            if (d == 0 || d == 12) {\n                pos[flexible.size() + 1] = d; // temporary, will rebuild below\n            }\n        }\n\n        // Rebuild positions cleanly\n        int fixedCount = 1;\n        pos[0] = 0;\n        for (int d : D) {\n            if (d == 0 || d == 12) {\n                pos[fixedCount++] = d;\n            } else {\n                flexible.add(d);\n            }\n        }\n        M = flexible.size();\n\n        // If too many flexible participants, brute force 2^M is impossible,\n        // but in the original problem constraints M is small enough.\n        // Evaluate all assignments.\n        int ans = 0;\n        int baseCount = fixedCount;\n\n        for (int mask = 0; mask < (1 << M); mask++) {\n            int count = baseCount;\n            for (int i = 0; i < M; i++) {\n                int d = flexible.get(i);\n                if (((mask >> i) & 1) == 0) pos[count++] = d;\n                else pos[count++] = 24 - d;\n            }\n\n            int minGap = 24;\n            for (int i = 0; i < count; i++) {\n                for (int j = i + 1; j < count; j++) {\n                    int diff = Math.abs(pos[i] - pos[j]);\n                    diff = Math.min(diff, 24 - diff);\n                    minGap = Math.min(minGap, diff);\n                }\n            }\n            ans = Math.max(ans, minGap);\n        }\n\n        System.out.println(ans);\n    }\n}"
+  },
+  {
+    "model": "deepseek-chat",
     "prompt_type": "zero_shot",
     "language": "c++",
-    "code": "#include <iostream>\n#include <vector>\n#include <algorithm>\n\nint main() {\n    int N;\n    std::cin >> N;\n    std::vector<int> D(N + 1);\n    for (int i = 0; i <= N; ++i) {\n        std::cin >> D[i];\n    }\n    \n    std::vector<int> time_gaps(N + 1);\n    for (int i = 0; i <= N; ++i) {\n        time_gaps[i] = std::min(D[i], 24 - D[i]);\n    }\n\n    std::sort(time_gaps.begin(), time_gaps.end());\n    int max_gap = time_gaps[N]; // Since time_gaps is sorted, the maximum element is the last element after sorting.\n\n    std::cout << max_gap << std::endl;\n    return 0;\n}",
-    "timestamp": "2025-08-13 14:07:12"
+    "code": "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    ios::sync_with_stdio(false);\n    cin.tie(nullptr);\n    \n    int N;\n    cin >> N;\n    vector<int> D(N);\n    for (int i = 0; i < N; ++i) {\n        cin >> D[i];\n    }\n    sort(D.begin(), D.end());\n    \n    int max_gap = 0;\n    for (int i = 0; i < N - 1; ++i) {\n        max_gap = max(max_gap, D[i+1] - D[i]);\n    }\n    // wrap-around gap\n    max_gap = max(max_gap, 24 - (D.back() - D.front()));\n    \n    // We can place Takahashi in the middle of the largest gap\n    int ans = max_gap / 2;\n    cout << ans << \"\\n\";\n    \n    return 0;\n}"
   },
   {
-    "model": "claude-3-5-haiku-20241022",
+    "model": "claude-sonnet-4-6",
+    "prompt_type": "zero_shot",
+    "language": "c++",
+    "code": "#include <bits/stdc++.h>\nusing namespace std;\n\n// 2-SAT implementation\n// ... standard 2-SAT\n\nint gap(int a, int b) {\n    int d = abs(a - b) % 24;\n    return min(d, 24 - d);\n}\n\n// Check if we can assign positions with all gaps >= x\n// Using 2-SAT"
+  },
+  {
+    "model": "gpt-5.4",
+    "prompt_type": "zero_shot",
+    "language": "c++",
+    "code": "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    ios::sync_with_stdio(false);\n    cin.tie(nullptr);\n\n    int N;\n    cin >> N;\n    vector<int> cnt(13, 0); // 0..12\n\n    for (int i = 0; i < N; ++i) {\n        int d;\n        cin >> d;\n        cnt[d]++;\n    }\n\n    // Takahashi is fixed at 0.\n    // For each D_i:\n    // - if D_i = 0 or 12, position is fixed (0 or 12), so duplicates impossible\n    // - otherwise choose either D_i or 24-D_i\n    //\n    // Since D_i is in [0,12], for d=1..11 if cnt[d] >= 3 impossible to keep all distinct\n    // (only two possible positions: d and 24-d).\n    // Also cnt[0] >= 1 impossible because Takahashi already at 0.\n    // Also cnt[12] >= 2 impossible because only one position 12.\n    //\n    // Enumerate all choices for d=1..11 with cnt[d]==1 or 2.\n\n    if (cnt[0] >= 1 || cnt[12] >= 2) {\n        cout << 0 << '\\n';\n        return 0;\n    }\n    for (int d = 1; d <= 11; ++d) {\n        if (cnt[d] >= 3) {\n            cout << 0 << '\\n';\n            return 0;\n        }\n    }\n\n    vector<int> ds;\n    for (int d = 1; d <= 11; ++d) {\n        for (int k = 0; k < cnt[d]; ++k) ds.push_back(d);\n    }\n\n    int m = ds.size();\n    int ans = 0;\n\n    for (int mask = 0; mask < (1 << m); ++mask) {\n        vector<int> pos;\n        pos.push_back(0); // Takahashi\n        if (cnt[12] == 1) pos.push_back(12);\n\n        for (int i = 0; i < m; ++i) {\n            int d = ds[i];\n            if (mask & (1 << i)) pos.push_back(d);\n            else pos.push_back(24 - d);\n        }\n\n        sort(pos.begin(), pos.end());\n\n        bool distinct_ok = true;\n        for (int i = 1; i < (int)pos.size(); ++i) {\n            if (pos[i] == pos[i - 1]) {\n                distinct_ok = false;\n                break;\n            }\n        }\n        if (!distinct_ok) continue;\n\n        int mn = 24;\n        for (int i = 1; i < (int)pos.size(); ++i) {\n            mn = min(mn, pos[i] - pos[i - 1]);\n        }\n        mn = min(mn, 24 - pos.back() + pos.front()); // circular gap\n\n        ans = max(ans, mn);\n    }\n\n    cout << ans << '\\n';\n    return 0;\n}"
+  },
+  {
+    "model": "deepseek-chat",
     "prompt_type": "zero_shot",
     "language": "python",
-    "code": "def solve(N, D):\n    max_min_gap = 0\n    for i in range(N+1):\n        for j in range(i+1, N+1):\n            gap = min(abs(D[i] - D[j]), 24 - abs(D[i] - D[j]))\n            max_min_gap = max(max_min_gap, gap)\n    return max_min_gap\n\ndef main():\n    N = int(input())\n    D = list(map(int, input().split()))\n    D.append(0)  # Takahashi's time zone\n    result = solve(N, D)\n    print(result)\n\nif __name__ == \"__main__\":\n    main()",
-    "timestamp": "2025-08-13 14:07:16"
+    "code": "def solve():\n    N = int(input().strip())\n    D = list(map(int, input().strip().split()))\n    \n    # Takahashi's time is 0\n    times = [0]\n    for d in D:\n        times.append(d)\n        times.append(24 - d)\n    \n    # We need two distinct participants, not necessarily distinct times\n    # But we have N+1 participants: index 0 is Takahashi, indices 1..N are others\n    # Each participant i (i>=1) can be at time D_i or 24-D_i.\n    # We pick 2 participants, each can choose either placement.\n    \n    best = 0\n    # Represent participants: 0 is Takahashi fixed at 0.\n    # For i from 1..N, two options.\n    participants = [(0,)]  # Takahashi only one option\n    for d in D:\n        participants.append((d, 24 - d))\n    \n    # Try all pairs of participants\n    for i in range(N+1):\n        for j in range(i+1, N+1):\n            for t1 in participants[i]:\n                for t2 in participants[j]:\n                    diff = abs(t1 - t2)\n                    dist = min(diff, 24 - diff)\n                    best = max(best, dist)\n    \n    print(best)\n\nif __name__ == \"__main__\":\n    solve()"
   },
   {
-    "model": "deepseek-v3",
+    "model": "claude-sonnet-4-6",
     "prompt_type": "zero_shot",
     "language": "python",
-    "code": "n = int(input())\nD = list(map(int, input().split()))\nD.append(0)  # Takahashi's time gap is 0\nD.sort()\n\nmax_min_gap = 0\nfor i in range(len(D)):\n    for j in range(i + 1, len(D)):\n        gap = abs(D[j] - D[i])\n        min_gap = min(gap, 24 - gap)\n        if min_gap > max_min_gap:\n            max_min_gap = min_gap\n\nprint(max_min_gap)",
-    "timestamp": "2025-08-13 14:07:35"
+    "code": "def circ_dist(a, b):\n    d = abs(a - b) % 24\n    return min(d, 24 - d)\n\ndef solve():\n    import sys\n    from pysat.solvers import Solver  # might not be available\n    # Use manual 2-SAT\n    input_data = sys.stdin.read().split()\n    n = int(input_data[0])\n    D = list(map(int, input_data[1:n+1]))\n    \n    # positions[i] = [D[i], 24-D[i]] for i in 0..n-1\n    # Takahashi at 0 (fixed)\n    \n    # Binary search on answer\n    # ... implement 2-SAT"
   },
   {
-    "model": "gpt-4o",
+    "model": "gpt-5.4",
     "prompt_type": "zero_shot",
-    "language": "js",
-    "code": "function max_min_time_gap(D) {\n    let maxGap = 0;\n    for (let i = 0; i < D.length - 1; i++) {\n        for (let j = i + 1; j < D.length; j++) {\n            let gap = Math.min(D[i], D[j]);\n            maxGap = Math.max(maxGap, gap);\n        }\n    }\n    return maxGap;\n}\n\n// Example usage:\nconst D = [5, 8, 3, 14];  // Example input, where D_i is the time gap for i-th participant's city\nconsole.log(max_min_time_gap(D));  // Output the maximum possible smallest time gap",
-    "timestamp": "2025-08-13 14:08:46"
-  },
-  {
-    "model": "claude-3-5-haiku-20241022",
-    "prompt_type": "zero_shot",
-    "language": "js",
-    "code": "function maxMinTimeGap(N, times) {\n    let maxMinGap = 0;\n    \n    for (let i = 0; i < N + 1; i++) {\n        for (let j = i + 1; j < N + 1; j++) {\n            let gap = Math.min(Math.abs(times[i] - times[j]), 24 - Math.abs(times[i] - times[j]));\n            maxMinGap = Math.max(maxMinGap, gap);\n        }\n    }\n    \n    return maxMinGap;\n}\n\nfunction solve(input) {\n    const lines = input.trim().split('\\n');\n    const N = parseInt(lines[0]);\n    const times = lines[1].split(' ').map(Number);\n    \n    console.log(maxMinTimeGap(N, times));\n}\n\n// Example usage\nconst input = `\n2\n5 15 0\n`;\n\nsolve(input);",
-    "timestamp": "2025-08-13 14:08:51"
-  },
-  {
-    "model": "deepseek-v3",
-    "prompt_type": "zero_shot",
-    "language": "js",
-    "code": "function solve() {\n    const N = parseInt(readline());\n    const D = readline().split(' ').map(Number);\n    \n    D.sort((a, b) => a - b);\n    D.push(D[0] + 24); // To handle circular condition\n    \n    let maxMinGap = 0;\n    for (let i = 1; i < D.length; i++) {\n        const gap = D[i] - D[i - 1];\n        const timeGap = Math.min(gap, 24 - gap);\n        if (timeGap > maxMinGap) {\n            maxMinGap = timeGap;\n        }\n    }\n    \n    console.log(maxMinGap);\n}\n\n// For testing purposes, you can replace readline() with actual input methods\n// Example:\n// function readline() {\n//     return input.shift();\n// }\n// const input = ['3', '6 9 11'];\n// solve();",
-    "timestamp": "2025-08-13 14:08:57"
+    "language": "python",
+    "code": "import sys\n\ndef main():\n    input = sys.stdin.readline\n    N = int(input())\n    D = list(map(int, input().split()))\n\n    # Takahashi is fixed at 0.\n    # For each d:\n    # - if d == 0 or d == 12, the position is forced (0 or 12)\n    # - otherwise the person can be placed at +d or -d mod 24\n    #\n    # We want to maximize the minimum circular distance among all chosen positions.\n\n    cnt = [0] * 13\n    for d in D:\n        cnt[d] += 1\n\n    # Impossible to place distinctly if:\n    # - someone else has distance 0 from Takahashi\n    # - more than one person has distance 12\n    # - for 1..11, more than two people share same d (only two possible positions)\n    if cnt[0] > 0 or cnt[12] > 1:\n        print(0)\n        return\n    for d in range(1, 12):\n        if cnt[d] > 2:\n            print(0)\n            return\n\n    # Build the list of distances that have exactly one person.\n    # Distances with count 2 are forced to occupy both d and 24-d.\n    singles = []\n    fixed = [0]  # Takahashi\n    if cnt[12] == 1:\n        fixed.append(12)\n    for d in range(1, 12):\n        if cnt[d] == 2:\n            fixed.append(d)\n            fixed.append(24 - d)\n        elif cnt[d] == 1:\n            singles.append(d)\n\n    # Number of singles is at most 11, so brute force over 2^11 is fine.\n    m = len(singles)\n    ans = 0\n\n    def min_gap(arr):\n        arr.sort()\n        res = 24\n        for i in range(len(arr)):\n            j = (i + 1) % len(arr)\n            diff = (arr[j] - arr[i]) % 24\n            res = min(res, diff)\n        return res\n\n    for mask in range(1 << m):\n        pos = fixed[:]\n        for i, d in enumerate(singles):\n            if (mask >> i) & 1:\n                pos.append(d)\n            else:\n                pos.append(24 - d)\n        ans = max(ans, min_gap(pos))\n\n    print(ans)\n\nif __name__ == \"__main__\":\n    main()"
   }
 ]

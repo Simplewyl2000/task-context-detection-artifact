@@ -1,86 +1,74 @@
 [
   {
-    "model": "claude-3-5-haiku-20241022",
-    "prompt_type": "zero_shot",
-    "language": "C",
-    "code": "#include <stdio.h>\n#include <stdlib.h>\n\n#define MAX_ELEVATORS 10\n#define MAX_FLOORS 10000\n\nint main() {\n    int datasets, num_elevators;\n    scanf(\"%d\", &datasets);\n\n    while (datasets--) {\n        scanf(\"%d\", &num_elevators);\n        \n        int floors[MAX_FLOORS + 1] = {0};\n        \n        for (int i = 0; i < num_elevators; i++) {\n            int low, high;\n            scanf(\"%d %d\", &low, &high);\n            \n            for (int j = low; j <= high; j++) {\n                floors[j] = 1;\n            }\n        }\n        \n        int unique_floors = 0;\n        for (int k = 1; k <= MAX_FLOORS; k++) {\n            if (floors[k]) {\n                unique_floors++;\n            }\n        }\n        \n        printf(\"%d\\n\", unique_floors);\n    }\n    \n    return 0;\n}",
-    "timestamp": "2025-08-05 21:47:04"
-  },
-  {
-    "model": "deepseek-v3",
-    "prompt_type": "zero_shot",
-    "language": "C",
-    "code": "#include <stdio.h>\n#include <stdlib.h>\n\nint main() {\n    int T;\n    scanf(\"%d\", &T);\n    \n    for (int t = 0; t < T; t++) {\n        int N;\n        scanf(\"%d\", &N);\n        \n        int *low = (int *)malloc(N * sizeof(int));\n        int *high = (int *)malloc(N * sizeof(int));\n        \n        for (int i = 0; i < N; i++) {\n            scanf(\"%d %d\", &low[i], &high[i]);\n        }\n        \n        int min_low = low[0];\n        int max_high = high[0];\n        \n        for (int i = 1; i < N; i++) {\n            if (low[i] < min_low) {\n                min_low = low[i];\n            }\n            if (high[i] > max_high) {\n                max_high = high[i];\n            }\n        }\n        \n        int *count = (int *)calloc(max_high - min_low + 1, sizeof(int));\n        \n        for (int i = 0; i < N; i++) {\n            for (int j = low[i]; j <= high[i]; j++) {\n                count[j - min_low] = 1;\n            }\n        }\n        \n        int unique = 0;\n        for (int i = 0; i <= max_high - min_low; i++) {\n            if (count[i] == 1) {\n                unique++;\n            }\n        }\n        \n        printf(\"%d\\n\", unique);\n        \n        free(low);\n        free(high);\n        free(count);\n    }\n    \n    return 0;\n}",
-    "timestamp": "2025-08-05 21:47:20"
-  },
-  {
-    "model": "deepseek-v3",
-    "prompt_type": "zero_shot",
-    "language": "C++",
-    "code": "#include <iostream>\n#include <vector>\n#include <unordered_set>\n#include <algorithm>\n\nusing namespace std;\n\nint main() {\n    int T;\n    cin >> T;\n    while (T--) {\n        int N;\n        cin >> N;\n        unordered_set<int> numbers;\n        for (int i = 0; i < N; ++i) {\n            int A, B;\n            cin >> A >> B;\n            for (int num = A; num <= B; ++num) {\n                numbers.insert(num);\n            }\n        }\n        cout << numbers.size() << endl;\n    }\n    return 0;\n}",
-    "timestamp": "2025-08-05 21:47:29"
-  },
-  {
-    "model": "deepseek-v3",
-    "prompt_type": "zero_shot",
-    "language": "Java",
-    "code": "import java.util.HashSet;\nimport java.util.Scanner;\nimport java.util.Set;\n\npublic class ElevatorDisplay {\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        int T = scanner.nextInt();\n        for (int t = 0; t < T; t++) {\n            int N = scanner.nextInt();\n            Set<Integer> uniqueFloors = new HashSet<>();\n            for (int n = 0; n < N; n++) {\n                int low = scanner.nextInt();\n                int high = scanner.nextInt();\n                for (int floor = low; floor <= high; floor++) {\n                    uniqueFloors.add(floor);\n                }\n            }\n            System.out.println(uniqueFloors.size());\n        }\n        scanner.close();\n    }\n}",
-    "timestamp": "2025-08-05 21:47:37"
-  },
-  {
-    "model": "claude-3-5-haiku-20241022",
-    "prompt_type": "zero_shot",
-    "language": "Java",
-    "code": "import java.util.*;\n\npublic class ElevatorDisplayNumbers {\n    public static int countDistinctNumbers(int[][] elevators) {\n        Set<Integer> distinctNumbers = new HashSet<>();\n        \n        for (int[] elevator : elevators) {\n            int low = elevator[0];\n            int high = elevator[1];\n            \n            for (int floor = low; floor <= high; floor++) {\n                distinctNumbers.add(floor);\n            }\n        }\n        \n        return distinctNumbers.size();\n    }\n    \n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        \n        int numDatasets = scanner.nextInt();\n        \n        for (int i = 0; i < numDatasets; i++) {\n            int numElevators = scanner.nextInt();\n            int[][] elevators = new int[numElevators][2];\n            \n            for (int j = 0; j < numElevators; j++) {\n                elevators[j][0] = scanner.nextInt();\n                elevators[j][1] = scanner.nextInt();\n            }\n            \n            System.out.println(countDistinctNumbers(elevators));\n        }\n        \n        scanner.close();\n    }\n}",
-    "timestamp": "2025-08-05 21:47:42"
-  },
-  {
-    "model": "claude-3-5-haiku-20241022",
-    "prompt_type": "zero_shot",
-    "language": "C++",
-    "code": "#include <iostream>\n#include <vector>\n#include <set>\n#include <algorithm>\n\nusing namespace std;\n\nint countDistinctFloors(vector<pair<int, int>>& elevators) {\n    set<int> distinctFloors;\n    \n    for (const auto& elevator : elevators) {\n        for (int floor = elevator.first; floor <= elevator.second; floor++) {\n            distinctFloors.insert(floor);\n        }\n    }\n    \n    return distinctFloors.size();\n}\n\nint main() {\n    int numDatasets;\n    cin >> numDatasets;\n    \n    for (int dataset = 0; dataset < numDatasets; dataset++) {\n        int numElevators;\n        cin >> numElevators;\n        \n        vector<pair<int, int>> elevators(numElevators);\n        \n        for (int i = 0; i < numElevators; i++) {\n            cin >> elevators[i].first >> elevators[i].second;\n        }\n        \n        int result = countDistinctFloors(elevators);\n        cout << result << endl;\n    }\n    \n    return 0;\n}",
-    "timestamp": "2025-08-05 21:47:46"
-  },
-  {
-    "model": "gpt-4o",
-    "prompt_type": "zero_shot",
-    "language": "python",
-    "code": "def count_distinct_numbers(datasets):\n    results = []\n    for dataset in datasets:\n        distinct_numbers = set()\n        for elevator in dataset:\n            low, high = elevator\n            for floor in range(low, high + 1):\n                distinct_numbers.add(floor)\n        results.append(len(distinct_numbers))\n    return results\n\n# Example usage:\ndatasets = [\n    [(1, 5), (3, 7), (10, 15)],\n    [(2, 4), (6, 8)],\n    [(1, 2), (2, 3), (3, 5)]\n]\n\nprint(count_distinct_numbers(datasets))  # Output: [12, 6, 5]",
-    "timestamp": "2025-08-13 07:30:12"
-  },
-  {
-    "model": "gpt-4o",
-    "prompt_type": "zero_shot",
-    "language": "java",
-    "code": "import java.util.HashSet;\nimport java.util.Scanner;\nimport java.util.Set;\n\npublic class ElevatorDisplay {\n\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        int datasets = scanner.nextInt();\n        \n        while (datasets-- > 0) {\n            int elevators = scanner.nextInt();\n            Set<Integer> uniqueFloors = new HashSet<>();\n            \n            for (int i = 0; i < elevators; i++) {\n                int low = scanner.nextInt();\n                int high = scanner.nextInt();\n                \n                for (int floor = low; floor <= high; floor++) {\n                    uniqueFloors.add(floor);\n                }\n            }\n            \n            System.out.println(uniqueFloors.size());\n        }\n        \n        scanner.close();\n    }\n}",
-    "timestamp": "2025-08-13 07:30:17"
-  },
-  {
-    "model": "gpt-4o",
+    "model": "claude-sonnet-4-6",
     "prompt_type": "zero_shot",
     "language": "c",
-    "code": "#include <stdio.h>\n#include <stdlib.h>\n\nint main() {\n    int t, n, low, high;\n    scanf(\"%d\", &t); // Number of test cases\n    \n    while(t--) {\n        scanf(\"%d\", &n); // Number of elevators\n        int *floors = (int *)calloc(10001, sizeof(int)); // Assumption: floor numbers are in range from 0 to 10000\n        int low, high;\n        \n        for(int i = 0; i < n; i++) {\n            scanf(\"%d %d\", &low, &high);\n            for (int j = low; j <= high; j++) {\n                floors[j] = 1;\n            }\n        }\n        \n        int uniqueFloors = 0;\n        for (int i = 0; i <= 10000; i++) {\n            if (floors[i] == 1) {\n                uniqueFloors++;\n            }\n        }\n\n        printf(\"%d\\n\", uniqueFloors);\n        free(floors);\n    }\n    \n    return 0;\n}",
-    "timestamp": "2025-08-13 07:30:21"
+    "code": "#include <stdio.h>\n#include <stdlib.h>\n\ntypedef struct {\n    int low, high;\n} Interval;\n\nint cmp(const void *a, const void *b) {\n    Interval *ia = (Interval *)a;\n    Interval *ib = (Interval *)b;\n    if (ia->low != ib->low) return ia->low - ib->low;\n    return ia->high - ib->high;\n}\n\nint main() {\n    int n;\n    while (scanf(\"%d\", &n) == 1 && n != 0) {\n        Interval intervals[1000];\n        for (int i = 0; i < n; i++) {\n            scanf(\"%d %d\", &intervals[i].low, &intervals[i].high);\n        }\n        qsort(intervals, n, sizeof(Interval), cmp);\n        \n        int count = 0;\n        int curLow = intervals[0].low, curHigh = intervals[0].high;\n        for (int i = 1; i < n; i++) {\n            if (intervals[i].low <= curHigh + 1) {\n                if (intervals[i].high > curHigh) curHigh = intervals[i].high;\n            } else {\n                count += curHigh - curLow + 1;\n                curLow = intervals[i].low;\n                curHigh = intervals[i].high;\n            }\n        }\n        count += curHigh - curLow + 1;\n        printf(\"%d\\n\", count);\n    }\n    return 0;\n}"
   },
   {
-    "model": "claude-3-5-haiku-20241022",
+    "model": "deepseek-chat",
     "prompt_type": "zero_shot",
-    "language": "python",
-    "code": "def count_unique_floors(elevators):\n    unique_floors = set()\n    \n    for low, high in elevators:\n        unique_floors.update(range(low, high + 1))\n    \n    return len(unique_floors)\n\n# Read number of test cases\nT = int(input())\n\n# Process each test case\nfor _ in range(T):\n    # Read number of elevators\n    N = int(input())\n    \n    # Read elevator ranges\n    elevators = []\n    for _ in range(N):\n        low, high = map(int, input().split())\n        elevators.append((low, high))\n    \n    # Calculate and print unique floors\n    print(count_unique_floors(elevators))",
-    "timestamp": "2025-08-13 07:30:27"
+    "language": "c",
+    "code": "#include <stdio.h>\n#include <stdlib.h>\n\nint compare(const void *a, const void *b) {\n    return (*(int*)a - *(int*)b);\n}\n\nint main() {\n    int t;\n    scanf(\"%d\", &t);\n    \n    while (t--) {\n        int n;\n        scanf(\"%d\", &n);\n        \n        int floors[200000]; // worst-case size\n        int count = 0;\n        \n        for (int i = 0; i < n; i++) {\n            int low, high;\n            scanf(\"%d %d\", &low, &high);\n            for (int f = low; f <= high; f++) {\n                floors[count++] = f;\n            }\n        }\n        \n        qsort(floors, count, sizeof(int), compare);\n        \n        int distinct = 0;\n        for (int i = 0; i < count; i++) {\n            if (i == 0 || floors[i] != floors[i-1]) {\n                distinct++;\n            }\n        }\n        \n        printf(\"%d\\n\", distinct);\n    }\n    \n    return 0;\n}"
   },
   {
-    "model": "deepseek-v3",
+    "model": "gpt-5.4",
     "prompt_type": "zero_shot",
-    "language": "python",
-    "code": "def count_unique_floors(elevators):\n    unique_floors = set()\n    for elevator in elevators:\n        low, high = elevator\n        unique_floors.update(range(low, high + 1))\n    return len(unique_floors)\n\ndef main():\n    import sys\n    input = sys.stdin.read().split()\n    idx = 0\n    T = int(input[idx])\n    idx += 1\n    for _ in range(T):\n        N = int(input[idx])\n        idx += 1\n        elevators = []\n        for _ in range(N):\n            low = int(input[idx])\n            high = int(input[idx + 1])\n            elevators.append((low, high))\n            idx += 2\n        print(count_unique_floors(elevators))\n\nif __name__ == \"__main__\":\n    main()",
-    "timestamp": "2025-08-13 07:30:38"
+    "language": "c",
+    "code": "#include <stdio.h>\n#include <stdlib.h>\n\ntypedef struct {\n    int l, r;\n} Interval;\n\nint cmp_interval(const void *a, const void *b) {\n    const Interval *x = (const Interval *)a;\n    const Interval *y = (const Interval *)b;\n    if (x->l != y->l) return x->l - y->l;\n    return x->r - y->r;\n}\n\nint main(void) {\n    int n;\n\n    while (scanf(\"%d\", &n) == 1 && n != 0) {\n        Interval *arr = (Interval *)malloc(sizeof(Interval) * n);\n        if (!arr) return 0;\n\n        for (int i = 0; i < n; i++) {\n            scanf(\"%d %d\", &arr[i].l, &arr[i].r);\n            if (arr[i].l > arr[i].r) {\n                int t = arr[i].l;\n                arr[i].l = arr[i].r;\n                arr[i].r = t;\n            }\n        }\n\n        qsort(arr, n, sizeof(Interval), cmp_interval);\n\n        long long total = 0;\n        int curL = arr[0].l, curR = arr[0].r;\n\n        for (int i = 1; i < n; i++) {\n            if (arr[i].l > curR + 1) {\n                total += (long long)curR - curL + 1;\n                curL = arr[i].l;\n                curR = arr[i].r;\n            } else {\n                if (arr[i].r > curR) curR = arr[i].r;\n            }\n        }\n        total += (long long)curR - curL + 1;\n\n        printf(\"%lld\\n\", total);\n        free(arr);\n    }\n\n    return 0;\n}"
   },
   {
-    "model": "gpt-4o",
+    "model": "claude-sonnet-4-6",
     "prompt_type": "zero_shot",
     "language": "c++",
-    "code": "#include <iostream>\n#include <set>\nusing namespace std;\n\nint main() {\n    int t;\n    cin >> t;\n    while (t--) {\n        int n;\n        cin >> n;\n        set<int> uniqueFloors;\n        while (n--) {\n            int low, high;\n            cin >> low >> high;\n            for (int i = low; i <= high; ++i) {\n                uniqueFloors.insert(i);\n            }\n        }\n        cout << uniqueFloors.size() << endl;\n    }\n    return 0;\n}",
-    "timestamp": "2025-08-13 11:39:01"
+    "code": "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    int n;\n    while (cin >> n && n != 0) {\n        vector<pair<int,int>> intervals(n);\n        for (int i = 0; i < n; i++) {\n            cin >> intervals[i].first >> intervals[i].second;\n        }\n        \n        // Sort by start\n        sort(intervals.begin(), intervals.end());\n        \n        // Merge intervals and count distinct numbers\n        long long count = 0;\n        int curLow = intervals[0].first;\n        int curHigh = intervals[0].second;\n        \n        for (int i = 1; i < n; i++) {\n            if (intervals[i].first <= curHigh + 1) {\n                curHigh = max(curHigh, intervals[i].second);\n            } else {\n                count += curHigh - curLow + 1;\n                curLow = intervals[i].first;\n                curHigh = intervals[i].second;\n            }\n        }\n        count += curHigh - curLow + 1;\n        \n        cout << count << \"\\n\";\n    }\n    return 0;\n}"
+  },
+  {
+    "model": "deepseek-chat",
+    "prompt_type": "zero_shot",
+    "language": "c++",
+    "code": "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    ios::sync_with_stdio(false);\n    cin.tie(nullptr);\n\n    int T;\n    cin >> T;\n    while (T--) {\n        int n;\n        cin >> n;\n        set<int> floors;\n        for (int i = 0; i < n; i++) {\n            int low, high;\n            cin >> low >> high;\n            for (int f = low; f <= high; f++) {\n                floors.insert(f);\n            }\n        }\n        cout << floors.size() << '\\n';\n    }\n    return 0;\n}"
+  },
+  {
+    "model": "gpt-5.4",
+    "prompt_type": "zero_shot",
+    "language": "c++",
+    "code": "#include <bits/stdc++.h>\nusing namespace std;\n\n/*\nWe are given multiple datasets. In each dataset, several elevators can display\nall floor numbers in their inclusive interval [low, high].\n\nWe need the count of distinct numbers that can appear on the display, i.e.\nthe size of the union of all intervals.\n\nAssumed input format:\n- Repeated datasets\n- Each dataset starts with n\n- Then n lines follow, each with low high\n- A dataset with n = 0 ends input\n\nThis is the standard way to solve such interval-union counting problems.\n*/\n\nint main() {\n    ios::sync_with_stdio(false);\n    cin.tie(nullptr);\n\n    int n;\n    while (cin >> n && n != 0) {\n        vector<pair<long long, long long>> segs;\n        segs.reserve(n);\n\n        for (int i = 0; i < n; ++i) {\n            long long l, r;\n            cin >> l >> r;\n            if (l > r) swap(l, r);\n            segs.push_back({l, r});\n        }\n\n        sort(segs.begin(), segs.end());\n\n        long long ans = 0;\n        long long curL = segs[0].first, curR = segs[0].second;\n\n        for (int i = 1; i < n; ++i) {\n            long long l = segs[i].first, r = segs[i].second;\n\n            // Since floors are integers, touching intervals like [1,3] and [4,5]\n            // together cover 1..5 continuously in terms of displayed integers.\n            if (l <= curR + 1) {\n                curR = max(curR, r);\n            } else {\n                ans += curR - curL + 1;\n                curL = l;\n                curR = r;\n            }\n        }\n        ans += curR - curL + 1;\n\n        cout << ans << '\\n';\n    }\n\n    return 0;\n}"
+  },
+  {
+    "model": "deepseek-chat",
+    "prompt_type": "zero_shot",
+    "language": "java",
+    "code": "import java.util.*;\n\npublic class ElevatorDisplay {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        while (sc.hasNextInt()) {\n            int n = sc.nextInt();\n            if (n == 0) break;\n            \n            List<int[]> intervals = new ArrayList<>();\n            for (int i = 0; i < n; i++) {\n                int low = sc.nextInt();\n                int high = sc.nextInt();\n                intervals.add(new int[]{low, high});\n            }\n            \n            // Sort intervals by starting floor\n            intervals.sort(Comparator.comparingInt(a -> a[0]));\n            \n            int totalFloors = 0;\n            int currentStart = intervals.get(0)[0];\n            int currentEnd = intervals.get(0)[1];\n            \n            for (int i = 1; i < intervals.size(); i++) {\n                int start = intervals.get(i)[0];\n                int end = intervals.get(i)[1];\n                \n                if (start <= currentEnd) {\n                    // Overlapping intervals, merge\n                    currentEnd = Math.max(currentEnd, end);\n                } else {\n                    // Non-overlapping, add previous range\n                    totalFloors += (currentEnd - currentStart + 1);\n                    currentStart = start;\n                    currentEnd = end;\n                }\n            }\n            // Add last range\n            totalFloors += (currentEnd - currentStart + 1);\n            \n            System.out.println(totalFloors);\n        }\n        sc.close();\n    }\n}"
+  },
+  {
+    "model": "claude-sonnet-4-6",
+    "prompt_type": "zero_shot",
+    "language": "java",
+    "code": "import java.util.*;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        while (sc.hasNextInt()) {\n            int n = sc.nextInt();\n            if (n == 0) break;\n            \n            List<int[]> intervals = new ArrayList<>();\n            for (int i = 0; i < n; i++) {\n                int lo = sc.nextInt();\n                int hi = sc.nextInt();\n                intervals.add(new int[]{lo, hi});\n            }\n            \n            // Sort intervals by start\n            intervals.sort((a, b) -> a[0] - b[0]);\n            \n            long count = 0;\n            int curLo = Integer.MIN_VALUE, curHi = Integer.MIN_VALUE;\n            \n            for (int[] interval : intervals) {\n                int lo = interval[0], hi = interval[1];\n                if (curLo == Integer.MIN_VALUE) {\n                    curLo = lo;\n                    curHi = hi;\n                } else if (lo <= curHi + 1) {\n                    curHi = Math.max(curHi, hi);\n                } else {\n                    count += (curHi - curLo + 1);\n                    curLo = lo;\n                    curHi = hi;\n                }\n            }\n            if (curLo != Integer.MIN_VALUE) {\n                count += (curHi - curLo + 1);\n            }\n            \n            System.out.println(count);\n        }\n    }\n}"
+  },
+  {
+    "model": "gpt-5.4",
+    "prompt_type": "zero_shot",
+    "language": "java",
+    "code": "import java.io.*;\nimport java.util.*;\n\npublic class Main {\n    static class FastScanner {\n        private final InputStream in = System.in;\n        private final byte[] buffer = new byte[1 << 16];\n        private int ptr = 0, len = 0;\n\n        private int read() throws IOException {\n            if (ptr >= len) {\n                len = in.read(buffer);\n                ptr = 0;\n                if (len <= 0) return -1;\n            }\n            return buffer[ptr++];\n        }\n\n        int nextInt() throws IOException {\n            int c;\n            do {\n                c = read();\n            } while (c <= ' ' && c != -1);\n\n            int sign = 1;\n            if (c == '-') {\n                sign = -1;\n                c = read();\n            }\n\n            int val = 0;\n            while (c > ' ') {\n                val = val * 10 + (c - '0');\n                c = read();\n            }\n            return val * sign;\n        }\n    }\n\n    public static void main(String[] args) throws Exception {\n        FastScanner fs = new FastScanner();\n        StringBuilder out = new StringBuilder();\n\n        while (true) {\n            int n;\n            try {\n                n = fs.nextInt();\n            } catch (Exception e) {\n                break;\n            }\n\n            if (n == 0) break;\n\n            List<int[]> intervals = new ArrayList<>();\n            for (int i = 0; i < n; i++) {\n                int low = fs.nextInt();\n                int high = fs.nextInt();\n                if (low > high) {\n                    int t = low;\n                    low = high;\n                    high = t;\n                }\n                intervals.add(new int[]{low, high});\n            }\n\n            intervals.sort(Comparator.comparingInt(a -> a[0]));\n\n            long total = 0;\n            int curL = intervals.get(0)[0];\n            int curR = intervals.get(0)[1];\n\n            for (int i = 1; i < intervals.size(); i++) {\n                int l = intervals.get(i)[0];\n                int r = intervals.get(i)[1];\n\n                if (l > curR + 1) {\n                    total += (long) curR - curL + 1;\n                    curL = l;\n                    curR = r;\n                } else {\n                    curR = Math.max(curR, r);\n                }\n            }\n            total += (long) curR - curL + 1;\n\n            out.append(total).append('\\n');\n        }\n\n        System.out.print(out.toString());\n    }\n}"
+  },
+  {
+    "model": "deepseek-chat",
+    "prompt_type": "zero_shot",
+    "language": "python",
+    "code": "# Read number of datasets\nt = int(input().strip())\n\nfor _ in range(t):\n    n = int(input().strip())\n    floors = set()\n    \n    for _ in range(n):\n        low, high = map(int, input().strip().split())\n        for floor in range(low, high + 1):\n            floors.add(floor)\n    \n    print(len(floors))"
+  },
+  {
+    "model": "claude-sonnet-4-6",
+    "prompt_type": "zero_shot",
+    "language": "python",
+    "code": "import sys\n\ndef solve():\n    import sys\n    input_data = sys.stdin.read().split()\n    idx = 0\n    \n    while idx < len(input_data):\n        n = int(input_data[idx]); idx += 1\n        if n == 0:\n            break\n        \n        intervals = []\n        for _ in range(n):\n            low = int(input_data[idx]); idx += 1\n            high = int(input_data[idx]); idx += 1\n            intervals.append((low, high))\n        \n        # Sort intervals and merge\n        intervals.sort()\n        merged = []\n        for lo, hi in intervals:\n            if merged and lo <= merged[-1][1] + 1:\n                merged[-1] = (merged[-1][0], max(merged[-1][1], hi))\n            else:\n                merged.append([lo, hi])\n        \n        count = sum(hi - lo + 1 for lo, hi in merged)\n        print(count)\n\nsolve()"
+  },
+  {
+    "model": "gpt-5.4",
+    "prompt_type": "zero_shot",
+    "language": "python",
+    "code": "import sys\n\ndef solve(data: str):\n    nums = list(map(int, data.split()))\n    if not nums:\n        return \"\"\n\n    out = []\n    i = 0\n\n    # Handle either:\n    # 1) first number = number of test cases\n    # 2) repeated datasets until EOF, each starting with n\n    def parse_from(start, use_t):\n        idx = start\n        res = []\n        if use_t:\n            if idx >= len(nums):\n                return None\n            t = nums[idx]\n            idx += 1\n            for _ in range(t):\n                if idx >= len(nums):\n                    return None\n                n = nums[idx]\n                idx += 1\n                intervals = []\n                for _ in range(n):\n                    if idx + 1 >= len(nums):\n                        return None\n                    a, b = nums[idx], nums[idx + 1]\n                    idx += 2\n                    if a > b:\n                        a, b = b, a\n                    intervals.append((a, b))\n                res.append(intervals)\n            if idx != len(nums):\n                return None\n            return res\n        else:\n            while idx < len(nums):\n                n = nums[idx]\n                idx += 1\n                intervals = []\n                for _ in range(n):\n                    if idx + 1 >= len(nums):\n                        return None\n                    a, b = nums[idx], nums[idx + 1]\n                    idx += 2\n                    if a > b:\n                        a, b = b, a\n                    intervals.append((a, b))\n                res.append(intervals)\n            return res\n\n    datasets = parse_from(0, True)\n    if datasets is None:\n        datasets = parse_from(0, False)\n\n    for intervals in datasets:\n        if not intervals:\n            out.append(\"0\")\n            continue\n\n        intervals.sort()\n        total = 0\n        cur_l, cur_r = intervals[0]\n\n        for l, r in intervals[1:]:\n            if l > cur_r + 1:\n                total += cur_r - cur_l + 1\n                cur_l, cur_r = l, r\n            else:\n                if r > cur_r:\n                    cur_r = r\n\n        total += cur_r - cur_l + 1\n        out.append(str(total))\n\n    return \"\\n\".join(out)\n\nif __name__ == \"__main__\":\n    print(solve(sys.stdin.read()))"
   }
 ]

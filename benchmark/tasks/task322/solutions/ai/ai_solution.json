@@ -1,86 +1,74 @@
 [
   {
-    "model": "deepseek-v3",
-    "prompt_type": "zero_shot",
-    "language": "C",
-    "code": "#include <stdio.h>\n#include <stdlib.h>\n\nint minOperations(int* initial, int* target, int n) {\n    int operations = 0;\n    for (int i = 0; i < n; ) {\n        if (initial[i] == target[i]) {\n            i++;\n            continue;\n        }\n        int delta = target[i] - initial[i];\n        if (delta < 0) {\n            delta += 9; // Assuming the maximum value is 9 (as per the problem description)\n        }\n        operations += delta;\n        for (int j = i; j < n && initial[j] != target[j]; j++) {\n            initial[j] = (initial[j] + delta - 1) % 9 + 1;\n        }\n    }\n    return operations;\n}\n\nint main() {\n    int n;\n    scanf(\"%d\", &n);\n    int* initial = (int*)malloc(n * sizeof(int));\n    int* target = (int*)malloc(n * sizeof(int));\n    for (int i = 0; i < n; i++) {\n        scanf(\"%d\", &initial[i]);\n    }\n    for (int i = 0; i < n; i++) {\n        scanf(\"%d\", &target[i]);\n    }\n    printf(\"%d\\n\", minOperations(initial, target, n));\n    free(initial);\n    free(target);\n    return 0;\n}",
-    "timestamp": "2025-08-05 21:04:36"
-  },
-  {
-    "model": "deepseek-v3",
-    "prompt_type": "zero_shot",
-    "language": "C++",
-    "code": "#include <vector>\n#include <algorithm>\n\nusing namespace std;\n\nint minOperations(vector<int>& current, vector<int>& target) {\n    int n = current.size();\n    int operations = 0;\n    for (int i = 0; i < n; ++i) {\n        int diff = (target[i] - current[i] + 9) % 9; // +9 to handle negative mod\n        if (diff != 0) {\n            operations += diff;\n            for (int j = i + 1; j < n; ++j) {\n                current[j] = (current[j] + diff) % 9;\n                if (current[j] == 0) current[j] = 9;\n            }\n        }\n    }\n    return operations;\n}",
-    "timestamp": "2025-08-05 21:04:46"
-  },
-  {
-    "model": "deepseek-v3",
-    "prompt_type": "zero_shot",
-    "language": "Java",
-    "code": "import java.util.*;\n\npublic class TallyCounters {\n    public static int minOperations(int[] initial, int[] target, int max) {\n        int n = initial.length;\n        int operations = 0;\n        \n        for (int i = 0; i < n; ) {\n            if (initial[i] == target[i]) {\n                i++;\n                continue;\n            }\n            \n            int delta = (target[i] - initial[i] + max) % max;\n            int j = i;\n            while (j < n && (target[j] - initial[j] + max) % max == delta) {\n                initial[j] = target[j];\n                j++;\n            }\n            operations++;\n        }\n        \n        return operations;\n    }\n\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        int n = scanner.nextInt();\n        int max = scanner.nextInt();\n        int[] initial = new int[n];\n        int[] target = new int[n];\n        \n        for (int i = 0; i < n; i++) {\n            initial[i] = scanner.nextInt();\n        }\n        \n        for (int i = 0; i < n; i++) {\n            target[i] = scanner.nextInt();\n        }\n        \n        System.out.println(minOperations(initial, target, max));\n    }\n}",
-    "timestamp": "2025-08-05 21:04:59"
-  },
-  {
-    "model": "claude-3-5-haiku-20241022",
-    "prompt_type": "zero_shot",
-    "language": "Java",
-    "code": "class Solution {\n    public int minOperations(int[] initial, int[] target, int maxValue) {\n        int n = initial.length;\n        int operations = 0;\n        \n        for (int i = 0; i < n; i++) {\n            int diff = (target[i] - initial[i] + maxValue) % maxValue;\n            if (diff > 0) {\n                if (i > 0 && operations > 0) {\n                    int prevDiff = (target[i-1] - initial[i-1] + maxValue) % maxValue;\n                    if (prevDiff > 0) {\n                        int gcd = calculateGCD(diff, prevDiff);\n                        operations = Math.max(operations, (diff + prevDiff - gcd) / gcd);\n                    } else {\n                        operations = Math.max(operations, diff);\n                    }\n                } else {\n                    operations = Math.max(operations, diff);\n                }\n            }\n        }\n        \n        return operations;\n    }\n    \n    private int calculateGCD(int a, int b) {\n        while (b != 0) {\n            int temp = b;\n            b = a % b;\n            a = temp;\n        }\n        return a;\n    }\n}",
-    "timestamp": "2025-08-05 21:05:04"
-  },
-  {
-    "model": "claude-3-5-haiku-20241022",
-    "prompt_type": "zero_shot",
-    "language": "C",
-    "code": "#include <stdio.h>\n#include <stdlib.h>\n#include <limits.h>\n\nint min_operations(int* initial, int* target, int n, int max_value) {\n    int** dp = malloc(n * sizeof(int*));\n    for (int i = 0; i < n; i++) {\n        dp[i] = malloc(max_value * sizeof(int));\n        for (int j = 0; j < max_value; j++) {\n            dp[i][j] = INT_MAX;\n        }\n    }\n\n    for (int j = 0; j < max_value; j++) {\n        int diff = (target[0] - initial[0] + max_value - j) % max_value;\n        dp[0][j] = diff;\n    }\n\n    for (int i = 1; i < n; i++) {\n        for (int j = 0; j < max_value; j++) {\n            for (int k = 0; k < max_value; k++) {\n                int diff = (target[i] - initial[i] + max_value - j) % max_value;\n                int prev_diff = (j - k + max_value) % max_value;\n                \n                if (dp[i-1][k] != INT_MAX) {\n                    dp[i][j] = fmin(dp[i][j], dp[i-1][k] + diff + prev_diff);\n                }\n            }\n        }\n    }\n\n    int min_ops = INT_MAX;\n    for (int j = 0; j < max_value; j++) {\n        min_ops = fmin(min_ops, dp[n-1][j]);\n    }\n\n    for (int i = 0; i < n; i++) {\n        free(dp[i]);\n    }\n    free(dp);\n\n    return min_ops;\n}\n\nint main() {\n    int n, max_value;\n    scanf(\"%d %d\", &n, &max_value);\n\n    int* initial = malloc(n * sizeof(int));\n    int* target = malloc(n * sizeof(int));\n\n    for (int i = 0; i < n; i++) {\n        scanf(\"%d\", &initial[i]);\n    }\n\n    for (int i = 0; i < n; i++) {\n        scanf(\"%d\", &target[i]);\n    }\n\n    int result = min_operations(initial, target, n, max_value);\n    printf(\"%d\\n\", result);\n\n    free(initial);\n    free(target);\n\n    return 0;\n}",
-    "timestamp": "2025-08-05 21:05:12"
-  },
-  {
-    "model": "claude-3-5-haiku-20241022",
-    "prompt_type": "zero_shot",
-    "language": "C++",
-    "code": "#include <vector>\n#include <algorithm>\n#include <climits>\n\nclass Solution {\npublic:\n    int minimumMoves(std::vector<int>& current, std::vector<int>& target, int maxCount) {\n        int n = current.size();\n        std::vector<std::vector<int>> dp(n + 1, std::vector<int>(n + 1, INT_MAX));\n        dp[0][0] = 0;\n\n        for (int i = 1; i <= n; i++) {\n            for (int j = 0; j <= i; j++) {\n                if (dp[i-1][j] == INT_MAX) continue;\n\n                // Option 1: Do not press current counter\n                dp[i][j] = std::min(dp[i][j], dp[i-1][j]);\n\n                // Option 2: Press current counter\n                int requiredMoves = calculateMoves(current[i-1], target[i-1], maxCount);\n                if (j + requiredMoves <= i) {\n                    dp[i][j + requiredMoves] = std::min(dp[i][j + requiredMoves], \n                                                        dp[i-1][j] + 1);\n                }\n            }\n        }\n\n        int minOperations = INT_MAX;\n        for (int j = 0; j <= n; j++) {\n            minOperations = std::min(minOperations, dp[n][j]);\n        }\n\n        return minOperations;\n    }\n\nprivate:\n    int calculateMoves(int current, int target, int maxCount) {\n        int moves = 0;\n        while (current != target) {\n            current = (current % maxCount) + 1;\n            moves++;\n        }\n        return moves;\n    }\n};",
-    "timestamp": "2025-08-05 21:05:18"
-  },
-  {
-    "model": "gpt-4o",
-    "prompt_type": "zero_shot",
-    "language": "python",
-    "code": "def min_operations_to_target(initial, target):\n    n = len(initial)\n    operations = 0\n\n    i = 0\n    while i < n:\n        if initial[i] != target[i]:\n            j = i\n            while j < n and initial[j] != target[j]:\n                initial[j] = target[j]\n                j += 1\n            operations += 1\n            i = j\n        else:\n            i += 1\n    return operations\n\n# Example usage:\ninitial_values = [1, 2, 3, 4]\ntarget_values = [2, 2, 4, 4]\nprint(min_operations_to_target(initial_values, target_values))  # Output: 2",
-    "timestamp": "2025-08-13 04:53:55"
-  },
-  {
-    "model": "gpt-4o",
-    "prompt_type": "zero_shot",
-    "language": "java",
-    "code": "public class TallyCounters {\n    public int minOperations(int[] initial, int[] target, int maxCounterValue) {\n        int n = initial.length;\n        int operations = 0;\n\n        for (int i = 0; i < n; ) {\n            if (initial[i] == target[i]) {\n                i++;\n                continue;\n            }\n\n            int j = i;\n            while (j < n && initial[j] != target[j]) {\n                j++;\n            }\n\n            operations++;\n            for (int k = i; k < j; k++) {\n                initial[k] = (initial[k] % maxCounterValue) + 1;\n            }\n        }\n\n        return operations;\n    }\n}",
-    "timestamp": "2025-08-13 04:53:58"
-  },
-  {
-    "model": "gpt-4o",
+    "model": "deepseek-chat",
     "prompt_type": "zero_shot",
     "language": "c",
-    "code": "#include <stdio.h>\n#include <stdlib.h>\n\nint minOperations(int* initial, int* target, int n, int maxVal) {\n    int operations = 0;\n    int i = 0;\n\n    while (i < n) {\n        if (initial[i] != target[i]) {\n            int start = i;\n            while (i < n && initial[i] != target[i]) {\n                initial[i] = (initial[i] + 1) % maxVal;\n                if (initial[i] == 0) {\n                    initial[i] = 1;\n                }\n                i++;\n            }\n            operations++;\n        } else {\n            i++;\n        }\n    }\n    return operations;\n}\n\nint main() {\n    int n, maxVal;\n    printf(\"Enter number of counters and max value: \");\n    scanf(\"%d%d\", &n, &maxVal);\n    \n    int* initial = (int*)malloc(n * sizeof(int));\n    int* target = (int*)malloc(n * sizeof(int));\n\n    printf(\"Enter initial values: \");\n    for (int i = 0; i < n; i++) {\n        scanf(\"%d\", &initial[i]);\n    }\n\n    printf(\"Enter target values: \");\n    for (int i = 0; i < n; i++) {\n        scanf(\"%d\", &target[i]);\n    }\n\n    int result = minOperations(initial, target, n, maxVal);\n    printf(\"Minimum operations required: %d\\n\", result);\n\n    free(initial);\n    free(target);\n    \n    return 0;\n}",
-    "timestamp": "2025-08-13 04:54:04"
+    "code": "#include <stdio.h>\n\nint main() {\n    int n, max;\n    scanf(\"%d %d\", &n, &max);\n    \n    int initial[n], target[n];\n    for (int i = 0; i < n; i++) {\n        scanf(\"%d\", &initial[i]);\n    }\n    for (int i = 0; i < n; i++) {\n        scanf(\"%d\", &target[i]);\n    }\n    \n    int diff[n];\n    for (int i = 0; i < n; i++) {\n        diff[i] = (target[i] - initial[i] + max) % max;\n    }\n    \n    long long operations = diff[0];\n    for (int i = 1; i < n; i++) {\n        if (diff[i] > diff[i - 1]) {\n            operations += diff[i] - diff[i - 1];\n        }\n    }\n    \n    printf(\"%lld\\n\", operations);\n    return 0;\n}"
   },
   {
-    "model": "claude-3-5-haiku-20241022",
+    "model": "claude-sonnet-4-6",
+    "prompt_type": "zero_shot",
+    "language": "c",
+    "code": "#include <stdio.h>\n\nint main() {\n    int n, M;\n    scanf(\"%d %d\", &n, &M);\n    \n    int a[1001], b[1001], d[1001];\n    for (int i = 0; i < n; i++) scanf(\"%d\", &a[i]);\n    for (int i = 0; i < n; i++) scanf(\"%d\", &b[i]);\n    \n    for (int i = 0; i < n; i++) {\n        d[i] = (b[i] - a[i] + M) % M;\n    }\n    \n    long long ans = d[0];\n    for (int i = 1; i < n; i++) {\n        if (d[i] > d[i-1]) ans += d[i] - d[i-1];\n    }\n    \n    printf(\"%lld\\n\", ans);\n    return 0;\n}"
+  },
+  {
+    "model": "gpt-5.4",
+    "prompt_type": "zero_shot",
+    "language": "c",
+    "code": "#include <stdio.h>\n#include <stdlib.h>\n\ntypedef long long ll;\n\nstatic ll maxll(ll a, ll b) { return a > b ? a : b; }\n\nint main(void) {\n    int n;\n    ll m;\n    if (scanf(\"%d %lld\", &n, &m) != 2) return 0;\n\n    ll *a = (ll *)malloc((n + 1) * sizeof(ll));\n    ll *b = (ll *)malloc((n + 1) * sizeof(ll));\n    ll *d = (ll *)malloc((n + 1) * sizeof(ll));\n\n    for (int i = 1; i <= n; i++) scanf(\"%lld\", &a[i]);\n    for (int i = 1; i <= n; i++) scanf(\"%lld\", &b[i]);\n\n    for (int i = 1; i <= n; i++) {\n        d[i] = (b[i] - a[i] + m) % m;   // required increments for counter i\n    }\n\n    /*\n      Each operation adds 1 to a contiguous segment.\n      For a linear array, minimum operations to realize nonnegative array d[]\n      is:\n          d[1] + sum_{i=2..n} max(0, d[i] - d[i-1])\n      because every time height increases, new segments must start.\n    */\n\n    ll ans = d[1];\n    for (int i = 2; i <= n; i++) {\n        if (d[i] > d[i - 1]) ans += d[i] - d[i - 1];\n    }\n\n    printf(\"%lld\\n\", ans);\n\n    free(a);\n    free(b);\n    free(d);\n    return 0;\n}"
+  },
+  {
+    "model": "deepseek-chat",
+    "prompt_type": "zero_shot",
+    "language": "java",
+    "code": "import java.util.Scanner;\n\npublic class TallyCounters {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        \n        int n = sc.nextInt();\n        int maxVal = sc.nextInt();\n        int[] initial = new int[n];\n        int[] target = new int[n];\n        \n        for (int i = 0; i < n; i++) {\n            initial[i] = sc.nextInt();\n        }\n        for (int i = 0; i < n; i++) {\n            target[i] = sc.nextInt();\n        }\n        \n        int[] diff = new int[n];\n        for (int i = 0; i < n; i++) {\n            diff[i] = (target[i] - initial[i] + maxVal) % maxVal;\n        }\n        \n        int operations = 0;\n        for (int i = 0; i < n; i++) {\n            if (diff[i] > 0) {\n                operations++;\n                int j = i;\n                while (j < n && diff[j] > 0) {\n                    diff[j]--;\n                    j++;\n                }\n                i--; // recheck current position after decrement\n            }\n        }\n        \n        System.out.println(operations);\n        sc.close();\n    }\n}"
+  },
+  {
+    "model": "claude-sonnet-4-6",
+    "prompt_type": "zero_shot",
+    "language": "java",
+    "code": "import java.util.*;\npublic class Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        int n = sc.nextInt();\n        int[] max = new int[n], a = new int[n], t = new int[n];\n        for(int i=0;i<n;i++) max[i]=sc.nextInt();\n        for(int i=0;i<n;i++) a[i]=sc.nextInt();\n        for(int i=0;i<n;i++) t[i]=sc.nextInt();\n        long[] d = new long[n];\n        for(int i=0;i<n;i++) d[i]=(t[i]-a[i]+max[i])%max[i];\n        long ans = d[0];\n        for(int i=1;i<n;i++) if(d[i]>d[i-1]) ans+=d[i]-d[i-1];\n        System.out.println(ans);\n    }\n}"
+  },
+  {
+    "model": "gpt-5.4",
+    "prompt_type": "zero_shot",
+    "language": "java",
+    "code": "import java.io.*;\nimport java.util.*;\n\npublic class Main {\n    public static void main(String[] args) throws Exception {\n        FastScanner fs = new FastScanner(System.in);\n\n        int n = fs.nextInt();\n        int m = fs.nextInt();\n\n        long[] need = new long[n];\n        for (int i = 0; i < n; i++) {\n            int a = fs.nextInt();\n            int b = fs.nextInt();\n            need[i] = (b - a + m) % m;\n        }\n\n        long ans = need[0];\n        for (int i = 1; i < n; i++) {\n            if (need[i] > need[i - 1]) ans += need[i] - need[i - 1];\n        }\n\n        System.out.println(ans);\n    }\n\n    static class FastScanner {\n        private final InputStream in;\n        private final byte[] buffer = new byte[1 << 16];\n        private int ptr = 0, len = 0;\n\n        FastScanner(InputStream is) {\n            in = is;\n        }\n\n        private int read() throws IOException {\n            if (ptr >= len) {\n                len = in.read(buffer);\n                ptr = 0;\n                if (len <= 0) return -1;\n            }\n            return buffer[ptr++];\n        }\n\n        int nextInt() throws IOException {\n            int c;\n            do {\n                c = read();\n            } while (c <= ' ' && c != -1);\n\n            int sign = 1;\n            if (c == '-') {\n                sign = -1;\n                c = read();\n            }\n\n            int val = 0;\n            while (c > ' ') {\n                val = val * 10 + (c - '0');\n                c = read();\n            }\n            return val * sign;\n        }\n    }\n}"
+  },
+  {
+    "model": "deepseek-chat",
     "prompt_type": "zero_shot",
     "language": "python",
-    "code": "def min_operations(initial, target):\n    n = len(initial)\n    if len(target) != n:\n        return -1\n    \n    def count_operations(diff):\n        ops = 0\n        for x in diff:\n            if x < 0:\n                return -1\n            ops += x\n        return ops\n    \n    max_counter = max(max(initial), max(target))\n    diff = [(target[i] - initial[i] + max_counter) % max_counter for i in range(n)]\n    \n    return count_operations(diff)",
-    "timestamp": "2025-08-13 04:54:10"
+    "code": "def solve():\n    import sys\n    input_data = sys.stdin.read().strip().split()\n    if not input_data:\n        return\n    n, m = int(input_data[0]), int(input_data[1])\n    current = list(map(int, input_data[2:2+n]))\n    target = list(map(int, input_data[2+n:2+2*n]))\n    \n    ops = 0\n    prev = 0\n    for i in range(n):\n        # needed increase from current to target\n        if target[i] >= current[i]:\n            need = target[i] - current[i]\n        else:\n            need = m - current[i] + target[i]\n        if need > prev:\n            ops += need - prev\n        prev = need\n    print(ops)\n\nif __name__ == \"__main__\":\n    solve()"
   },
   {
-    "model": "deepseek-v3",
+    "model": "claude-sonnet-4-6",
     "prompt_type": "zero_shot",
     "language": "python",
-    "code": "def min_operations(initial, target):\n    n = len(initial)\n    operations = 0\n    current_increment = 0\n    \n    for i in range(n):\n        diff = (target[i] - initial[i] - current_increment) % 10\n        if diff < 0:\n            diff += 10\n        operations += diff\n        current_increment += diff\n    \n    return operations",
-    "timestamp": "2025-08-13 04:54:16"
+    "code": "import sys\n\ndef solve():\n    input_data = sys.stdin.read().split()\n    idx = 0\n    n = int(input_data[idx]); idx += 1\n    initial = []\n    for i in range(n):\n        initial.append(int(input_data[idx])); idx += 1\n    target = []\n    for i in range(n):\n        target.append(int(input_data[idx])); idx += 1\n    \n    d = [(target[i] - initial[i]) for i in range(n)]\n    # Minimum operations = d[0] + sum of positive increments\n    ops = d[0]\n    for i in range(1, n):\n        if d[i] > d[i-1]:\n            ops += d[i] - d[i-1]\n    print(ops)\n\nsolve()"
   },
   {
-    "model": "gpt-4o",
+    "model": "gpt-5.4",
+    "prompt_type": "zero_shot",
+    "language": "python",
+    "code": "import sys\n\ndef main():\n    data = list(map(int, sys.stdin.read().split()))\n    if not data:\n        return\n\n    n, m = data[0], data[1]\n    a = data[2:2+n]\n    b = data[2+n:2+2*n]\n\n    # Required increments for each counter (mod m, but values are 1..m)\n    d = [(b[i] - a[i]) % m for i in range(n)]\n\n    # Let x_i be how many operations cover position i.\n    # Then x_i ≡ d_i (mod m), x_i >= 0.\n    #\n    # Any operation on an interval [l..r] contributes:\n    #   +1 to \"start count\" at l\n    #   +1 to \"end count\" at r\n    #\n    # If x_0..x_{n-1} are fixed, the minimum number of intervals needed is:\n    #   x_0 + sum(max(0, x_i - x_{i-1})) for i=1..n-1\n    #\n    # We may choose x_i = d_i + k_i*m.\n    # Increasing some x_i by m can only increase the objective, so the minimum\n    # is achieved by taking the smallest nonnegative representatives x_i = d_i.\n\n    ans = d[0]\n    for i in range(1, n):\n        if d[i] > d[i - 1]:\n            ans += d[i] - d[i - 1]\n\n    print(ans)\n\nif __name__ == \"__main__\":\n    main()"
+  },
+  {
+    "model": "deepseek-chat",
     "prompt_type": "zero_shot",
     "language": "c++",
-    "code": "#include <iostream>\n#include <vector>\n#include <algorithm>\n\nint minOperationsToTarget(std::vector<int>& initial, std::vector<int>& target, int max_value) {\n    int n = initial.size();\n    int operations = 0;\n\n    for (int i = 0; i < n; ++i) {\n        if (initial[i] != target[i]) {\n            int j = i;\n            int delta = (target[i] - initial[i] + max_value) % max_value;\n            while (j < n && initial[j] != target[j]) {\n                initial[j] = (initial[j] + delta) % max_value;\n                if (initial[j] == 0) initial[j] = max_value;\n                j++;\n            }\n            operations++;\n        }\n    }\n    return operations;\n}\n\nint main() {\n    int n, max_value;\n    std::cin >> n >> max_value;\n    std::vector<int> initial(n), target(n);\n    for (int i = 0; i < n; ++i) std::cin >> initial[i];\n    for (int i = 0; i < n; ++i) std::cin >> target[i];\n\n    std::cout << minOperationsToTarget(initial, target, max_value) << std::endl;\n    return 0;\n}",
-    "timestamp": "2025-08-13 11:21:56"
+    "code": "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    ios::sync_with_stdio(false);\n    cin.tie(nullptr);\n    \n    int n, m;\n    cin >> n >> m;\n    vector<int> start(n), target(n);\n    for (int i = 0; i < n; ++i) cin >> start[i];\n    for (int i = 0; i < n; ++i) cin >> target[i];\n    \n    vector<int> need(n);\n    for (int i = 0; i < n; ++i) {\n        need[i] = (target[i] - start[i] + m) % m;\n    }\n    \n    long long ans = need[0];\n    for (int i = 1; i < n; ++i) {\n        if (need[i] > need[i-1]) {\n            ans += need[i] - need[i-1];\n        }\n    }\n    \n    cout << ans << '\\n';\n    return 0;\n}"
+  },
+  {
+    "model": "claude-sonnet-4-6",
+    "prompt_type": "zero_shot",
+    "language": "c++",
+    "code": "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n    \n    int n, M;\n    cin >> n >> M;\n    \n    vector<int> a(n), b(n);\n    for (int i = 0; i < n; i++) cin >> a[i];\n    for (int i = 0; i < n; i++) cin >> b[i];\n    \n    vector<long long> d(n);\n    for (int i = 0; i < n; i++) {\n        d[i] = ((b[i] - a[i]) % M + M) % M;\n    }\n    \n    long long ans = d[0];\n    for (int i = 1; i < n; i++) {\n        if (d[i] > d[i-1]) {\n            ans += d[i] - d[i-1];\n        }\n    }\n    \n    cout << ans << endl;\n    \n    return 0;\n}"
+  },
+  {
+    "model": "gpt-5.4",
+    "prompt_type": "zero_shot",
+    "language": "c++",
+    "code": "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    ios::sync_with_stdio(false);\n    cin.tie(nullptr);\n\n    int n, m;\n    cin >> n >> m;\n\n    vector<long long> a(n), b(n);\n    for (int i = 0; i < n; ++i) cin >> a[i];\n    for (int i = 0; i < n; ++i) cin >> b[i];\n\n    // Needed increments for each counter modulo m:\n    // values are from 1..m, and after m comes 1.\n    vector<long long> d(n);\n    for (int i = 0; i < n; ++i) {\n        d[i] = (b[i] - a[i] + m) % m;\n    }\n\n    // Minimum number of operations for raising adjacent segments\n    // equals:\n    // d[0] + sum(max(0, d[i] - d[i-1])).\n    long long ans = d[0];\n    for (int i = 1; i < n; ++i) {\n        if (d[i] > d[i - 1]) ans += d[i] - d[i - 1];\n    }\n\n    cout << ans << '\\n';\n    return 0;\n}"
   }
 ]

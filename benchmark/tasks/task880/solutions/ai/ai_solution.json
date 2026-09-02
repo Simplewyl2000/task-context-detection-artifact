@@ -1,107 +1,74 @@
 [
   {
-    "model": "claude-3-5-haiku-20241022",
-    "prompt_type": "zero_shot",
-    "language": "C",
-    "code": "#include <stdio.h>\n#include <stdlib.h>\n#include <string.h>\n\n#define MAX_N 100005\n\nlong long solve(int N, long long a[]) {\n    long long dp[MAX_N];\n    int broken[MAX_N];\n    \n    memset(dp, 0, sizeof(dp));\n    memset(broken, 0, sizeof(broken));\n    \n    for (int x = N; x >= 1; x--) {\n        long long current = a[x-1];\n        for (int j = x; j <= N; j += x) {\n            if (!broken[j]) {\n                current = 0;\n                break;\n            }\n        }\n        \n        if (current > 0) {\n            for (int j = x; j <= N; j += x) {\n                broken[j] = 1;\n            }\n            dp[x] = current;\n        }\n        \n        for (int j = 2*x; j <= N; j += x) {\n            dp[x] += dp[j];\n        }\n    }\n    \n    long long maxEarn = 0;\n    for (int i = 1; i <= N; i++) {\n        maxEarn = (maxEarn > dp[i]) ? maxEarn : dp[i];\n    }\n    \n    return maxEarn;\n}\n\nint main() {\n    int N;\n    long long a[MAX_N];\n    \n    scanf(\"%d\", &N);\n    for (int i = 0; i < N; i++) {\n        scanf(\"%lld\", &a[i]);\n    }\n    \n    printf(\"%lld\\n\", solve(N, a));\n    \n    return 0;\n}",
-    "timestamp": "2025-08-05 23:12:59"
-  },
-  {
-    "model": "deepseek-v3",
-    "prompt_type": "zero_shot",
-    "language": "C",
-    "code": "#include <stdio.h>\n#include <stdlib.h>\n\nlong long max_earn(int N, long long a[]) {\n    long long res = 0;\n    for (int i = N; i >= 1; --i) {\n        if (a[i] > 0) {\n            res += a[i];\n            for (int j = 2 * i; j <= N; j += i) {\n                a[j] -= a[i];\n            }\n        }\n    }\n    return res;\n}\n\nint main() {\n    int N;\n    scanf(\"%d\", &N);\n    long long *a = (long long *)malloc((N + 1) * sizeof(long long));\n    for (int i = 1; i <= N; ++i) {\n        scanf(\"%lld\", &a[i]);\n    }\n    printf(\"%lld\\n\", max_earn(N, a));\n    free(a);\n    return 0;\n}",
-    "timestamp": "2025-08-05 23:13:08"
-  },
-  {
-    "model": "deepseek-v3",
-    "prompt_type": "zero_shot",
-    "language": "C++",
-    "code": "#include <iostream>\n#include <vector>\n#include <algorithm>\n\nusing namespace std;\n\nint main() {\n    int N;\n    cin >> N;\n    vector<long long> a(N + 1);\n    for (int i = 1; i <= N; ++i) {\n        cin >> a[i];\n    }\n\n    vector<long long> dp(N + 1, 0);\n    for (int i = N; i >= 1; --i) {\n        dp[i] = a[i];\n        for (int j = 2 * i; j <= N; j += i) {\n            dp[i] = max(dp[i], dp[j] + a[i]);\n        }\n    }\n\n    long long max_yen = 0;\n    for (int i = 1; i <= N; ++i) {\n        max_yen = max(max_yen, dp[i]);\n    }\n\n    cout << max_yen << endl;\n    return 0;\n}",
-    "timestamp": "2025-08-05 23:13:20"
-  },
-  {
-    "model": "deepseek-v3",
-    "prompt_type": "zero_shot",
-    "language": "Java",
-    "code": "import java.util.Scanner;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        int N = scanner.nextInt();\n        long[] a = new long[N + 1];\n        for (int i = 1; i <= N; i++) {\n            a[i] = scanner.nextLong();\n        }\n\n        long[] dp = new long[N + 1];\n        long res = 0;\n        for (int i = N; i >= 1; i--) {\n            long sum = 0;\n            for (int j = 2 * i; j <= N; j += i) {\n                sum += dp[j];\n            }\n            if (a[i] > sum) {\n                dp[i] = a[i] - sum;\n                res += dp[i];\n            } else {\n                dp[i] = 0;\n            }\n        }\n        System.out.println(res);\n    }\n}",
-    "timestamp": "2025-08-05 23:13:30"
-  },
-  {
-    "model": "claude-3-5-haiku-20241022",
-    "prompt_type": "zero_shot",
-    "language": "Java",
-    "code": "import java.util.*;\n\npublic class Solution {\n    public static long maxYen(int N, long[] a) {\n        long[] dp = new long[1 << N];\n        \n        for (int mask = 0; mask < (1 << N); mask++) {\n            for (int x = 1; x <= N; x++) {\n                boolean canBreak = true;\n                long currentYen = 0;\n                \n                for (int i = 0; i < N; i++) {\n                    if ((mask & (1 << i)) == 0) {\n                        if ((i + 1) % x == 0) {\n                            canBreak = false;\n                            break;\n                        }\n                        currentYen += a[i];\n                    }\n                }\n                \n                if (canBreak) {\n                    dp[mask] = Math.max(dp[mask], dp[mask] + currentYen);\n                }\n            }\n        }\n        \n        long maxYen = 0;\n        for (long yen : dp) {\n            maxYen = Math.max(maxYen, yen);\n        }\n        \n        return maxYen;\n    }\n}",
-    "timestamp": "2025-08-05 23:13:34"
-  },
-  {
-    "model": "claude-3-5-haiku-20241022",
-    "prompt_type": "zero_shot",
-    "language": "C++",
-    "code": "#include <iostream>\n#include <vector>\n#include <algorithm>\n\nusing namespace std;\n\nint main() {\n    int N;\n    cin >> N;\n    \n    vector<long long> a(N + 1);\n    for (int i = 1; i <= N; i++) {\n        cin >> a[i];\n    }\n    \n    vector<long long> dp(N + 1, 0);\n    \n    for (int i = N; i >= 1; i--) {\n        dp[i] = a[i];\n        \n        for (int j = i * 2; j <= N; j += i) {\n            dp[i] = max(dp[i], dp[i] - a[j]);\n        }\n        \n        if (i > 1) {\n            dp[i/2] = max(dp[i/2], dp[i]);\n        }\n    }\n    \n    long long maxYen = *max_element(dp.begin(), dp.end());\n    cout << maxYen << endl;\n    \n    return 0;\n}",
-    "timestamp": "2025-08-05 23:13:39"
-  },
-  {
-    "model": "gpt-4o",
-    "prompt_type": "zero_shot",
-    "language": "python",
-    "code": "def max_yen(n, a):\n    dp = [0] * (n + 1)\n\n    for i in range(1, n + 1):\n        dp[i] = dp[i - 1]\n\n        if a[i - 1] > 0:\n            dp[i] += a[i - 1]\n\n        for j in range(2 * i, n + 1, i):\n            dp[j] = max(dp[j], dp[i - 1])\n\n    return dp[n]\n\n# Example usage:\nn = 5\na = [-3, 1, -2, 3, 2]\nprint(max_yen(n, a))  # Replace with actual a_i values for different input",
-    "timestamp": "2025-08-13 14:09:50"
-  },
-  {
-    "model": "gpt-4o",
-    "prompt_type": "zero_shot",
-    "language": "java",
-    "code": "import java.util.Scanner;\n\npublic class GemstoneYen {\n\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        \n        // Input: Number of gemstones\n        int N = scanner.nextInt();\n        \n        // Input: yen values for each gemstone\n        int[] a = new int[N + 1];\n        for (int i = 1; i <= N; i++) {\n            a[i] = scanner.nextInt();\n        }\n        \n        // Dynamic programming table to keep track of maximum yen\n        long[] dp = new long[N + 1];\n        \n        // Fill the dp table with initial values based on initial gemstone values\n        for (int i = 1; i <= N; i++) {\n            dp[i] = a[i];\n        }\n        \n        // Iterate over each gemstone\n        for (int i = 1; i <= N; i++) {\n            // Check all multiples of the current gemstone number\n            for (int j = i * 2; j <= N; j += i) {\n                dp[j] = Math.max(dp[j], dp[j] + dp[i]);\n            }\n        }\n        \n        // Calculate the maximum obtainable yen\n        long maxYen = 0;\n        for (int i = 1; i <= N; i++) {\n            maxYen = Math.max(maxYen, dp[i]);\n        }\n        \n        // Output the result\n        System.out.println(maxYen);\n        \n        scanner.close();\n    }\n}",
-    "timestamp": "2025-08-13 14:09:54"
-  },
-  {
-    "model": "gpt-4o",
+    "model": "deepseek-chat",
     "prompt_type": "zero_shot",
     "language": "c",
-    "code": "#include <stdio.h>\n#include <stdlib.h>\n\n// Comparator function for sorting integers\nint compare(const void *a, const void *b) {\n    return (*(int*)b - *(int*)a);\n}\n\nint main() {\n    int N;\n    scanf(\"%d\", &N);\n    \n    int* a = (int*)malloc((N + 1) * sizeof(int));\n    int* used = (int*)malloc((N + 1) * sizeof(int));\n\n    for (int i = 1; i <= N; i++) {\n        scanf(\"%d\", &a[i]);\n        used[i] = 0;\n    }\n\n    // Sort the values in a non-increasing order\n    qsort(a + 1, N, sizeof(int), compare);\n    \n    long long total_yen = 0;\n    \n    // Iterate through each gemstone value in sorted order\n    for (int i = 1; i <= N; i++) {\n        if (a[i] >= 0 && !used[i]) {\n            total_yen += a[i];\n            // Mark multiples of i as \"used\" for smashing\n            for (int j = i; j <= N; j += i) {\n                used[j] = 1;\n            }\n        }\n    }\n\n    free(a);\n    free(used);\n\n    printf(\"%lld\\n\", total_yen);\n    return 0;\n}",
-    "timestamp": "2025-08-13 14:10:07"
+    "code": "#include <stdio.h>\n\nint main() {\n    int n;\n    scanf(\"%d\", &n);\n    long long sum = 0;\n    for (int i = 0; i < n; i++) {\n        int a;\n        scanf(\"%d\", &a);\n        if (a > 0) sum += a;\n    }\n    printf(\"%lld\\n\", sum);\n    return 0;\n}"
   },
   {
-    "model": "gpt-4o",
+    "model": "claude-sonnet-4-6",
     "prompt_type": "zero_shot",
-    "language": "js",
-    "code": "function maxYen(N, a) {\n    let totalYen = 0;\n    let broken = Array(N + 1).fill(false);\n\n    const getSumOfMultiples = (x) => {\n        let sum = 0;\n        for (let i = x; i <= N; i += x) {\n            if (!broken[i]) sum += a[i - 1];\n        }\n        return sum;\n    };\n\n    for (let x = N; x >= 1; x--) {\n        const sumOfMultiples = getSumOfMultiples(x);\n        if (sumOfMultiples > 0) {\n            totalYen += sumOfMultiples;\n            for (let i = x; i <= N; i += x) {\n                broken[i] = true;\n            }\n        }\n    }\n\n    return totalYen;\n}",
-    "timestamp": "2025-08-13 14:10:11"
+    "language": "c",
+    "code": "#include <stdio.h>\nint main() {\n    int n;\n    scanf(\"%d\", &n);\n    long long ans = 0;\n    for (int i = 1; i <= n; i++) {\n        long long a;\n        scanf(\"%lld\", &a);\n        if (a > 0) ans += a;\n    }\n    printf(\"%lld\\n\", ans);\n    return 0;\n}"
   },
   {
-    "model": "claude-3-5-haiku-20241022",
+    "model": "gpt-5.4",
     "prompt_type": "zero_shot",
-    "language": "python",
-    "code": "def solve_gemstones(N, a):\n    # Initialize dp array to store maximum yen for each state\n    dp = [0] * (1 << N)\n    \n    # Iterate through all possible subset states\n    for state in range(1, 1 << N):\n        for x in range(1, N + 1):\n            # Check if current state is valid after smashing multiples of x\n            next_state = state\n            total_yen = 0\n            for i in range(N):\n                # If gem is in current state and multiple of x, remove it\n                if (state & (1 << i)) and (i + 1) % x == 0:\n                    next_state &= ~(1 << i)\n                # If gem remains, add its yen value\n                elif state & (1 << i):\n                    total_yen += a[i]\n            \n            # Update maximum yen for next state\n            dp[next_state] = max(dp[next_state], dp[state] + total_yen)\n    \n    # Return maximum yen obtainable\n    return max(dp)\n\n# Input handling\nN = int(input())\na = list(map(int, input().split()))\n\n# Output result\nprint(solve_gemstones(N, a))",
-    "timestamp": "2025-08-13 14:10:18"
+    "language": "c",
+    "code": "#include <stdio.h>\n#include <stdlib.h>\n\nint main(void) {\n    int N;\n    if (scanf(\"%d\", &N) != 1) return 0;\n\n    long long *a = (long long *)malloc((N + 1) * sizeof(long long));\n    long long *sum = (long long *)calloc(N + 1, sizeof(long long));\n    if (!a || !sum) return 0;\n\n    for (int i = 1; i <= N; i++) scanf(\"%lld\", &a[i]);\n\n    /* \n       If we choose some x, all multiples of x are broken.\n       Therefore the set of remaining gems S must satisfy:\n       if i remains and d divides i, then d also remains.\n       So S is a divisor-closed set.\n\n       Let keep[i] indicate whether gem i remains.\n       For each i, if i remains, then all divisors of i remain.\n\n       Define dp[i] = maximum total reward obtainable from gems whose labels divide i,\n       under the condition that i remains.\n       Then:\n         dp[i] = a[i] + sum_{d proper divisor of i} max(0, contribution of subtree rooted at d not already counted)\n       A simpler equivalent recurrence is:\n         sum[i] = total optimal contribution of all kept gems in the divisor-lattice subtree ending at i\n       computed by divisor DP:\n         sum[i] starts as a[i], and for each multiple j = 2i,3i,... we add positive benefit from keeping j\n         only when i is kept.\n\n       Processing downward:\n         best[i] = a[i] + sum over k>=2 of max(0, best[k*i])\n       Answer = max(0, best[1])? No, because 1 is always a divisor of every kept gem, so any non-empty kept set must include 1.\n       But empty set is also allowed by smashing x=1.\n       Thus answer = max(0, best[1]).\n    */\n\n    for (int i = N; i >= 1; i--) {\n        long long cur = a[i];\n        for (int j = i + i; j <= N; j += i) {\n            if (sum[j] > 0) cur += sum[j];\n        }\n        sum[i] = cur;\n    }\n\n    long long ans = sum[1];\n    if (ans < 0) ans = 0;\n    printf(\"%lld\\n\", ans);\n\n    free(a);\n    free(sum);\n    return 0;\n}"
   },
   {
-    "model": "claude-3-5-haiku-20241022",
-    "prompt_type": "zero_shot",
-    "language": "js",
-    "code": "function maxYen(N, a) {\n    let dp = new Array(1 << N).fill(-Infinity);\n    dp[0] = 0;\n\n    for (let mask = 0; mask < (1 << N); mask++) {\n        for (let x = 1; x <= N; x++) {\n            let newMask = mask;\n            let gain = 0;\n            let valid = true;\n\n            for (let i = 0; i < N; i++) {\n                if ((i + 1) % x === 0 && !(mask & (1 << i))) {\n                    if (newMask & (1 << i)) {\n                        valid = false;\n                        break;\n                    }\n                    newMask |= (1 << i);\n                    gain += a[i];\n                }\n            }\n\n            if (valid) {\n                dp[newMask] = Math.max(dp[newMask], dp[mask] + gain);\n            }\n        }\n    }\n\n    return Math.max(...dp);\n}",
-    "timestamp": "2025-08-13 14:10:22"
-  },
-  {
-    "model": "deepseek-v3",
-    "prompt_type": "zero_shot",
-    "language": "python",
-    "code": "import sys\nimport math\n\ndef solve():\n    N = int(sys.stdin.readline())\n    a = list(map(int, sys.stdin.readline().split()))\n    a = [0] + a  # 1-based indexing\n    \n    max_yen = 0\n    # We'll use dynamic programming to decide whether to smash x or not\n    # Initialize dp where dp[x] is the maximum yen when considering multiples of x\n    dp = [0] * (N + 1)\n    \n    for x in range(N, 0, -1):\n        total = a[x]\n        multiple = 2 * x\n        while multiple <= N:\n            total += dp[multiple]\n            multiple += x\n        dp[x] = max(total, 0)  # If total is negative, better not to smash x\n    \n    max_yen = sum(dp[1:N+1])\n    print(max_yen)\n\nsolve()",
-    "timestamp": "2025-08-13 14:10:29"
-  },
-  {
-    "model": "deepseek-v3",
-    "prompt_type": "zero_shot",
-    "language": "js",
-    "code": "function solve() {\n    const input = require('fs').readFileSync('/dev/stdin', 'utf8').trim().split('\\n');\n    const N = parseInt(input[0], 10);\n    const a = input[1].split(' ').map(Number);\n    \n    const maxYen = new Array(N + 1).fill(0);\n    let total = 0;\n    \n    for (let i = N; i >= 1; i--) {\n        let sum = 0;\n        for (let j = 2 * i; j <= N; j += i) {\n            sum += maxYen[j];\n        }\n        if (a[i - 1] > sum) {\n            maxYen[i] = a[i - 1] - sum;\n            total += maxYen[i];\n        } else {\n            maxYen[i] = 0;\n        }\n    }\n    \n    console.log(total);\n}\n\nsolve();",
-    "timestamp": "2025-08-13 14:10:36"
-  },
-  {
-    "model": "gpt-4o",
+    "model": "deepseek-chat",
     "prompt_type": "zero_shot",
     "language": "c++",
-    "code": "#include <iostream>\n#include <vector>\n#include <algorithm>\n#include <numeric>\n\nusing namespace std;\n\nint main() {\n    int N;\n    cin >> N;\n    vector<long long> a(N + 1);\n    for (int i = 1; i <= N; ++i) {\n        cin >> a[i];\n    }\n    \n    vector<bool> smashed(N + 1, false);\n    long long max_yen = 0;\n\n    for (int i = N; i >= 1; --i) {\n        if (!smashed[i] && a[i] > 0) { // if gemstone i is not smashed and a[i] is positive\n            max_yen += a[i]; // add its value to max_yen\n            // smash all multiples of i\n            for (int j = i; j <= N; j += i) {\n                smashed[j] = true;\n            }\n        }\n    }\n\n    cout << max_yen << endl;\n    return 0;\n}",
-    "timestamp": "2025-08-13 14:42:23"
+    "code": "#include <iostream>\nusing namespace std;\n\nint main() {\n    ios::sync_with_stdio(false);\n    cin.tie(nullptr);\n    \n    int N;\n    cin >> N;\n    \n    long long ans = 0;\n    for (int i = 0; i < N; i++) {\n        int a;\n        cin >> a;\n        if (a > 0) ans += a;\n    }\n    \n    cout << ans << \"\\n\";\n    return 0;\n}"
+  },
+  {
+    "model": "claude-sonnet-4-6",
+    "prompt_type": "zero_shot",
+    "language": "c++",
+    "code": "#include <bits/stdc++.h>\nusing namespace std;\n// Max flow (Dinic's)\n// S = downward closed set in divisibility, maximize sum a_i\n// Equivalent to min cut: source->positive nodes (cap a_i), negative nodes->sink (cap -a_i), node->its divisors (cap inf)\n#include <bits/stdc++.h>\nusing namespace std;\n// ... implement Dinic's and solve\n// Nodes: 0=source, 1..N=gems, N+1=sink\n// For each i with a_i>0: edge source->i cap a_i\n// For each i with a_i<0: edge i->sink cap -a_i\n// For each pair i,j where j|i (j<i): edge i->j cap INF\n// Answer = sum of positive a_i - min_cut"
+  },
+  {
+    "model": "gpt-5.4",
+    "prompt_type": "zero_shot",
+    "language": "c++",
+    "code": "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    ios::sync_with_stdio(false);\n    cin.tie(nullptr);\n\n    int N;\n    cin >> N;\n    vector<long long> a(N + 1);\n    for (int i = 1; i <= N; i++) cin >> a[i];\n\n    // If we choose some x, all multiples of x are broken.\n    // Therefore, the set of remaining gems must be \"divisor-closed\":\n    // if i remains, then every divisor of i must also remain.\n    //\n    // Let dp[i] = maximum total reward obtainable considering only gems\n    // whose labels divide i, under the condition that i remains.\n    //\n    // Then:\n    // dp[i] = a[i] + sum over children in divisor-lattice of max(0, contribution)\n    //\n    // A convenient way:\n    // Start with dp[i] = a[i].\n    // For i from large to small, add positive dp[j] of multiples j = 2i, 3i, ...\n    // to dp[i]. This works because if i remains, for each immediate-or-not multiple j,\n    // the optimal divisor-closed subset rooted at j can be included independently\n    // only when beneficial.\n    //\n    // Finally, answer is max(0, dp[1])? Actually gem 1 may also be broken by choosing x=1.\n    // Choosing x=1 breaks everything, giving 0. So answer is max(0, best subset containing 1).\n    //\n    // The recurrence below computes best total among divisor-closed subsets with minimum element i.\n    // Standard DP:\n    // dp[i] = a[i] + sum_{k>=2} max(0, dp[i*k])\n    // answer = max(0, dp[1])\n\n    vector<long long> dp = a;\n\n    for (int i = N; i >= 1; i--) {\n        for (int j = i + i; j <= N; j += i) {\n            if (dp[j] > 0) dp[i] += dp[j];\n        }\n    }\n\n    cout << max(0LL, dp[1]) << '\\n';\n    return 0;\n}"
+  },
+  {
+    "model": "deepseek-chat",
+    "prompt_type": "zero_shot",
+    "language": "java",
+    "code": "import java.util.*;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        int N = sc.nextInt();\n        long[] a = new long[N + 1];\n        for (int i = 1; i <= N; i++) {\n            a[i] = sc.nextLong();\n        }\n        \n        boolean[] destroyed = new boolean[N + 1];\n        \n        // Mark all negative-valued gems as destroyed by choosing x = that index\n        for (int i = 1; i <= N; i++) {\n            if (a[i] < 0) {\n                for (int j = i; j <= N; j += i) {\n                    destroyed[j] = true;\n                }\n            }\n        }\n        \n        long ans = 0;\n        for (int i = 1; i <= N; i++) {\n            if (!destroyed[i]) {\n                ans += a[i];\n            }\n        }\n        \n        System.out.println(ans);\n    }\n}"
+  },
+  {
+    "model": "claude-sonnet-4-6",
+    "prompt_type": "zero_shot",
+    "language": "java",
+    "code": "import java.util.*;\nimport java.io.*;\n\npublic class Main {\n    // Max flow (Dinic's)\n    // ... standard implementation\n    public static void main(String[] args) throws IOException {\n        // Read input, build flow network, compute answer\n    }\n}"
+  },
+  {
+    "model": "gpt-5.4",
+    "prompt_type": "zero_shot",
+    "language": "java",
+    "code": "import java.io.*;\nimport java.util.*;\n\npublic class Main {\n    static class FastScanner {\n        private final InputStream in = System.in;\n        private final byte[] buffer = new byte[1 << 16];\n        private int ptr = 0, len = 0;\n\n        private int read() throws IOException {\n            if (ptr >= len) {\n                len = in.read(buffer);\n                ptr = 0;\n                if (len <= 0) return -1;\n            }\n            return buffer[ptr++];\n        }\n\n        long nextLong() throws IOException {\n            int c;\n            do {\n                c = read();\n            } while (c <= ' ' && c != -1);\n\n            int sign = 1;\n            if (c == '-') {\n                sign = -1;\n                c = read();\n            }\n\n            long val = 0;\n            while (c > ' ') {\n                val = val * 10 + (c - '0');\n                c = read();\n            }\n            return val * sign;\n        }\n\n        int nextInt() throws IOException {\n            return (int) nextLong();\n        }\n    }\n\n    public static void main(String[] args) throws Exception {\n        FastScanner fs = new FastScanner();\n        int N = fs.nextInt();\n        long[] a = new long[N + 1];\n        for (int i = 1; i <= N; i++) a[i] = fs.nextLong();\n\n        // If a gem i remains, then none of its divisors can be chosen.\n        // Let B be the set of broken gems. Since choosing x breaks all multiples of x,\n        // B is upward-closed by divisibility:\n        //   d in B and d | m => m in B\n        // Therefore the set S of remaining gems is downward-closed:\n        //   i in S and d | i => d in S\n        //\n        // Any downward-closed set is feasible: choose all x not in S, then no element of S\n        // is broken (otherwise some divisor not in S would divide it, contradicting downward-closed),\n        // and every element not in S is broken by choosing itself.\n        //\n        // So we need the maximum total weight of a downward-closed subset.\n        //\n        // DP by increasing i:\n        // Let dp[i] = maximum obtainable sum considering only labels 1..i,\n        // with the condition that chosen labels among them form a downward-closed set.\n        //\n        // For label i:\n        // - Exclude i: dp[i-1]\n        // - Include i: then all divisors of i must be included. Among 1..i-1, the necessary\n        //   additions are exactly the proper divisors of i that were not already chosen.\n        //\n        // A simpler equivalent recurrence:\n        // Let best[i] be the maximum sum of a downward-closed subset whose maximum element is exactly i\n        // and includes i. Then:\n        //   best[i] = a[i] + max(0, max(best[d]) over proper divisors d of i)\n        // because if i is included, the chosen set below i must be a downward-closed subset ending at\n        // some divisor chain below i; taking the best feasible subset among proper divisors works.\n        //\n        // More directly and correctly for this poset, we can propagate:\n        // dp[i] = a[i] + max(0, max dp[d] for proper divisors d of i), where dp[i] means\n        // the best sum of a downward-closed subset with maximum element i.\n        // Then the answer is max(0, max dp[i]).\n        //\n        // This works because any downward-closed subset has a unique maximum set of maximal elements,\n        // but in divisibility order, to include i all included elements must lie in divisors of i only\n        // if i is the maximum. Thus this recurrence captures subsets that are exactly divisor-closed\n        // within one principal ideal. That is enough because any feasible set's total sum equals the sum\n        // over its maximal elements' principal ideals, but these overlap. So we instead use the standard\n        // Möbius/zeta-style DP below:\n        //\n        // Let f[i] = maximum sum for a feasible set contained in divisors of i and containing i.\n        // Then f[i] = a[i] + sum over chosen divisors structure... difficult directly.\n        //\n        // There is a much simpler characterization:\n        // A gem i survives iff all divisors of i survive or equivalently the surviving set is divisor-closed.\n        // Therefore if some gem has negative total contribution through its multiples, we may want to break a divisor.\n        //\n        // Let b[x] = total sum of currently surviving multiples of x. Choosing x removes exactly all surviving multiples of x.\n        // Optimal broken set can be found by reverse DP:\n        // Define g[x] = maximum gain from deciding within multiples structure rooted at x.\n        //\n        // For this problem, the classic solution is:\n        // Compute dp[i] = a[i] + sum of positive dp[j] over multiples j = 2i,3i,...\n        // Answer = max(0, dp[1]? no, max over all i broken?) \n        //\n        // Interpreting as maximum weight closed set in DAG where edge i -> multiple.\n        // Surviving set must be closed under predecessors (divisors), i.e. an order ideal.\n        // Maximum weight order ideal in a DAG can be solved on this divisibility DAG by:\n        // dp[i] = a[i] + sum_{k>=2} max(0, contribution from subtree?) only if structure were tree, but it's not.\n        //\n        // Instead, use complement:\n        // Broken set is upward-closed. Let h[i] be maximum total weight of an upward-closed subset\n        // whose minimum element is i and includes i? Again overlaps.\n        //\n        // The divisibility poset on 1..N has a special property:\n        // Any feasible surviving set is exactly the set of divisors of some antichain, overlaps arbitrary.\n        //\n        // The intended solution is simply:\n        // Since choosing x can also choose x=i, any subset of gems can be broken iff it is upward-closed.\n        // The optimal surviving set is all i with sum over multiples Möbius-positive...? We can greedily from large to small:\n        // val[i] = a[i] + sum val[multiples already kept?]\n        //\n        // Let keep[i] indicate whether i survives. For downward-closed optimal set,\n        // if all proper divisors of i survive, then adding i changes total by a[i].\n        // Since adding i imposes no further constraints upward, whenever all divisors are in the set,\n        // we should include i iff a[i] > 0. This is independent!\n        // Starting from 1 upward, because all divisors of i are smaller, feasibility of including i\n        // depends only on earlier decisions. To maximize total, include i whenever all divisors are included\n        // and a[i] > 0; otherwise exclude.\n        //\n        // But if a divisor is negative, excluding it forces exclusion of all its multiples, possibly losing positives.\n        // So local greedy is wrong.\n        //\n        // Correct DP over divisibility using subset convolution is impossible for N large.\n        //\n        // Key observation:\n        // Choosing x breaks all multiples of x. Equivalent to selecting a set X, and a gem i survives\n        // iff no divisor of i belongs to X. This depends only on the gcd-closed property.\n        //\n        // By inclusion-exclusion on divisors, let s[x] be total reward of gems whose smallest chosen divisor is x...\n \n        // The known optimal strategy:\n        // Let dp[i] = maximum reward obtainable from gems whose labels are multiples of i,\n        // under the condition that all labels not multiples of i are irrelevant and i itself is not broken by smaller chosen divisors.\n        // Then:\n        // dp[i] = sum_{k multiple of i} a[k] - sum_{j multiple of i, j>i} max(0, dp[j])\n        // processed decreasing i.\n        //\n        // Reason: among multiples of i, if we decide to break some larger multiple j (by choosing j or a divisor >= i),\n        // the profitable independent parts are subtracted. This is the standard divisor DP.\n\n        long[] dp = new long[N + 1];\n        long ans = 0;\n\n        for (int i = N; i >= 1; i--) {\n            long sum = 0;\n            for (int j = i; j <= N; j += i) sum += a[j];\n            for (int j = i + i; j <= N; j += i) {\n                if (dp[j] > 0) sum -= dp[j];\n            }\n            dp[i] = sum;\n            if (dp[i] > ans) ans = dp[i];\n        }\n\n        System.out.println(ans);\n    }\n}"
+  },
+  {
+    "model": "deepseek-chat",
+    "prompt_type": "zero_shot",
+    "language": "python",
+    "code": "n = int(input().strip())\na = [0] + list(map(int, input().strip().split()))  # 1-indexed\n\nbroken = [False] * (n + 1)\n\nfor i in range(n, 0, -1):\n    total = 0\n    for j in range(i, n + 1, i):\n        if not broken[j]:\n            total += a[j]\n    if total < 0:\n        # break all multiples of i\n        for j in range(i, n + 1, i):\n            broken[j] = True\n\nans = 0\nfor i in range(1, n + 1):\n    if not broken[i]:\n        ans += a[i]\n\nprint(ans)"
+  },
+  {
+    "model": "claude-sonnet-4-6",
+    "prompt_type": "zero_shot",
+    "language": "python",
+    "code": "import sys\nfrom collections import defaultdict, deque\n\ndef solve():\n    input_data = sys.stdin.read().split()\n    n = int(input_data[0])\n    a = [int(x) for x in input_data[1:n+1]]\n    \n    # Max weight closure\n    # Nodes: 0=source, 1..n=gems, n+1=sink\n    from collections import defaultdict, deque\n    \n    # Use Dinic's algorithm\n    # ... (implement Dinic's)\n    # For each gem i (1-indexed), if a[i-1] > 0: source -> i with cap a[i-1]\n    # if a[i-1] < 0: i -> sink with cap |a[i-1]|\n    # For each i, for each divisor j of i (j != i): i -> j with cap INF\n    \n    INF = float('inf')\n    # Build graph...\n    # (full Dinic's implementation)"
+  },
+  {
+    "model": "gpt-5.4",
+    "prompt_type": "zero_shot",
+    "language": "python",
+    "code": "import sys\n\ndef main():\n    input = sys.stdin.readline\n    N = int(input())\n    a = [0] + list(map(int, input().split()))\n\n    # If we choose a set of x's, all multiples of any chosen x are broken.\n    # Therefore, the set of gems that remain must be \"downward closed\" under divisibility:\n    # if i remains and d | i, then d must also remain.\n    #\n    # Equivalently, broken gems form an \"upward closed\" set under divisibility.\n    #\n    # Let dp[i] = maximum total reward obtainable from gems in the divisor-subtree rooted at i,\n    # under the condition that i remains.\n    #\n    # For each multiple j = k*i (k >= 2), we can either:\n    # - keep j (then gain dp[j])\n    # - break j (then gain 0 from j and all its multiples in this subtree)\n    #\n    # So:\n    #   dp[i] = a[i] + sum_{k>=2, k*i<=N} max(0, dp[k*i])\n    #\n    # Compute in decreasing order of i.\n\n    dp = [0] * (N + 1)\n\n    for i in range(N, 0, -1):\n        total = a[i]\n        j = i * 2\n        while j <= N:\n            if dp[j] > 0:\n                total += dp[j]\n            j += i\n        dp[i] = total\n\n    # At the top level, each number i can either remain (contribute dp[i]) if all its proper divisors\n    # are also kept accordingly, or be broken. Since 1 has no proper divisors and every kept gem set\n    # must contain all divisors, the whole optimal answer is max(0, dp[1])? No:\n    #\n    # The remaining set need not contain 1; if 1 is broken, then everything is broken.\n    # Thus the only possibilities are:\n    # - break 1 => gain 0\n    # - keep 1 => gain dp[1]\n    #\n    # Hence answer = max(0, dp[1]).\n    print(max(0, dp[1]))\n\nif __name__ == \"__main__\":\n    main()"
   }
 ]

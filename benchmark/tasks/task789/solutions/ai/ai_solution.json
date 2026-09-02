@@ -1,107 +1,74 @@
 [
   {
-    "model": "claude-3-5-haiku-20241022",
-    "prompt_type": "zero_shot",
-    "language": "C",
-    "code": "#include <stdio.h>\n#include <stdbool.h>\n\n#define MAX_N 100005\n\ntypedef struct {\n    int x, y;\n} Point;\n\nPoint points[MAX_N];\nbool grid[1005][1005];\n\nint main() {\n    int N, x, y;\n    scanf(\"%d\", &N);\n\n    for (int i = 0; i < N; i++) {\n        scanf(\"%d %d\", &points[i].x, &points[i].y);\n        grid[points[i].x][points[i].y] = true;\n    }\n\n    for (int i = 0; i < N; i++) {\n        int x = points[i].x, y = points[i].y;\n        grid[x][y] = !grid[x][y];\n        grid[x][y+1] = !grid[x][y+1];\n        grid[x+1][y] = !grid[x+1][y];\n    }\n\n    for (int i = 0; i < N; i++) {\n        int x = points[i].x, y = points[i].y;\n        if (!grid[x][y]) {\n            printf(\"%d %d\\n\", x, y);\n            return 0;\n        }\n    }\n\n    return 0;\n}",
-    "timestamp": "2025-08-05 22:55:25"
-  },
-  {
-    "model": "deepseek-v3",
-    "prompt_type": "zero_shot",
-    "language": "C",
-    "code": "#include <stdio.h>\n#include <stdlib.h>\n\ntypedef struct {\n    int x;\n    int y;\n} Point;\n\nPoint find_initial_point(Point lamps[], int N) {\n    int min_x = lamps[0].x, max_x = lamps[0].x;\n    int min_y = lamps[0].y, max_y = lamps[0].y;\n    \n    for (int i = 1; i < N; ++i) {\n        if (lamps[i].x < min_x) min_x = lamps[i].x;\n        if (lamps[i].x > max_x) max_x = lamps[i].x;\n        if (lamps[i].y < min_y) min_y = lamps[i].y;\n        if (lamps[i].y > max_y) max_y = lamps[i].y;\n    }\n    \n    Point initial;\n    initial.x = min_x;\n    initial.y = min_y;\n    return initial;\n}\n\nint main() {\n    int N;\n    scanf(\"%d\", &N);\n    Point *lamps = (Point *)malloc(N * sizeof(Point));\n    \n    for (int i = 0; i < N; ++i) {\n        scanf(\"%d %d\", &lamps[i].x, &lamps[i].y);\n    }\n    \n    Point initial = find_initial_point(lamps, N);\n    printf(\"%d %d\\n\", initial.x, initial.y);\n    \n    free(lamps);\n    return 0;\n}",
-    "timestamp": "2025-08-05 22:55:39"
-  },
-  {
-    "model": "deepseek-v3",
-    "prompt_type": "zero_shot",
-    "language": "C++",
-    "code": "#include <iostream>\n#include <vector>\n#include <algorithm>\n\nusing namespace std;\n\nint main() {\n    int N;\n    cin >> N;\n    vector<pair<int, int>> lamps(N);\n    for (int i = 0; i < N; ++i) {\n        cin >> lamps[i].first >> lamps[i].second;\n    }\n    \n    sort(lamps.begin(), lamps.end());\n    \n    int X = lamps[0].first + lamps.back().first - lamps[1].first;\n    int Y = lamps[0].second + lamps.back().second - lamps[1].second;\n    \n    cout << X << \" \" << Y << endl;\n    \n    return 0;\n}",
-    "timestamp": "2025-08-05 22:55:47"
-  },
-  {
-    "model": "deepseek-v3",
-    "prompt_type": "zero_shot",
-    "language": "Java",
-    "code": "import java.util.*;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        int N = scanner.nextInt();\n        int minX = Integer.MAX_VALUE;\n        int minY = Integer.MAX_VALUE;\n        \n        for (int i = 0; i < N; i++) {\n            int x = scanner.nextInt();\n            int y = scanner.nextInt();\n            if (x + y < minX + minY) {\n                minX = x;\n                minY = y;\n            } else if (x + y == minX + minY) {\n                if (x < minX) {\n                    minX = x;\n                    minY = y;\n                }\n            }\n        }\n        \n        System.out.println(minX + \" \" + minY);\n    }\n}",
-    "timestamp": "2025-08-05 22:55:55"
-  },
-  {
-    "model": "claude-3-5-haiku-20241022",
-    "prompt_type": "zero_shot",
-    "language": "Java",
-    "code": "import java.util.*;\n\npublic class LampProblem {\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        int N = scanner.nextInt();\n        \n        Set<String> onLamps = new HashSet<>();\n        for (int i = 0; i < N; i++) {\n            int x = scanner.nextInt();\n            int y = scanner.nextInt();\n            onLamps.add(x + \",\" + y);\n        }\n        \n        for (String lamp : onLamps) {\n            String[] coord = lamp.split(\",\");\n            int x = Integer.parseInt(coord[0]);\n            int y = Integer.parseInt(coord[1]);\n            \n            if (isOriginalLamp(x, y, onLamps)) {\n                System.out.println(x + \" \" + y);\n                return;\n            }\n        }\n    }\n    \n    private static boolean isOriginalLamp(int x, int y, Set<String> onLamps) {\n        return !onLamps.contains((x-1) + \",\" + y) &&\n               !onLamps.contains((x-1) + \",\" + (y-1)) &&\n               !onLamps.contains(x + \",\" + (y-1));\n    }\n}",
-    "timestamp": "2025-08-05 22:56:00"
-  },
-  {
-    "model": "claude-3-5-haiku-20241022",
-    "prompt_type": "zero_shot",
-    "language": "C++",
-    "code": "#include <iostream>\n#include <vector>\n#include <set>\n#include <algorithm>\n\nusing namespace std;\n\nint main() {\n    int N;\n    cin >> N;\n\n    vector<pair<int, int>> on_lamps(N);\n    for (int i = 0; i < N; i++) {\n        cin >> on_lamps[i].first >> on_lamps[i].second;\n    }\n\n    sort(on_lamps.begin(), on_lamps.end());\n\n    int x = on_lamps[0].first;\n    int y = on_lamps[0].second;\n\n    set<pair<int, int>> lamp_set(on_lamps.begin(), on_lamps.end());\n\n    for (auto& lamp : on_lamps) {\n        if (!lamp_set.count({lamp.first-1, lamp.second}) &&\n            !lamp_set.count({lamp.first-1, lamp.second-1}) &&\n            !lamp_set.count({lamp.first, lamp.second-1})) {\n            x = lamp.first;\n            y = lamp.second;\n            break;\n        }\n    }\n\n    cout << x << \" \" << y << endl;\n\n    return 0;\n}",
-    "timestamp": "2025-08-05 22:56:06"
-  },
-  {
-    "model": "gpt-4o",
-    "prompt_type": "zero_shot",
-    "language": "python",
-    "code": "def find_original_lamp(n, lamps):\n    xor_x, xor_y = 0, 0\n    for x, y in lamps:\n        xor_x ^= x\n        xor_y ^= y\n    return xor_x, xor_y\n\n# Example usage:\nn = 3\nlamps = [(1, 1), (1, 2), (2, 1)]\noriginal_lamp = find_original_lamp(n, lamps)\nprint(original_lamp)",
-    "timestamp": "2025-08-13 12:59:16"
-  },
-  {
-    "model": "gpt-4o",
-    "prompt_type": "zero_shot",
-    "language": "java",
-    "code": "import java.util.*;\n\npublic class LampsFinder {\n    public static int[] findInitialLamp(int[][] lamps) {\n        int xorX = 0, xorY = 0;\n        for (int[] lamp : lamps) {\n            xorX ^= lamp[0];\n            xorY ^= lamp[1];\n        }\n        return new int[]{xorX, xorY};\n    }\n\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        int N = sc.nextInt();\n        int[][] lamps = new int[N][2];\n        for (int i = 0; i < N; i++) {\n            lamps[i][0] = sc.nextInt();\n            lamps[i][1] = sc.nextInt();\n        }\n        int[] originalCoordinates = findInitialLamp(lamps);\n        System.out.println(originalCoordinates[0] + \" \" + originalCoordinates[1]);\n    }\n}",
-    "timestamp": "2025-08-13 12:59:21"
-  },
-  {
-    "model": "gpt-4o",
+    "model": "claude-sonnet-4-6",
     "prompt_type": "zero_shot",
     "language": "c",
-    "code": "#include <stdio.h>\n\nint main() {\n    int N;\n    scanf(\"%d\", &N);\n    \n    int toggleCount[10001][10001] = {0}; // A sufficiently large grid for toggle counts\n    \n    int coords[N][2];\n    for (int i = 0; i < N; i++) {\n        scanf(\"%d %d\", &coords[i][0], &coords[i][1]);\n        // Reversing the toggle operation to deduce initial point\n        toggleCount[coords[i][0]][coords[i][1]] ^= 1;\n        toggleCount[coords[i][0]][coords[i][1]+1] ^= 1;\n        toggleCount[coords[i][0]+1][coords[i][1]] ^= 1;\n    }\n    \n    for (int i = 0; i < 10001; i++) {\n        for (int j = 0; j < 10001; j++) {\n            if (toggleCount[i][j] == 1) {\n                printf(\"%d %d\\n\", i, j);\n                return 0;\n            }\n        }\n    }\n\n    return 0;\n}",
-    "timestamp": "2025-08-13 12:59:24"
+    "code": "#include <stdio.h>\n#include <string.h>\n\nint C[605][605]; // binomial mod 2\n\nint main(){\n    // Precompute binomial coefficients mod 2\n    for(int i=0;i<605;i++){\n        C[i][0]=1;\n        for(int j=1;j<=i;j++) C[i][j]=(C[i-1][j-1]+C[i-1][j])%2;\n    }\n    int N; scanf(\"%d\",&N);\n    int a[N],b[N];\n    for(int i=0;i<N;i++) scanf(\"%d%d\",&a[i],&b[i]);\n    // For each k, invariant = sum C(a[i], k-b[i]) mod 2 = C(X, k-Y)\n    // Try all possible X, Y in reasonable range\n    // Coordinates seem bounded; let's find range\n    int inv[605]={0};\n    for(int k=0;k<605;k++){\n        for(int i=0;i<N;i++){\n            int idx=k-b[i];\n            if(idx>=0 && idx<=a[i]) inv[k]^=C[a[i]][idx];\n        }\n    }\n    // Now find X,Y such that C(X,k-Y)=inv[k] for all k\n    for(int X=0;X<300;X++) for(int Y=-200;Y<300;Y++){\n        int ok=1;\n        for(int k=0;k<605&&ok;k++){\n            int idx=k-Y;\n            int val=(idx>=0&&idx<=X)?C[X][idx]:0;\n            if(val!=inv[k]) ok=0;\n        }\n        if(ok){printf(\"%d %d\\n\",X,Y);return 0;}\n    }\n}"
   },
   {
-    "model": "gpt-4o",
+    "model": "deepseek-chat",
+    "prompt_type": "zero_shot",
+    "language": "c",
+    "code": "#include <stdio.h>\n\nint main() {\n    int N;\n    scanf(\"%d\", &N);\n    \n    int x, y;\n    long long sum_x = 0, sum_y = 0;\n    int min_x = 1000000000, min_y = 1000000000;\n    \n    for (int i = 0; i < N; i++) {\n        scanf(\"%d %d\", &x, &y);\n        sum_x += x;\n        sum_y += y;\n        if (x < min_x) min_x = x;\n        if (y < min_y) min_y = y;\n    }\n    \n    // The key: sum of coordinates of all on lamps mod 3 gives info,\n    // and the original lamp (X,Y) is the unique point reachable.\n    // Using the invariant: sum of x coordinates modulo N and sum of y coordinates gives direct formula.\n    \n    // For the known solution: X = (sum_x - min_x * N) / (N - 1)\n    // Y = (sum_y - min_y * N) / (N - 1)\n    \n    long long X = (sum_x - (long long)min_x * N) / (N - 1);\n    long long Y = (sum_y - (long long)min_y * N) / (N - 1);\n    \n    printf(\"%lld %lld\\n\", X, Y);\n    \n    return 0;\n}"
+  },
+  {
+    "model": "gpt-5.4",
+    "prompt_type": "zero_shot",
+    "language": "c",
+    "code": "#include <stdio.h>\n#include <stdlib.h>\n\ntypedef long long ll;\n\ntypedef struct {\n    ll x, y;\n} Point;\n\nint cmp_ll(const void *a, const void *b) {\n    ll x = *(const ll *)a;\n    ll y = *(const ll *)b;\n    if (x < y) return -1;\n    if (x > y) return 1;\n    return 0;\n}\n\nint main(void) {\n    int N;\n    if (scanf(\"%d\", &N) != 1) return 0;\n\n    Point *p = (Point *)malloc(sizeof(Point) * N);\n    ll *sx = (ll *)malloc(sizeof(ll) * N);\n    ll *sy = (ll *)malloc(sizeof(ll) * N);\n    ll *sd = (ll *)malloc(sizeof(ll) * N); /* x+y */\n\n    for (int i = 0; i < N; i++) {\n        scanf(\"%lld %lld\", &p[i].x, &p[i].y);\n        sx[i] = p[i].x;\n        sy[i] = p[i].y;\n        sd[i] = p[i].x + p[i].y;\n    }\n\n    qsort(sx, N, sizeof(ll), cmp_ll);\n    qsort(sy, N, sizeof(ll), cmp_ll);\n    qsort(sd, N, sizeof(ll), cmp_ll);\n\n    ll X = 0, Y = 0;\n\n    /* In XOR over F2, each operation toggles:\n       x-parities: x twice, x+1 once  => contributes x+1\n       y-parities: y twice, y+1 once  => contributes y+1\n       (x+y)-parities: x+y twice, x+y+1 once => contributes x+y+1\n       Therefore the parity-odd value among final on lamps gives:\n       odd x = X, odd y = Y, odd (x+y) = X+Y.\n    */\n\n    for (int i = 0; i < N; ) {\n        int j = i;\n        while (j < N && sx[j] == sx[i]) j++;\n        if (((j - i) & 1) != 0) {\n            X = sx[i];\n            break;\n        }\n        i = j;\n    }\n\n    for (int i = 0; i < N; ) {\n        int j = i;\n        while (j < N && sy[j] == sy[i]) j++;\n        if (((j - i) & 1) != 0) {\n            Y = sy[i];\n            break;\n        }\n        i = j;\n    }\n\n    /* X and Y are uniquely determined; print them. */\n    printf(\"%lld %lld\\n\", X, Y);\n\n    free(p);\n    free(sx);\n    free(sy);\n    free(sd);\n    return 0;\n}"
+  },
+  {
+    "model": "claude-sonnet-4-6",
     "prompt_type": "zero_shot",
     "language": "c++",
-    "code": "#include <iostream>\n#include <unordered_set>\n#include <utility>\n\nusing namespace std;\n\nusing Pair = pair<int, int>;\nusing PairHash = pair<int, int>;\n\nint main() {\n    int N;\n    cin >> N;\n    \n    unordered_set<Pair, PairHash> lamps;\n    \n    while (N--) {\n        int x, y;\n        cin >> x >> y;\n        lamps.insert({x, y});\n    }\n\n    for (const auto& [x, y] : lamps) {\n        bool possible_origin = true;\n\n        for (const auto& [tx, ty] : lamps) {\n            if ((tx < x) || (ty < y) || (tx > x + 1) || (ty > y + 1)) {\n                possible_origin = false;\n                break;\n            }\n        }\n        \n        if (possible_origin) {\n            cout << x << \" \" << y << endl;\n            return 0;\n        }\n    }\n    \n    return 0;\n}",
-    "timestamp": "2025-08-13 12:59:27"
+    "code": "#include <bits/stdc++.h>\nusing namespace std;\nint main(){\n    int n;\n    cin>>n;\n    vector<long long> x(n),y(n);\n    for(int i=0;i<n;i++) cin>>x[i]>>y[i];\n    // XOR of all x and y\n    long long X=0,Y=0;\n    for(int i=0;i<n;i++){X^=x[i];Y^=y[i];}\n    // Each op at (a,b): xors X with a^a^(a+1)=a+1, Y with b^(b+1)^b=b+1\n    // Not invariant. Try sum mod 2:\n    // Actually just output X,Y and hope\n    cout<<X<<\" \"<<Y<<endl;\n}"
   },
   {
-    "model": "claude-3-5-haiku-20241022",
+    "model": "deepseek-chat",
+    "prompt_type": "zero_shot",
+    "language": "c++",
+    "code": "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    ios::sync_with_stdio(false);\n    cin.tie(nullptr);\n    \n    int N;\n    cin >> N;\n    vector<long long> xs(N), ys(N);\n    int cnt[2][2] = {};\n    long long sum_mod3 = 0;\n    for (int i = 0; i < N; ++i) {\n        cin >> xs[i] >> ys[i];\n        cnt[xs[i] & 1][ys[i] & 1] ^= 1; // XOR for parity count\n        sum_mod3 = (sum_mod3 + (xs[i] + 2 * ys[i]) % 3 + 3) % 3;\n    }\n    // Find parity type with odd count\n    int target_xp = -1, target_yp = -1;\n    for (int a = 0; a < 2; ++a)\n        for (int b = 0; b < 2; ++b)\n            if (cnt[a][b]) {\n                target_xp = a;\n                target_yp = b;\n            }\n    \n    // Find candidate\n    for (int i = 0; i < N; ++i) {\n        if ((xs[i] & 1) == target_xp && (ys[i] & 1) == target_yp) {\n            if (((xs[i] + 2 * ys[i]) % 3 + 3) % 3 == sum_mod3) {\n                cout << xs[i] << \" \" << ys[i] << \"\\n\";\n                return 0;\n            }\n        }\n    }\n    // Should never reach if input valid\n    return 0;\n}"
+  },
+  {
+    "model": "gpt-5.4",
+    "prompt_type": "zero_shot",
+    "language": "c++",
+    "code": "#include <bits/stdc++.h>\nusing namespace std;\n\nusing int64 = long long;\n\n// We use the invariant over F2.\n// Let a lamp at (x,y) correspond to monomial X^x Y^y.\n// One operation toggles\n//   (x,y), (x,y+1), (x+1,y)\n// i.e. adds X^x Y^y (1 + X + Y).\n//\n// Therefore the final configuration F satisfies\n//   F = X^X0 Y^Y0 + (1 + X + Y) * G\n// over F2.\n// So modulo (1 + X + Y), F is exactly the initial monomial.\n//\n// In the quotient ring with relation Y = 1 + X, a monomial becomes\n//   X^x (1 + X)^y.\n// Over F2, by Lucas' theorem,\n//   (1 + X)^y = sum_{k subset-of y} X^k,\n// where coefficient of X^k is 1 iff k is a submask of y.\n//\n// Hence\n//   F(X,1+X) = sum_i X^{xi} (1+X)^{yi}\n// is a polynomial equal to a single monomial X^X0.\n// So if we XOR contributions of all lamps to coefficients, exactly one degree remains.\n//\n// We represent y by its set submasks. Since yi <= 1e6 in typical constraints,\n// O(sum 2^{popcount(yi)}) is feasible.\n//\n// Then X0 is the unique exponent with odd coefficient.\n// Finally, using symmetry with X = 1 + Y, we similarly recover Y0.\n\nint main() {\n    ios::sync_with_stdio(false);\n    cin.tie(nullptr);\n\n    int N;\n    cin >> N;\n\n    vector<pair<int,int>> p(N);\n    int maxCoord = 0;\n    for (int i = 0; i < N; ++i) {\n        int x, y;\n        cin >> x >> y;\n        p[i] = {x, y};\n        maxCoord = max(maxCoord, max(x, y));\n    }\n\n    // Enough size for exponent x + submask(y), similarly for y + submask(x)\n    int LIM = 1;\n    while (LIM <= 2 * maxCoord + 5) LIM <<= 1;\n\n    vector<unsigned char> cx(LIM, 0), cy(LIM, 0);\n\n    for (auto [x, y] : p) {\n        // Add X^x (1+X)^y\n        int s = y;\n        while (true) {\n            cx[x + s] ^= 1;\n            if (s == 0) break;\n            s = (s - 1) & y;\n        }\n\n        // Symmetrically add Y^y (1+Y)^x\n        s = x;\n        while (true) {\n            cy[y + s] ^= 1;\n            if (s == 0) break;\n            s = (s - 1) & x;\n        }\n    }\n\n    int X = -1, Y = -1;\n    for (int i = 0; i < LIM; ++i) {\n        if (cx[i]) {\n            X = i;\n            break;\n        }\n    }\n    for (int i = 0; i < LIM; ++i) {\n        if (cy[i]) {\n            Y = i;\n            break;\n        }\n    }\n\n    cout << X << ' ' << Y << '\\n';\n    return 0;\n}"
+  },
+  {
+    "model": "deepseek-chat",
+    "prompt_type": "zero_shot",
+    "language": "java",
+    "code": "import java.util.*;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        int N = sc.nextInt();\n        Map<Long, int[]> points = new HashMap<>();\n        for (int i = 0; i < N; i++) {\n            int x = sc.nextInt();\n            int y = sc.nextInt();\n            long key = ((long) x << 32) | (y & 0xffffffffL);\n            points.put(key, new int[]{x, y});\n        }\n        sc.close();\n\n        // We need to find the unique (X,Y) such that starting from it,\n        // using allowed toggles we get exactly the given set.\n        // Inversion: process from high x+y to low, toggling when lamp is on.\n        // Since coordinates can be negative, shift to positive range for sorting.\n        \n        List<int[]> list = new ArrayList<>(points.values());\n        // Sort by (x+y) descending, then x descending\n        list.sort((a, b) -> {\n            int sumA = a[0] + a[1];\n            int sumB = b[0] + b[1];\n            if (sumA != sumB) return sumB - sumA;\n            return b[0] - a[0];\n        });\n\n        Set<Long> onSet = new HashSet<>();\n        for (int[] p : points.values()) {\n            onSet.add(((long) p[0] << 32) | (p[1] & 0xffffffffL));\n        }\n\n        for (int[] p : list) {\n            int x = p[0], y = p[1];\n            long key = ((long) x << 32) | (y & 0xffffffffL);\n            if (onSet.contains(key)) {\n                // toggle (x,y), (x,y+1), (x+1,y)\n                toggle(onSet, x, y);\n                toggle(onSet, x, y + 1);\n                toggle(onSet, x + 1, y);\n            }\n        }\n\n        // After processing, only one lamp should remain\n        if (onSet.size() != 1) {\n            // Should not happen per problem constraints\n            return;\n        }\n        long remaining = onSet.iterator().next();\n        int rx = (int) (remaining >> 32);\n        int ry = (int) (remaining & 0xffffffffL);\n        System.out.println(rx + \" \" + ry);\n    }\n\n    static void toggle(Set<Long> set, int x, int y) {\n        long key = ((long) x << 32) | (y & 0xffffffffL);\n        if (set.contains(key)) {\n            set.remove(key);\n        } else {\n            set.add(key);\n        }\n    }\n}"
+  },
+  {
+    "model": "claude-sonnet-4-6",
+    "prompt_type": "zero_shot",
+    "language": "java",
+    "code": "import java.util.*;\npublic class Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        int n = sc.nextInt();\n        int X = 0, Y = 0;\n        for (int i = 0; i < n; i++) {\n            X ^= sc.nextInt();\n            Y ^= sc.nextInt();\n        }\n        System.out.println(X + \" \" + Y);\n    }\n}"
+  },
+  {
+    "model": "gpt-5.4",
+    "prompt_type": "zero_shot",
+    "language": "java",
+    "code": "import java.io.*;\nimport java.util.*;\n\npublic class Main {\n    // Fast scanner\n    static class FastScanner {\n        private final InputStream in;\n        private final byte[] buffer = new byte[1 << 16];\n        private int ptr = 0, len = 0;\n\n        FastScanner(InputStream is) {\n            in = is;\n        }\n\n        private int read() throws IOException {\n            if (ptr >= len) {\n                len = in.read(buffer);\n                ptr = 0;\n                if (len <= 0) return -1;\n            }\n            return buffer[ptr++];\n        }\n\n        long nextLong() throws IOException {\n            int c;\n            do {\n                c = read();\n            } while (c <= ' ' && c != -1);\n\n            long sign = 1;\n            if (c == '-') {\n                sign = -1;\n                c = read();\n            }\n\n            long val = 0;\n            while (c > ' ') {\n                val = val * 10 + (c - '0');\n                c = read();\n            }\n            return val * sign;\n        }\n\n        int nextInt() throws IOException {\n            return (int) nextLong();\n        }\n    }\n\n    public static void main(String[] args) throws Exception {\n        FastScanner fs = new FastScanner(System.in);\n        int N = fs.nextInt();\n\n        long xorU = 0; // xor of (x+y)\n        long xorV = 0; // xor of y\n\n        for (int i = 0; i < N; i++) {\n            long x = fs.nextLong();\n            long y = fs.nextLong();\n            xorU ^= (x + y);\n            xorV ^= y;\n        }\n\n        long Y = xorV;\n        long X = xorU ^ xorV;\n\n        System.out.println(X + \" \" + Y);\n    }\n}"
+  },
+  {
+    "model": "claude-sonnet-4-6",
     "prompt_type": "zero_shot",
     "language": "python",
-    "code": "def solve_initial_lamp(N, on_lamps):\n    def toggle(x, y, grid):\n        grid[(x, y)] = not grid.get((x, y), False)\n        grid[(x, y+1)] = not grid.get((x, y+1), False)\n        grid[(x+1, y)] = not grid.get((x+1, y), False)\n\n    for x in range(-N, N):\n        for y in range(-N, N):\n            grid = {(x, y): True}\n            used_lamps = set([(x, y)])\n\n            for nx, ny in on_lamps:\n                found = False\n                for dx in range(-N, N):\n                    for dy in range(-N, N):\n                        test_grid = grid.copy()\n                        toggle(dx, dy, test_grid)\n                        if test_grid.get((nx, ny), False):\n                            grid = test_grid\n                            used_lamps.add((dx, dy))\n                            found = True\n                            break\n                    if found:\n                        break\n                if not found:\n                    break\n            else:\n                return (x, y)\n\n    return None",
-    "timestamp": "2025-08-13 12:59:33"
+    "code": "import sys\n\ndef solve():\n    input_data = sys.stdin.read().split()\n    idx = 0\n    N = int(input_data[idx]); idx += 1\n    xs = []\n    ys = []\n    for _ in range(N):\n        x = int(input_data[idx]); idx += 1\n        y = int(input_data[idx]); idx += 1\n        xs.append(x)\n        ys.append(y)\n    X = 0\n    Y = 0\n    for x in xs:\n        X ^= x\n    for y in ys:\n        Y ^= y\n    print(X, Y)\n\nsolve()"
   },
   {
-    "model": "deepseek-v3",
+    "model": "deepseek-chat",
     "prompt_type": "zero_shot",
     "language": "python",
-    "code": "def solve():\n    import sys\n    input = sys.stdin.read\n    data = input().split()\n    \n    N = int(data[0])\n    lamps = []\n    for i in range(1, 2*N + 1, 2):\n        x = int(data[i])\n        y = int(data[i+1])\n        lamps.append((x, y))\n    \n    # Calculate X and Y\n    min_x = min(lamps, key=lambda p: p[0] + p[1])[0]\n    min_y = min(lamps, key=lambda p: p[0] + p[1])[1]\n    max_x = max(lamps, key=lambda p: p[0] - p[1])[0]\n    max_y = max(lamps, key=lambda p: p[0] - p[1])[1]\n    \n    X = (min_x + max_x - max_y + min_y) // 2\n    Y = (min_y + max_y - max_x + min_x) // 2\n    print(X, Y)\n\nsolve()",
-    "timestamp": "2025-08-13 12:59:39"
+    "code": "X = sum_x\nY = sum_y"
   },
   {
-    "model": "gpt-4o",
+    "model": "gpt-5.4",
     "prompt_type": "zero_shot",
-    "language": "js",
-    "code": "function findInitialLamp(lamps) {\n  const toggle = (x, y, state) => {\n    state[x] = state[x] || {};\n    state[x][y] = !state[x][y];\n    state[x][y + 1] = !(state[x][y + 1] || false);\n    state[x + 1] = state[x + 1] || {};\n    state[x + 1][y] = !(state[x + 1][y] || false);\n  };\n\n  let state = {};\n\n  for (const [x, y] of lamps) {\n    toggle(x, y, state);\n  }\n\n  for (const x in state) {\n    for (const y in state[x]) {\n      if (state[x][y]) {\n        return [parseInt(x), parseInt(y)];\n      }\n    }\n  }\n\n  return null;\n}",
-    "timestamp": "2025-08-13 13:00:10"
-  },
-  {
-    "model": "claude-3-5-haiku-20241022",
-    "prompt_type": "zero_shot",
-    "language": "js",
-    "code": "function findOriginalLamp(N, onLamps) {\n    let xorSum = 0;\n    let yorSum = 0;\n    \n    for (let [x, y] of onLamps) {\n        xorSum ^= x;\n        yorSum ^= y;\n    }\n    \n    return [xorSum, yorSum];\n}",
-    "timestamp": "2025-08-13 13:00:13"
-  },
-  {
-    "model": "deepseek-v3",
-    "prompt_type": "zero_shot",
-    "language": "js",
-    "code": "function solve() {\n    const readline = require('readline');\n    const rl = readline.createInterface({\n        input: process.stdin,\n        output: process.stdout\n    });\n\n    let N = 0;\n    let lamps = [];\n    let lineCount = 0;\n\n    rl.on('line', (line) => {\n        if (lineCount === 0) {\n            N = parseInt(line.trim(), 10);\n            lineCount++;\n        } else {\n            const [x, y] = line.trim().split(' ').map(Number);\n            lamps.push({ x, y });\n            if (lamps.length === N) {\n                rl.close();\n            }\n        }\n    });\n\n    rl.on('close', () => {\n        let minX = Infinity;\n        let minY = Infinity;\n        for (const lamp of lamps) {\n            const s = lamp.x + lamp.y;\n            const t = lamp.x - lamp.y;\n            if (s < minX) {\n                minX = s;\n            }\n            if (t < minY) {\n                minY = t;\n            }\n        }\n        const X = (minX + minY) / 2;\n        const Y = (minX - minY) / 2;\n        console.log(X, Y);\n    });\n}\n\nsolve();",
-    "timestamp": "2025-08-13 13:00:21"
+    "language": "python",
+    "code": "import sys\n\ndef main():\n    input = sys.stdin.readline\n    N = int(input())\n    sx = 0\n    sy = 0\n    for _ in range(N):\n        x, y = map(int, input().split())\n        sx ^= x\n        sy ^= y\n    print(sx, sy)\n\nif __name__ == \"__main__\":\n    main()"
   }
 ]
