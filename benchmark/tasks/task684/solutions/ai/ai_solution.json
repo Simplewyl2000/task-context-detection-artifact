@@ -6,7 +6,7 @@
     "code": "#include <stdio.h>\n#include <stdlib.h>\n\nint main() {\n    long long k;\n    scanf(\"%lld\", &k);\n    \n    // BFS to find lunlun numbers in order\n    long long *queue = (long long*)malloc(sizeof(long long) * 10000000);\n    int head = 0, tail = 0;\n    \n    // Initialize with 1-9\n    for (int i = 1; i <= 9; i++) {\n        queue[tail++] = i;\n    }\n    \n    long long ans = 0;\n    long long count = 0;\n    \n    while (head < tail) {\n        long long num = queue[head++];\n        count++;\n        if (count == k) {\n            ans = num;\n            break;\n        }\n        \n        int last_digit = num % 10;\n        if (last_digit > 0) {\n            queue[tail++] = num * 10 + (last_digit - 1);\n        }\n        queue[tail++] = num * 10 + last_digit;\n        if (last_digit < 9) {\n            queue[tail++] = num * 10 + (last_digit + 1);\n        }\n    }\n    \n    printf(\"%lld\\n\", ans);\n    free(queue);\n    return 0;\n}"
   },
   {
-    "model": "deepseek-chat",
+    "model": "deepseek-v4-flash",
     "prompt_type": "zero_shot",
     "language": "c",
     "code": "#include <stdio.h>\n#include <stdlib.h>\n\nint main() {\n    int K;\n    scanf(\"%d\", &K);\n    \n    // We will use a queue to generate lunlun numbers in increasing order.\n    // Since K can be up to 10^5, we can use a simple array-based queue.\n    long long queue[100005];\n    int front = 0, rear = 0;\n    \n    // Initial lunlun numbers: 1 to 9\n    for (int i = 1; i <= 9; i++) {\n        queue[rear++] = i;\n    }\n    \n    long long current;\n    for (int i = 0; i < K; i++) {\n        current = queue[front++];\n        long long last_digit = current % 10;\n        \n        // Generate next numbers by appending digit d where |d - last_digit| <= 1\n        if (last_digit > 0) {\n            queue[rear++] = current * 10 + (last_digit - 1);\n        }\n        queue[rear++] = current * 10 + last_digit;\n        if (last_digit < 9) {\n            queue[rear++] = current * 10 + (last_digit + 1);\n        }\n    }\n    \n    printf(\"%lld\\n\", current);\n    return 0;\n}"
@@ -24,7 +24,7 @@
     "code": "#include <bits/stdc++.h>\nusing namespace std;\n\nint main(){\n    long long k;\n    cin >> k;\n    \n    queue<long long> q;\n    for(int i = 1; i <= 9; i++) q.push(i);\n    \n    long long count = 0;\n    while(!q.empty()){\n        long long x = q.front(); q.pop();\n        count++;\n        if(count == k){\n            cout << x << endl;\n            return 0;\n        }\n        int last = x % 10;\n        if(last > 0) q.push(x * 10 + last - 1);\n        q.push(x * 10 + last);\n        if(last < 9) q.push(x * 10 + last + 1);\n    }\n    return 0;\n}"
   },
   {
-    "model": "deepseek-chat",
+    "model": "deepseek-v4-flash",
     "prompt_type": "zero_shot",
     "language": "c++",
     "code": "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    int K;\n    cin >> K;\n    \n    queue<long long> q;\n    for (int i = 1; i <= 9; i++) {\n        q.push(i);\n    }\n    \n    long long ans;\n    for (int i = 0; i < K; i++) {\n        ans = q.front();\n        q.pop();\n        int last_digit = ans % 10;\n        if (last_digit > 0) {\n            q.push(ans * 10 + (last_digit - 1));\n        }\n        q.push(ans * 10 + last_digit);\n        if (last_digit < 9) {\n            q.push(ans * 10 + (last_digit + 1));\n        }\n    }\n    \n    cout << ans << endl;\n    return 0;\n}"
@@ -42,7 +42,7 @@
     "code": "import java.util.*;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        int K = sc.nextInt();\n        \n        Queue<Long> queue = new LinkedList<>();\n        for (long i = 1; i <= 9; i++) {\n            queue.add(i);\n        }\n        \n        long ans = 0;\n        for (int i = 0; i < K; i++) {\n            ans = queue.poll();\n            long lastDigit = ans % 10;\n            if (lastDigit > 0) queue.add(ans * 10 + lastDigit - 1);\n            queue.add(ans * 10 + lastDigit);\n            if (lastDigit < 9) queue.add(ans * 10 + lastDigit + 1);\n        }\n        \n        System.out.println(ans);\n    }\n}"
   },
   {
-    "model": "deepseek-chat",
+    "model": "deepseek-v4-flash",
     "prompt_type": "zero_shot",
     "language": "java",
     "code": "import java.util.*;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        int K = sc.nextInt();\n        sc.close();\n\n        Queue<Long> queue = new LinkedList<>();\n        \n        // Initialize queue with digits 1-9\n        for (long i = 1; i <= 9; i++) {\n            queue.add(i);\n        }\n\n        long answer = 0;\n        for (int i = 0; i < K; i++) {\n            answer = queue.poll();\n            long lastDigit = answer % 10;\n            \n            if (lastDigit > 0) {\n                queue.add(answer * 10 + (lastDigit - 1));\n            }\n            queue.add(answer * 10 + lastDigit);\n            if (lastDigit < 9) {\n                queue.add(answer * 10 + (lastDigit + 1));\n            }\n        }\n\n        System.out.println(answer);\n    }\n}"
@@ -60,7 +60,7 @@
     "code": "from collections import deque\n\ndef solve():\n    K = int(input())\n    \n    queue = deque()\n    for d in range(1, 10):\n        queue.append(d)\n    \n    count = 0\n    while queue:\n        num = queue.popleft()\n        count += 1\n        if count == K:\n            print(num)\n            return\n        \n        last_digit = num % 10\n        if last_digit > 0:\n            queue.append(num * 10 + last_digit - 1)\n        queue.append(num * 10 + last_digit)\n        if last_digit < 9:\n            queue.append(num * 10 + last_digit + 1)\n\nsolve()"
   },
   {
-    "model": "deepseek-chat",
+    "model": "deepseek-v4-flash",
     "prompt_type": "zero_shot",
     "language": "python",
     "code": "from collections import deque\n\ndef solve():\n    K = int(input().strip())\n    q = deque(range(1, 10))\n    \n    for _ in range(K - 1):\n        x = q.popleft()\n        last_digit = x % 10\n        if last_digit > 0:\n            q.append(x * 10 + (last_digit - 1))\n        q.append(x * 10 + last_digit)\n        if last_digit < 9:\n            q.append(x * 10 + (last_digit + 1))\n    \n    print(q.popleft())\n\nif __name__ == \"__main__\":\n    solve()"

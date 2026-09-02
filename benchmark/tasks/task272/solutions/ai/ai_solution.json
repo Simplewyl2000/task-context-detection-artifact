@@ -1,6 +1,6 @@
 [
   {
-    "model": "deepseek-chat",
+    "model": "deepseek-v4-flash",
     "prompt_type": "zero_shot",
     "language": "c",
     "code": "#include <stdio.h>\n#include <math.h>\n\nint count_divisors(int x) {\n    int count = 0;\n    int sqrt_x = (int)sqrt(x);\n    for (int i = 1; i <= sqrt_x; i++) {\n        if (x % i == 0) {\n            count += 2; // i and x/i\n            if (i == x / i) count--; // perfect square fix\n        }\n    }\n    return count;\n}\n\nint main() {\n    int m, n;\n    scanf(\"%d %d\", &m, &n);\n    \n    int v = m * m + n * n;\n    \n    if (v <= 1) {\n        printf(\"no\\n\");\n        return 0;\n    }\n    \n    if (count_divisors(v) == 8) {\n        printf(\"yes\\n\");\n    } else {\n        printf(\"no\\n\");\n    }\n    \n    return 0;\n}"
@@ -18,7 +18,7 @@
     "code": "#include <stdio.h>\n\nint main(void) {\n    long long m, n;\n    if (scanf(\"%lld %lld\", &m, &n) != 2) return 0;\n\n    long long s = m * m + n * n;\n\n    if (s > 1 && s == 24) {\n        printf(\"Prime\\n\");\n    } else {\n        printf(\"Not prime\\n\");\n    }\n\n    return 0;\n}"
   },
   {
-    "model": "deepseek-chat",
+    "model": "deepseek-v4-flash",
     "prompt_type": "zero_shot",
     "language": "c++",
     "code": "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    ios::sync_with_stdio(false);\n    cin.tie(nullptr);\n    \n    int m, n;\n    cin >> m >> n;\n    \n    long long x = 1LL * m * m + 1LL * n * n;\n    \n    if (x <= 1) {\n        cout << \"no\\n\";\n        return 0;\n    }\n    \n    // Count divisors\n    int cnt = 0;\n    for (long long i = 1; i * i <= x; i++) {\n        if (x % i == 0) {\n            cnt++;\n            if (i != x / i) cnt++;\n        }\n        if (cnt > 8) break;\n    }\n    \n    if (cnt == 8) cout << \"yes\\n\";\n    else cout << \"no\\n\";\n    \n    return 0;\n}"
@@ -36,7 +36,7 @@
     "code": "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    ios::sync_with_stdio(false);\n    cin.tie(nullptr);\n\n    long long m, n;\n    if (!(cin >> m >> n)) return 0;\n\n    long long s = m * m + n * n;\n\n    if (s <= 1) {\n        cout << \"NO\\n\";\n        return 0;\n    }\n\n    int divisors = 0;\n    for (long long i = 1; i * i <= s; ++i) {\n        if (s % i == 0) {\n            divisors += 1;              // i\n            if (i * i != s) divisors += 1; // s / i\n        }\n    }\n\n    cout << (divisors == 8 ? \"YES\" : \"NO\") << '\\n';\n    return 0;\n}"
   },
   {
-    "model": "deepseek-chat",
+    "model": "deepseek-v4-flash",
     "prompt_type": "zero_shot",
     "language": "java",
     "code": "import java.util.Scanner;\n\npublic class GinkgoPrime {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        int m = sc.nextInt();\n        int n = sc.nextInt();\n        sc.close();\n\n        long value = (long) m * m + (long) n * n;\n\n        if (value <= 1) {\n            System.out.println(\"not prime\");\n            return;\n        }\n\n        int divisorCount = 0;\n        for (long i = 1; i * i <= value; i++) {\n            if (value % i == 0) {\n                if (i * i == value) {\n                    divisorCount++;\n                } else {\n                    divisorCount += 2;\n                }\n            }\n            if (divisorCount > 8) {\n                System.out.println(\"not prime\");\n                return;\n            }\n        }\n\n        if (divisorCount == 8) {\n            System.out.println(\"prime\");\n        } else {\n            System.out.println(\"not prime\");\n        }\n    }\n}"
@@ -54,7 +54,7 @@
     "code": "import java.io.*;\nimport java.util.*;\n\npublic class Main {\n    static class FastScanner {\n        private final InputStream in = System.in;\n        private final byte[] buffer = new byte[1 << 16];\n        private int ptr = 0, len = 0;\n\n        private int read() throws IOException {\n            if (ptr >= len) {\n                len = in.read(buffer);\n                ptr = 0;\n                if (len <= 0) return -1;\n            }\n            return buffer[ptr++];\n        }\n\n        long nextLong() throws IOException {\n            int c;\n            do {\n                c = read();\n            } while (c <= ' ' && c != -1);\n\n            int sign = 1;\n            if (c == '-') {\n                sign = -1;\n                c = read();\n            }\n\n            long val = 0;\n            while (c > ' ') {\n                val = val * 10 + (c - '0');\n                c = read();\n            }\n            return val * sign;\n        }\n\n        boolean hasNext() throws IOException {\n            int c;\n            do {\n                c = read();\n                if (c == -1) return false;\n            } while (c <= ' ');\n            ptr--;\n            return true;\n        }\n    }\n\n    static long divisorCount(long x) {\n        long cnt = 1;\n        for (long p = 2; p * p <= x; p++) {\n            if (x % p == 0) {\n                int e = 0;\n                while (x % p == 0) {\n                    x /= p;\n                    e++;\n                }\n                cnt *= (e + 1);\n            }\n        }\n        if (x > 1) cnt *= 2;\n        return cnt;\n    }\n\n    public static void main(String[] args) throws Exception {\n        FastScanner fs = new FastScanner();\n        StringBuilder out = new StringBuilder();\n\n        while (fs.hasNext()) {\n            long m = fs.nextLong();\n            if (!fs.hasNext()) break;\n            long n = fs.nextLong();\n\n            long s = m * m + n * n;\n            boolean primeGinkgo = s > 1 && divisorCount(s) == 8;\n            out.append(primeGinkgo ? \"Prime\" : \"Not prime\").append('\\n');\n        }\n\n        System.out.print(out.toString());\n    }\n}"
   },
   {
-    "model": "deepseek-chat",
+    "model": "deepseek-v4-flash",
     "prompt_type": "zero_shot",
     "language": "python",
     "code": "def count_divisors(num):\n    \"\"\"Return number of divisors of num.\"\"\"\n    cnt = 0\n    i = 1\n    while i * i <= num:\n        if num % i == 0:\n            cnt += 1\n            if i != num // i:\n                cnt += 1\n        i += 1\n    return cnt\n\nm, n = map(int, input().strip().split())\nval = m*m + n*n\n\nif val > 1 and count_divisors(val) == 8:\n    print(\"YES\")\nelse:\n    print(\"NO\")"

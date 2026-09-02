@@ -6,7 +6,7 @@
     "code": "n, k = map(int, input().split())\nfrom math import gcd\nm = 10**k\nlcm = m * n // gcd(m, n)\nprint(lcm)"
   },
   {
-    "model": "deepseek-chat",
+    "model": "deepseek-v4-flash",
     "prompt_type": "zero_shot",
     "language": "python",
     "code": "x = lcm(n, 10^k)"

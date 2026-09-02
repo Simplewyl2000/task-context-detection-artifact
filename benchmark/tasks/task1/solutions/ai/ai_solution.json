@@ -1,6 +1,6 @@
 [
   {
-    "model": "deepseek-chat",
+    "model": "deepseek-v4-flash",
     "prompt_type": "zero_shot",
     "language": "python",
     "code": "s = input().strip()\n\nn = len(s)\n\n# Find leftmost '['\nleft_bracket = s.find('[')\nif left_bracket == -1:\n    print(-1)\n    exit()\n\n# Find rightmost ']'\nright_bracket = s.rfind(']')\nif right_bracket == -1 or right_bracket <= left_bracket:\n    print(-1)\n    exit()\n\n# Find first ':' after left_bracket\nleft_colon = s.find(':', left_bracket + 1)\nif left_colon == -1 or left_colon >= right_bracket:\n    print(-1)\n    exit()\n\n# Find last ':' before right_bracket\nright_colon = s.rfind(':', 0, right_bracket)\nif right_colon == -1 or right_colon <= left_colon:\n    print(-1)\n    exit()\n\n# Count '|' between left_colon and right_colon\npipe_count = s.count('|', left_colon + 1, right_colon)\n\n# Length = 4 + pipe_count\nprint(4 + pipe_count)"

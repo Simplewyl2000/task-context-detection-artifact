@@ -1,6 +1,6 @@
 [
   {
-    "model": "deepseek-chat",
+    "model": "deepseek-v4-flash",
     "prompt_type": "zero_shot",
     "language": "python",
     "code": "def solve() -> None:\n    # Read the 4x4 board\n    board = [list(input().strip()) for _ in range(4)]\n    \n    # All possible directions to form three in a row\n    directions = [\n        (0, 1),   # horizontal\n        (1, 0),   # vertical\n        (1, 1),   # main diagonal\n        (1, -1)   # anti-diagonal\n    ]\n    \n    def check_win_after_move(r: int, c: int) -> bool:\n        \"\"\"Check if placing 'x' at (r,c) would create three in a row.\"\"\"\n        for dr, dc in directions:\n            count = 1  # the cell we just placed\n            # Check forward direction\n            nr, nc = r + dr, c + dc\n            while 0 <= nr < 4 and 0 <= nc < 4 and board[nr][nc] == 'x':\n                count += 1\n                nr += dr\n                nc += dc\n            # Check backward direction\n            nr, nc = r - dr, c - dc\n            while 0 <= nr < 4 and 0 <= nc < 4 and board[nr][nc] == 'x':\n                count += 1\n                nr -= dr\n                nc -= dc\n            if count >= 3:\n                return True\n        return False\n    \n    # Try every empty cell\n    for i in range(4):\n        for j in range(4):\n            if board[i][j] == '.':\n                if check_win_after_move(i, j):\n                    print(\"YES\")\n                    return\n    \n    print(\"NO\")\n\nif __name__ == \"__main__\":\n    solve()"

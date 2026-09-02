@@ -1,6 +1,6 @@
 [
   {
-    "model": "deepseek-chat",
+    "model": "deepseek-v4-flash",
     "prompt_type": "zero_shot",
     "language": "python",
     "code": "first, last = input().split()\nbest = None\n\nfor i in range(1, len(first) + 1):\n    for j in range(1, len(last) + 1):\n        candidate = first[:i] + last[:j]\n        if best is None or candidate < best:\n            best = candidate\n\nprint(best)"

@@ -1,6 +1,6 @@
 [
   {
-    "model": "deepseek-chat",
+    "model": "deepseek-v4-flash",
     "prompt_type": "zero_shot",
     "language": "python",
     "code": "x, y, z = map(int, input().split())\na, b, c = map(int, input().split())\n\n# Andrew\nif a < x:\n    print(\"NO\")\nelse:\n    a -= x\n    # Dmitry: can eat green + purple\n    if a + b < y:\n        print(\"NO\")\n    else:\n        # take from green first, then purple\n        if a >= y:\n            a -= y\n        else:\n            y -= a\n            a = 0\n            b -= y\n        # Michal: can eat any remaining\n        if a + b + c >= z:\n            print(\"YES\")\n        else:\n            print(\"NO\")"

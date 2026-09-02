@@ -1,6 +1,6 @@
 [
   {
-    "model": "deepseek-chat",
+    "model": "deepseek-v4-flash",
     "prompt_type": "zero_shot",
     "language": "python",
     "code": "n = int(input().strip())\ns = input().strip()\n\n# Petya can delete this many characters\npetya_moves = (n - 11) // 2\n\n# Count eights in the first n-10 positions\ncount_eights = 0\nfor i in range(n - 10):\n    if s[i] == '8':\n        count_eights += 1\n\nif count_eights > petya_moves:\n    print(\"YES\")\nelse:\n    print(\"NO\")"

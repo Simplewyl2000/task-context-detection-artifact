@@ -1,6 +1,6 @@
 [
   {
-    "model": "deepseek-chat",
+    "model": "deepseek-v4-flash",
     "prompt_type": "zero_shot",
     "language": "python",
     "code": "import sys\n\ninput = sys.stdin.readline\n\nn, m = map(int, input().strip().split())\nswitches = [input().strip() for _ in range(n)]\n\n# Count how many switches cover each lamp\ncover_count = [0] * m\nfor i in range(n):\n    for j in range(m):\n        if switches[i][j] == '1':\n            cover_count[j] += 1\n\n# Check if any switch can be removed\nfor i in range(n):\n    possible = True\n    for j in range(m):\n        if switches[i][j] == '1' and cover_count[j] == 1:\n            possible = False\n            break\n    if possible:\n        print(\"YES\")\n        sys.exit()\n\nprint(\"NO\")"

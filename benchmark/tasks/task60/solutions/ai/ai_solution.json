@@ -1,6 +1,6 @@
 [
   {
-    "model": "deepseek-chat",
+    "model": "deepseek-v4-flash",
     "prompt_type": "zero_shot",
     "language": "python",
     "code": "n = int(input().strip())\nmin1, max1 = map(int, input().strip().split())\nmin2, max2 = map(int, input().strip().split())\nmin3, max3 = map(int, input().strip().split())\n\n# First, maximize first-degree diplomas\nd1 = max1\n# After taking d1, we need to see if we can satisfy min requirements for 2 and 3\nremaining = n - d1\nif remaining < min2 + min3:\n    # too many first-degree, reduce to minimum possible that still allows others\n    d1 = n - (min2 + min3)\n    # but d1 cannot be less than min1\n    if d1 < min1:\n        d1 = min1\n    remaining = n - d1\n\n# Now maximize second-degree diplomas given d1 fixed\n# We have remaining students to distribute between degree2 and degree3\n# maximize d2 up to max2, but leave at least min3 for degree3\nd2 = min(max2, remaining - min3)\nif d2 < min2:\n    d2 = min2\n    # if even min2 forces remaining < min3, we need to adjust d1 downwards? \n    # This shouldn't happen due to guaranteed feasibility, but handle just in case\n    # Actually guaranteed min1+min2+min3 <= n <= max1+max2+max3 ensures feasibility.\n    \nd3 = n - d1 - d2\n\n# At this point d1,d2,d3 should satisfy all constraints\nprint(d1, d2, d3)"

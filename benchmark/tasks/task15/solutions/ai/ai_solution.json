@@ -1,6 +1,6 @@
 [
   {
-    "model": "deepseek-chat",
+    "model": "deepseek-v4-flash",
     "prompt_type": "zero_shot",
     "language": "python",
     "code": "n = int(input())\na = int(input())\nb = int(input())\n\n# We need 4 of a, 2 of b\nneeded = [a]*4 + [b]*2\n\n# Try from 1 bar up to 6 bars\nfor bars in range(1, 7):\n    # Try to assign pieces to bars\n    # Use backtracking\n    remaining = needed[:]\n    bar_lengths = [n] * bars\n    \n    def backtrack(piece_idx):\n        if piece_idx == len(remaining):\n            return True\n        piece = remaining[piece_idx]\n        for i in range(bars):\n            if bar_lengths[i] >= piece:\n                bar_lengths[i] -= piece\n                if backtrack(piece_idx + 1):\n                    return True\n                bar_lengths[i] += piece\n        return False\n    \n    if backtrack(0):\n        print(bars)\n        break"

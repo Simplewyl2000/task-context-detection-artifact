@@ -6,7 +6,7 @@
     "code": "#include <stdio.h>\n#include <string.h>\n\nint main() {\n    int n;\n    char s[105];\n    scanf(\"%d %s\", &n, s);\n    \n    int ans = n; // no copy operation\n    \n    for (int i = 1; i <= n/2; i++) {\n        // Check if s[0..i-1] == s[i..2i-1]\n        if (strncmp(s, s+i, i) == 0) {\n            int cost = i + 1 + (n - 2*i);\n            if (cost < ans) ans = cost;\n        }\n    }\n    \n    printf(\"%d\\n\", ans);\n    return 0;\n}"
   },
   {
-    "model": "deepseek-chat",
+    "model": "deepseek-v4-flash",
     "prompt_type": "zero_shot",
     "language": "c",
     "code": "#include <stdio.h>\n#include <string.h>\n\nint main() {\n    int n;\n    char s[105];\n    scanf(\"%d\", &n);\n    scanf(\"%s\", s);\n    \n    int ans = n; // worst case: type each character one by one\n    \n    for (int len = 1; len <= n / 2; len++) {\n        if (strncmp(s, s + len, len) == 0) {\n            int ops = len + 1 + (n - 2 * len);\n            if (ops < ans) ans = ops;\n        }\n    }\n    \n    printf(\"%d\\n\", ans);\n    return 0;\n}"
@@ -24,7 +24,7 @@
     "code": "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    int n;\n    cin >> n;\n    string s;\n    cin >> s;\n    \n    int best = n; // no copy\n    \n    for (int i = 1; i <= n/2; i++) {\n        // Check if s[0..i-1] == s[i..2i-1]\n        bool ok = true;\n        for (int j = 0; j < i; j++) {\n            if (s[j] != s[i+j]) {\n                ok = false;\n                break;\n            }\n        }\n        if (ok) {\n            int cost = i + 1 + (n - 2*i);\n            best = min(best, cost);\n        }\n    }\n    \n    cout << best << endl;\n    return 0;\n}"
   },
   {
-    "model": "deepseek-chat",
+    "model": "deepseek-v4-flash",
     "prompt_type": "zero_shot",
     "language": "c++",
     "code": "#include <iostream>\n#include <string>\nusing namespace std;\n\nint main() {\n    int n;\n    string s;\n    cin >> n >> s;\n    \n    int ans = n; // worst case: type all characters one by one\n    \n    // Try all possible lengths for the initial typed part\n    for (int len = 1; len <= n / 2; len++) {\n        if (s.substr(0, len) == s.substr(len, len)) {\n            // We can type first len chars, copy them, then type the rest\n            int ops = len + 1 + (n - 2 * len);\n            ans = min(ans, ops);\n        }\n    }\n    \n    cout << ans << endl;\n    return 0;\n}"
@@ -42,7 +42,7 @@
     "code": "n = int(input())\ns = input().strip()\n\nbest = n  # type everything one by one\n\nfor i in range(1, n // 2 + 1):\n    # Check if s[0:2i] == s[0:i] + s[0:i]\n    if s[:2*i] == s[:i] + s[:i]:\n        # But wait, we need s[0:i] repeated to cover s[0:2i]\n        # Actually we need s[0:2i] to start with s[0:i]*2? No.\n        # After typing s[0:i] and copying, we have s[0:i]*2\n        # So we need s[0:2i] == s[0:i] * 2\n        ops = i + 1 + (n - 2*i)\n        best = min(best, ops)\n\nprint(best)"
   },
   {
-    "model": "deepseek-chat",
+    "model": "deepseek-v4-flash",
     "prompt_type": "zero_shot",
     "language": "python",
     "code": "n = int(input().strip())\ns = input().strip()\n\nmin_ops = n\n\nfor i in range(1, n // 2 + 1):\n    if s[:i] == s[i:2*i]:\n        ops = i + 1 + (n - 2 * i)\n        min_ops = min(min_ops, ops)\n\nprint(min_ops)"
@@ -54,7 +54,7 @@
     "code": "n = int(input().strip())\ns = input().strip()\n\n# Without copy: n operations.\n# If we type first k characters, then copy the current string once,\n# the built string becomes s[:2k]. This is useful only if s[:k] == s[k:2k].\n# Then total operations = k (typing) + 1 (copy) + (n - 2k) (remaining chars)\n# = n - k + 1. So we want the largest valid k with 2k <= n.\n\nbest = n\nfor k in range(1, n // 2 + 1):\n    if s[:k] == s[k:2*k]:\n        best = min(best, n - k + 1)\n\nprint(best)"
   },
   {
-    "model": "deepseek-chat",
+    "model": "deepseek-v4-flash",
     "prompt_type": "zero_shot",
     "language": "java",
     "code": "import java.util.Scanner;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        int n = sc.nextInt();\n        String s = sc.next();\n        int ans = n; // worst case: type all characters one by one\n\n        for (int i = 1; i <= n / 2; i++) {\n            if (s.substring(0, i).equals(s.substring(i, 2 * i))) {\n                ans = Math.min(ans, i + 1 + (n - 2 * i));\n            }\n        }\n\n        System.out.println(ans);\n    }\n}"

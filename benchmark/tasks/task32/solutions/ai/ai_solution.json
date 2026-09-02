@@ -1,6 +1,6 @@
 [
   {
-    "model": "deepseek-chat",
+    "model": "deepseek-v4-flash",
     "prompt_type": "zero_shot",
     "language": "python",
     "code": "# Read the input values\na = int(input().strip())\nb = int(input().strip())\nc = int(input().strip())\n\n# Maximum possible number of lemons we can use is limited by the counts\n# For each lemon we need 2 apples and 4 pears\nmax_lemons = min(a, b // 2, c // 4)\n\n# Total fruits used = lemons + apples + pears = max_lemons * (1 + 2 + 4)\ntotal = max_lemons * 7\n\nprint(total)"

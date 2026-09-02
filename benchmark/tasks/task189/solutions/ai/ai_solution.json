@@ -1,6 +1,6 @@
 [
   {
-    "model": "deepseek-chat",
+    "model": "deepseek-v4-flash",
     "prompt_type": "zero_shot",
     "language": "c",
     "code": "#include <stdio.h>\n\nint count_pairs(int L) {\n    int res = 1;\n    int temp = L;\n    for (int p = 2; p * p <= temp; p++) {\n        if (temp % p == 0) {\n            int e = 0;\n            while (temp % p == 0) {\n                temp /= p;\n                e++;\n            }\n            res *= (2 * e + 1);\n        }\n    }\n    if (temp > 1) {\n        res *= 3; // (2*1 + 1)\n    }\n    return (res + 1) / 2;\n}\n\nint main() {\n    int L;\n    while (1) {\n        scanf(\"%d\", &L);\n        if (L == 0) break;\n        printf(\"%d\\n\", count_pairs(L));\n    }\n    return 0;\n}"
@@ -18,7 +18,7 @@
     "code": "#include <stdio.h>\n\nint main(void) {\n    unsigned long long L;\n    while (scanf(\"%llu\", &L) == 1 && L != 0) {\n        unsigned long long n = L;\n        int distinct_primes = 0;\n\n        for (unsigned long long p = 2; p * p <= n; ++p) {\n            if (n % p == 0) {\n                distinct_primes++;\n                while (n % p == 0) n /= p;\n            }\n        }\n        if (n > 1) distinct_primes++;\n\n        unsigned long long ans = 1;\n        for (int i = 0; i < distinct_primes; ++i) ans *= 3ULL;\n\n        ans = (ans + 1) / 2;  // unordered pairs with a <= b\n        printf(\"%llu\\n\", ans);\n    }\n    return 0;\n}"
   },
   {
-    "model": "deepseek-chat",
+    "model": "deepseek-v4-flash",
     "prompt_type": "zero_shot",
     "language": "c++",
     "code": "#include <bits/stdc++.h>\nusing namespace std;\n\nint countPairs(int L) {\n    int res = 0;\n    for (int g = 1; g * g <= L; g++) {\n        if (L % g == 0) {\n            int d1 = g;\n            int d2 = L / g;\n            \n            // For divisor g\n            int m = L / d1;\n            for (int x = 1; x * x <= m; x++) {\n                if (m % x == 0) {\n                    int y = m / x;\n                    if (__gcd(x, y) == 1) {\n                        if (x <= y) res++;\n                    }\n                }\n            }\n            \n            // For the paired divisor if different\n            if (d1 != d2) {\n                m = L / d2;\n                for (int x = 1; x * x <= m; x++) {\n                    if (m % x == 0) {\n                        int y = m / x;\n                        if (__gcd(x, y) == 1) {\n                            if (x <= y) res++;\n                        }\n                    }\n                }\n            }\n        }\n    }\n    return res;\n}\n\nint main() {\n    ios::sync_with_stdio(false);\n    cin.tie(nullptr);\n    \n    int L;\n    while (cin >> L && L != 0) {\n        cout << countPairs(L) << \"\\n\";\n    }\n    return 0;\n}"
@@ -36,7 +36,7 @@
     "code": "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    ios::sync_with_stdio(false);\n    cin.tie(nullptr);\n\n    long long L;\n    while (cin >> L && L) {\n        long long n = L;\n        int distinctPrimes = 0;\n\n        for (long long p = 2; p * p <= n; ++p) {\n            if (n % p == 0) {\n                ++distinctPrimes;\n                while (n % p == 0) n /= p;\n            }\n        }\n        if (n > 1) ++distinctPrimes;\n\n        // Number of ordered pairs (a,b) with lcm(a,b)=L is 3^k,\n        // where k is the number of distinct prime factors of L.\n        // Since we need a <= b, answer is (3^k + 1) / 2.\n        long long ans = 1;\n        for (int i = 0; i < distinctPrimes; ++i) ans *= 3;\n        ans = (ans + 1) / 2;\n\n        cout << L << \" \" << ans << '\\n';\n    }\n\n    return 0;\n}"
   },
   {
-    "model": "deepseek-chat",
+    "model": "deepseek-v4-flash",
     "prompt_type": "zero_shot",
     "language": "java",
     "code": "import java.util.Scanner;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        while (sc.hasNextInt()) {\n            int L = sc.nextInt();\n            if (L == 0) break;\n            System.out.println(countPairs(L));\n        }\n        sc.close();\n    }\n\n    static long countPairs(int L) {\n        long result = 1;\n        int temp = L;\n        for (int p = 2; p * p <= temp; p++) {\n            if (temp % p == 0) {\n                int k = 0;\n                while (temp % p == 0) {\n                    temp /= p;\n                    k++;\n                }\n                result *= (2L * k + 1);\n            }\n        }\n        if (temp > 1) {\n            // remaining prime factor with exponent 1\n            result *= (2L * 1 + 1);\n        }\n        return result;\n    }\n}"
@@ -54,7 +54,7 @@
     "code": "import java.io.*;\nimport java.util.*;\n\npublic class Main {\n    public static void main(String[] args) throws Exception {\n        BufferedInputStream in = new BufferedInputStream(System.in);\n        StringBuilder out = new StringBuilder();\n\n        while (true) {\n            long L = nextLong(in);\n            if (L == Long.MIN_VALUE) break; // EOF\n            if (L == 0) break;\n\n            long n = L;\n            int distinctPrimeCount = 0;\n\n            for (long p = 2; p * p <= n; p += (p == 2 ? 1 : 2)) {\n                if (n % p == 0) {\n                    distinctPrimeCount++;\n                    while (n % p == 0) n /= p;\n                }\n            }\n            if (n > 1) distinctPrimeCount++;\n\n            long ans = 1L << distinctPrimeCount;\n            ans = (ans + 1) / 2;\n\n            out.append(L).append(' ').append(ans).append('\\n');\n        }\n\n        System.out.print(out.toString());\n    }\n\n    private static long nextLong(InputStream in) throws IOException {\n        int c;\n        do {\n            c = in.read();\n            if (c == -1) return Long.MIN_VALUE;\n        } while (c <= ' ');\n\n        long sign = 1;\n        if (c == '-') {\n            sign = -1;\n            c = in.read();\n        }\n\n        long val = 0;\n        while (c > ' ') {\n            val = val * 10 + (c - '0');\n            c = in.read();\n        }\n        return val * sign;\n    }\n}"
   },
   {
-    "model": "deepseek-chat",
+    "model": "deepseek-v4-flash",
     "prompt_type": "zero_shot",
     "language": "python",
     "code": "import sys\nimport math\n\ndef count_pairs(L):\n    n = L\n    res = 1\n    # factor out 2\n    cnt = 0\n    while n % 2 == 0:\n        n //= 2\n        cnt += 1\n    if cnt:\n        res *= (2 * cnt + 1)\n    # odd factors\n    p = 3\n    while p * p <= n:\n        cnt = 0\n        while n % p == 0:\n            n //= p\n            cnt += 1\n        if cnt:\n            res *= (2 * cnt + 1)\n        p += 2\n    if n > 1:\n        res *= (2 * 1 + 1)\n    return res\n\ndef main():\n    for line in sys.stdin:\n        L = int(line.strip())\n        if L == 0:\n            break\n        print(count_pairs(L))\n\nif __name__ == \"__main__\":\n    main()"

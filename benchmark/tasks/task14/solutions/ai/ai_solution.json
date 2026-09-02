@@ -1,6 +1,6 @@
 [
   {
-    "model": "deepseek-chat",
+    "model": "deepseek-v4-flash",
     "prompt_type": "zero_shot",
     "language": "python",
     "code": "n, t = map(int, input().split())\n# pyramid[i][j] for i from 0 to n-1, j from 0 to i\npyramid = [[0.0] * (i + 1) for i in range(n)]\n\npyramid[0][0] = t  # pour all champagne at once\n\nfull_count = 0\n\nfor i in range(n):\n    for j in range(i + 1):\n        if pyramid[i][j] >= 1.0:\n            full_count += 1\n            overflow = pyramid[i][j] - 1.0\n            if i + 1 < n:\n                pyramid[i + 1][j] += overflow / 2.0\n                pyramid[i + 1][j + 1] += overflow / 2.0\n\nprint(full_count)"

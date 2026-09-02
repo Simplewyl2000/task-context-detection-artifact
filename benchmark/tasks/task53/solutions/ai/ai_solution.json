@@ -1,6 +1,6 @@
 [
   {
-    "model": "deepseek-chat",
+    "model": "deepseek-v4-flash",
     "prompt_type": "zero_shot",
     "language": "python",
     "code": "n = int(input().strip())\na = list(map(int, input().strip().split()))\n\n# Find first and last occurrence of 1\nfirst = -1\nlast = -1\nfor i in range(n):\n    if a[i] == 1:\n        if first == -1:\n            first = i\n        last = i\n\nif first == -1:\n    print(0)\nelse:\n    # Count total pairs from first to last\n    total = last - first + 1\n    # Subtract zeros that are in blocks of 2 or more consecutive zeros\n    i = first\n    while i <= last:\n        if a[i] == 0:\n            j = i\n            while j <= last and a[j] == 0:\n                j += 1\n            zero_len = j - i\n            if zero_len >= 2:\n                total -= zero_len\n            i = j\n        else:\n            i += 1\n    print(total)"

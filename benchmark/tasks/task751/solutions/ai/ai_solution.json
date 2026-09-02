@@ -1,6 +1,6 @@
 [
   {
-    "model": "deepseek-chat",
+    "model": "deepseek-v4-flash",
     "prompt_type": "zero_shot",
     "language": "c++",
     "code": "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    ios::sync_with_stdio(false);\n    cin.tie(nullptr);\n    int N;\n    cin >> N;\n    if (N == 1) {\n        cout << \"No\\n\";\n        return 0;\n    }\n    cout << \"Yes\\n\";\n    // connect i to i+1 for i = 1..N-1\n    for (int i = 1; i < N; i++) {\n        cout << i << \" \" << i+1 << \"\\n\";\n    }\n    // connect N to N+1\n    cout << N << \" \" << N+1 << \"\\n\";\n    // connect N+i to N+i-1 for i=2..N\n    for (int i = 2; i <= N; i++) {\n        cout << N+i-1 << \" \" << N+i << \"\\n\";\n    }\n    return 0;\n}"
@@ -18,7 +18,7 @@
     "code": "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    ios::sync_with_stdio(false);\n    cin.tie(nullptr);\n\n    long long N;\n    cin >> N;\n\n    // It is possible iff N is odd.\n    // Construction:\n    // For N = 1: edge 1-2.\n    // For odd N >= 3:\n    // Use vertices 1..N and N+1..2N.\n    // Build:\n    // 1 - 2\n    // 1 - (N+1)\n    // (N+1) - (N+3)\n    // For each odd i = 3,5,...,N-2:\n    //   1 - i\n    //   i - i+1\n    //   i - (N+i)\n    //   (N+i) - (N+i+1)\n    // Finally:\n    //   N - 2\n    //   N - (N+2)\n    //\n    // This gives a tree with 2N vertices and satisfies the XOR condition.\n\n    if (N % 2 == 0) {\n        cout << \"No\\n\";\n        return 0;\n    }\n\n    cout << \"Yes\\n\";\n\n    vector<pair<int,int>> edges;\n\n    if (N == 1) {\n        edges.push_back({1, 2});\n    } else {\n        int n = (int)N;\n\n        edges.push_back({1, 2});\n        edges.push_back({1, n + 1});\n        edges.push_back({n + 1, n + 3});\n\n        for (int i = 3; i <= n - 2; i += 2) {\n            edges.push_back({1, i});\n            edges.push_back({i, i + 1});\n            edges.push_back({i, n + i});\n            edges.push_back({n + i, n + i + 1});\n        }\n\n        edges.push_back({n, 2});\n        edges.push_back({n, n + 2});\n    }\n\n    for (auto &e : edges) {\n        cout << e.first << ' ' << e.second << '\\n';\n    }\n\n    return 0;\n}"
   },
   {
-    "model": "deepseek-chat",
+    "model": "deepseek-v4-flash",
     "prompt_type": "zero_shot",
     "language": "c",
     "code": "#include <stdio.h>\n\nint main() {\n    int N;\n    scanf(\"%d\", &N);\n    if (N == 1) {\n        printf(\"-1\\n\");\n        return 0;\n    }\n    printf(\"%d %d\\n\", 1, 2);\n    for (int i = 3; i <= 2*N; i++) {\n        printf(\"%d %d\\n\", i-1, i);\n    }\n    return 0;\n}"
@@ -36,7 +36,7 @@
     "code": "#include <stdio.h>\n#include <stdlib.h>\n\ntypedef struct {\n    int u, v;\n} Edge;\n\nint main(void) {\n    int N;\n    if (scanf(\"%d\", &N) != 1) return 0;\n\n    /* It is possible iff N is odd.\n       Construction for odd N:\n       Let a_i = i, b_i = N+i.\n       Add edge (a_i, b_i) for all i.\n       For i = 1..N-1, add edge (b_i, a_{i+1}).\n\n       Then the graph is a path:\n       a1 - b1 - a2 - b2 - ... - aN - bN\n\n       For each i:\n       - If i is odd, path from a_i to b_i is just [a_i, b_i], xor = i^i = 0? No.\n       So this simple path does NOT work.\n\n       We use the standard odd-N construction:\n       Build edges:\n         for odd i < N:   (i, i+1), (N+i, N+i+1)\n         for odd i < N:   (i, N+i+1), (N+i, i+1)\n       and connect the last pair through 1:\n         (N, 1), (2N, N+1)\n       This forms a tree for odd N and satisfies the condition.\n    */\n\n    if (N % 2 == 0) {\n        puts(\"No\");\n        return 0;\n    }\n\n    puts(\"Yes\");\n\n    /* Number of edges is 2N-1 */\n    Edge *edges = (Edge*)malloc(sizeof(Edge) * (2 * N));\n    int m = 0;\n\n    if (N == 1) {\n        edges[m++] = (Edge){1, 2};\n    } else {\n        for (int i = 1; i <= N - 2; i += 2) {\n            edges[m++] = (Edge){i, i + 1};\n            edges[m++] = (Edge){N + i, N + i + 1};\n            edges[m++] = (Edge){i, N + i + 1};\n            edges[m++] = (Edge){N + i, i + 1};\n        }\n        edges[m++] = (Edge){N - 1, N};\n        edges[m++] = (Edge){2 * N - 1, 2 * N};\n        edges[m++] = (Edge){N, 1};\n        edges[m++] = (Edge){2 * N, N + 1};\n    }\n\n    for (int i = 0; i < m; i++) {\n        printf(\"%d %d\\n\", edges[i].u, edges[i].v);\n    }\n\n    free(edges);\n    return 0;\n}"
   },
   {
-    "model": "deepseek-chat",
+    "model": "deepseek-v4-flash",
     "prompt_type": "zero_shot",
     "language": "java",
     "code": "For i=1..N:\n   if i==1:\n       connect 1 to N+1\n   else:\n       connect i to N+i-1\n   if i==N:\n       connect N to 2N"
@@ -60,7 +60,7 @@
     "code": "import sys\nfrom sys import stdin\n\ndef solve():\n    N = int(stdin.readline())\n    if N == 1:\n        print(\"Yes\")\n        print(1, 2)\n        return\n    # Connect i -- (N+1) -- (N+i) for i != 1, and 1 -- (N+1) -- (N+1) directly\n    # Need XOR of path i to N+i = i\n    # Try: path goes i -> N+i directly with weight i XOR i = 0, doesn't work\n    # Build a chain: 1 - N+1 - N+2 - 2 - N+3 - 3 - ... \n    print(\"Yes\")\n    edges = []\n    edges.append((1, N+1))\n    for i in range(1, N):\n        edges.append((N+i, N+i+1))\n        edges.append((N+i+1, i+1))\n    for e in edges:\n        print(e[0], e[1])\n\nsolve()"
   },
   {
-    "model": "deepseek-chat",
+    "model": "deepseek-v4-flash",
     "prompt_type": "zero_shot",
     "language": "python",
     "code": "def solve():\n    import sys\n    input = sys.stdin.readline\n    N = int(input().strip())\n    if N == 1:\n        print(\"No\")\n        return\n    print(\"Yes\")\n    # Construction\n    # Connect i to N+i+1 for i=1..N-1\n    for i in range(1, N):\n        print(i, N + i + 1)\n    # Connect N to N+1\n    print(N, N + 1)\n    # Connect i+1 to N+i for i=1..N-1\n    for i in range(1, N):\n        print(i + 1, N + i)\n\nif __name__ == \"__main__\":\n    solve()"

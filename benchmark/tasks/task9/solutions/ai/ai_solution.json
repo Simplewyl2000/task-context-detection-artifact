@@ -1,6 +1,6 @@
 [
   {
-    "model": "deepseek-chat",
+    "model": "deepseek-v4-flash",
     "prompt_type": "zero_shot",
     "language": "python",
     "code": "import sys\n\ninput = sys.stdin.readline\n\nn, x = map(int, input().split())\na = list(map(int, input().split()))\n\n# dp0: never multiplied\n# dp1: currently multiplying\n# dp2: finished multiplying\ndp0 = dp1 = dp2 = 0\nans = 0\n\nfor val in a:\n    # Update states\n    dp0 = max(0, dp0 + val)\n    dp1 = max(dp0, dp1 + val * x)\n    dp2 = max(dp1, dp2 + val)\n    ans = max(ans, dp2)\n\nprint(ans)"

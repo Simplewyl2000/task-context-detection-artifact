@@ -1,6 +1,6 @@
 [
   {
-    "model": "deepseek-chat",
+    "model": "deepseek-v4-flash",
     "prompt_type": "zero_shot",
     "language": "python",
     "code": "n, m = map(int, input().split())\na = [list(map(int, input().split())) for _ in range(n)]\nb = [list(map(int, input().split())) for _ in range(n)]\n\n# At each cell, put min in a, max in b\nfor i in range(n):\n    for j in range(m):\n        if a[i][j] > b[i][j]:\n            a[i][j], b[i][j] = b[i][j], a[i][j]\n\n# Check rows and columns for both matrices\ndef is_increasing(mat):\n    for i in range(n):\n        for j in range(1, m):\n            if mat[i][j] <= mat[i][j-1]:\n                return False\n    for j in range(m):\n        for i in range(1, n):\n            if mat[i][j] <= mat[i-1][j]:\n                return False\n    return True\n\nif is_increasing(a) and is_increasing(b):\n    print(\"Possible\")\nelse:\n    print(\"Impossible\")"

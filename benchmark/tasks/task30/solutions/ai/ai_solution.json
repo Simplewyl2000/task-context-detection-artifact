@@ -6,7 +6,7 @@
     "code": "MOD = 10**9 + 7\nn, m = map(int, input().split())\nbase = (pow(2, m, MOD) - 1) % MOD\nprint(pow(base, n, MOD))"
   },
   {
-    "model": "deepseek-chat",
+    "model": "deepseek-v4-flash",
     "prompt_type": "zero_shot",
     "language": "python",
     "code": "MOD = 10**9 + 7\n\ndef mod_pow(base, exp):\n    res = 1\n    while exp > 0:\n        if exp & 1:\n            res = (res * base) % MOD\n        base = (base * base) % MOD\n        exp >>= 1\n    return res\n\nn, m = map(int, input().split())\nways = mod_pow((mod_pow(2, m) - 1) % MOD, n)\nprint(ways)"

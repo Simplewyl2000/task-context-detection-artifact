@@ -1,6 +1,6 @@
 [
   {
-    "model": "deepseek-chat",
+    "model": "deepseek-v4-flash",
     "prompt_type": "zero_shot",
     "language": "python",
     "code": "n = int(input())\na = list(map(int, input().split()))\n\npos1 = a.index(1)\nposn = a.index(n)\n\n# Possible distances after one swap\ncandidates = [\n    abs(0 - posn),          # swap 1 to front\n    abs(n-1 - posn),        # swap 1 to back\n    abs(pos1 - 0),          # swap n to front\n    abs(pos1 - (n-1))       # swap n to back\n]\n\nprint(max(candidates))"

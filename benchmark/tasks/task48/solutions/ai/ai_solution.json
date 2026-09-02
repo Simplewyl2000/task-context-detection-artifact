@@ -1,6 +1,6 @@
 [
   {
-    "model": "deepseek-chat",
+    "model": "deepseek-v4-flash",
     "prompt_type": "zero_shot",
     "language": "python",
     "code": "n = int(input())\nweights = set()\n\n# For each possible quotient q = n // k\nk = 1\nwhile k <= n:\n    q = n // k\n    # For this q, the smallest k that gives same q is n // (q + 1) + 1\n    # We check if condition holds for this k\n    if q > n // (k + 1):\n        weights.add(k)\n    # Move to next distinct k range\n    k = n // q + 1\n\n# Also add weight 1 (always possible) and n (all ones)\nweights.add(1)\nweights.add(n)\n\nprint(len(weights))"

@@ -1,6 +1,6 @@
 [
   {
-    "model": "deepseek-chat",
+    "model": "deepseek-v4-flash",
     "prompt_type": "zero_shot",
     "language": "python",
     "code": "n = int(input())\ns = input().strip()\n\nhalf = n // 2\nleft = s[:half]\nright = s[half:]\n\nsum_left = 0\nq_left = 0\nfor ch in left:\n    if ch == '?':\n        q_left += 1\n    else:\n        sum_left += int(ch)\n\nsum_right = 0\nq_right = 0\nfor ch in right:\n    if ch == '?':\n        q_right += 1\n    else:\n        sum_right += int(ch)\n\ndiff = sum_left - sum_right\n# Monocarp wants to maximize absolute diff, Bicarp wants to balance\n# Each '?' in left: Monocarp can add 9, Bicarp can add 0 -> net +9 for Monocarp if he plays there\n# Each '?' in right: Monocarp can add 0, Bicarp can add 9 -> net -9 for Monocarp if he plays there\n# Balanced pairs cancel out.\n# Remaining '?' in one half decide.\n\n# If diff + (q_left - q_right) * 9 / 2 == 0, Bicarp wins\nif diff + (q_left - q_right) * 9 // 2 == 0:\n    print(\"Bicarp\")\nelse:\n    print(\"Monocarp\")"

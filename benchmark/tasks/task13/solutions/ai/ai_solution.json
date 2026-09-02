@@ -1,6 +1,6 @@
 [
   {
-    "model": "deepseek-chat",
+    "model": "deepseek-v4-flash",
     "prompt_type": "zero_shot",
     "language": "python",
     "code": "import sys\nfrom collections import Counter\n\ndef solve():\n    n, k = map(int, sys.stdin.readline().split())\n    \n    # Count initial powers\n    counts = Counter()\n    bit = 0\n    temp = n\n    while temp:\n        if temp & 1:\n            counts[bit] += 1\n        temp >>= 1\n        bit += 1\n    \n    # Total number of powers we have\n    total = sum(counts.values())\n    \n    if total > k:\n        print(\"No\")\n        return\n    \n    # We need to increase count to exactly k\n    # We'll split the largest powers\n    # Use a max-heap concept (negative for Python min-heap)\n    import heapq\n    max_heap = [-x for x in counts.keys() for _ in range(counts[x])]\n    heapq.heapify(max_heap)\n    \n    while total < k:\n        largest = -heapq.heappop(max_heap)\n        # split\n        heapq.heappush(max_heap, -(largest - 1))\n        heapq.heappush(max_heap, -(largest - 1))\n        total += 1\n    \n    # Now build result\n    result = []\n    while max_heap:\n        result.append(-heapq.heappop(max_heap))\n    \n    # Since we popped from max-heap, they come out descending\n    # But lexicographically largest means descending order already\n    print(\"Yes\")\n    print(\" \".join(map(str, result)))\n\nif __name__ == \"__main__\":\n    solve()"

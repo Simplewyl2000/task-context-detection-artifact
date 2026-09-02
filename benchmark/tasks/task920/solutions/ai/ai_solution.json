@@ -6,7 +6,7 @@
     "code": "#include <stdio.h>\nint main() {\n    int n;\n    scanf(\"%d\", &n);\n    for (int i = 0; i < n-1; i++) {\n        int u, v;\n        scanf(\"%d %d\", &u, &v);\n    }\n    if (n % 2 == 1) printf(\"Takahashi\\n\");\n    else printf(\"Aoki\\n\");\n    return 0;\n}"
   },
   {
-    "model": "deepseek-chat",
+    "model": "deepseek-v4-flash",
     "prompt_type": "zero_shot",
     "language": "c",
     "code": "#include <stdio.h>\n#include <stdlib.h>\n\n#define MAXN 200005\n\nint head[MAXN], to[MAXN * 2], nxt[MAXN * 2];\nint edge_count = 0;\n\nvoid add_edge(int u, int v) {\n    to[edge_count] = v;\n    nxt[edge_count] = head[u];\n    head[u] = edge_count++;\n}\n\nint dp[MAXN][2]; // dp[u][0] = size of max matching in subtree when u is free\n                 // dp[u][1] = size of max matching in subtree when u is matched with its parent\n\nvoid dfs(int u, int parent) {\n    dp[u][0] = 0;\n    dp[u][1] = 0;\n    int sum0 = 0;\n    for (int e = head[u]; e != -1; e = nxt[e]) {\n        int v = to[e];\n        if (v == parent) continue;\n        dfs(v, u);\n        sum0 += dp[v][0];\n    }\n    dp[u][1] = sum0; // u not matched with any child\n    dp[u][0] = sum0; // initially same as not matched\n    for (int e = head[u]; e != -1; e = nxt[e]) {\n        int v = to[e];\n        if (v == parent) continue;\n        int candidate = sum0 - dp[v][0] + dp[v][1] + 1;\n        if (candidate > dp[u][0]) dp[u][0] = candidate;\n    }\n}\n\nint main() {\n    int N;\n    scanf(\"%d\", &N);\n    for (int i = 1; i <= N; i++) head[i] = -1;\n    for (int i = 0; i < N - 1; i++) {\n        int u, v;\n        scanf(\"%d %d\", &u, &v);\n        add_edge(u, v);\n        add_edge(v, u);\n    }\n    dfs(1, -1);\n    int max_match = dp[1][0];\n    if (max_match * 2 == N) {\n        printf(\"Aoki\\n\");\n    } else {\n        printf(\"Takahashi\\n\");\n    }\n    return 0;\n}"
@@ -24,7 +24,7 @@
     "code": "import sys\ninput_data = sys.stdin.read().split()\nidx = 0\nN = int(input_data[idx]); idx += 1\nfor _ in range(N-1):\n    u = int(input_data[idx]); idx += 1\n    v = int(input_data[idx]); idx += 1\n\nif N % 2 == 1:\n    print(\"Takahashi\")\nelse:\n    print(\"Aoki\")"
   },
   {
-    "model": "deepseek-chat",
+    "model": "deepseek-v4-flash",
     "prompt_type": "zero_shot",
     "language": "python",
     "code": "n = int(input())\nedges = [[] for _ in range(n)]\nfor _ in range(n - 1):\n    u, v = map(int, input().split())\n    edges[u-1].append(v-1)\n    edges[v-1].append(u-1)\n\ndegree = [len(edges[i]) for i in range(n)]\n\nif any(d >= 3 for d in degree):\n    print(\"First\")\nelse:\n    # Tree is a path\n    if n % 2 == 1:\n        print(\"First\")\n    else:\n        print(\"Second\")"
@@ -42,7 +42,7 @@
     "code": "import java.util.*;\nimport java.io.*;\n\npublic class Main {\n    public static void main(String[] args) throws IOException {\n        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));\n        int N = Integer.parseInt(br.readLine().trim());\n        // Read N-1 edges\n        for (int i = 0; i < N - 1; i++) br.readLine();\n        // Takahashi wins iff N is odd\n        System.out.println(N % 2 == 1 ? \"Takahashi\" : \"Aoki\");\n    }\n}"
   },
   {
-    "model": "deepseek-chat",
+    "model": "deepseek-v4-flash",
     "prompt_type": "zero_shot",
     "language": "java",
     "code": "import java.util.*;\nimport java.io.*;\n\npublic class Main {\n    static List<Integer>[] adj;\n    static boolean[] visited;\n    static boolean[] matched;\n    \n    public static void main(String[] args) throws IOException {\n        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));\n        int N = Integer.parseInt(br.readLine());\n        adj = new ArrayList[N+1];\n        for (int i = 1; i <= N; i++) adj[i] = new ArrayList<>();\n        \n        for (int i = 0; i < N-1; i++) {\n            StringTokenizer st = new StringTokenizer(br.readLine());\n            int u = Integer.parseInt(st.nextToken());\n            int v = Integer.parseInt(st.nextToken());\n            adj[u].add(v);\n            adj[v].add(u);\n        }\n        \n        visited = new boolean[N+1];\n        matched = new boolean[N+1];\n        \n        // Root the tree at 1\n        dfs(1, 0);\n        \n        // Check if every vertex is matched\n        for (int i = 1; i <= N; i++) {\n            if (!matched[i]) {\n                System.out.println(\"First\");\n                return;\n            }\n        }\n        System.out.println(\"Second\");\n    }\n    \n    static void dfs(int u, int parent) {\n        visited[u] = true;\n        for (int v : adj[u]) {\n            if (v == parent) continue;\n            dfs(v, u);\n        }\n        // Greedy matching: if u is not matched and any child is not matched, match them\n        if (!matched[u]) {\n            for (int v : adj[u]) {\n                if (v != parent && !matched[v]) {\n                    matched[u] = true;\n                    matched[v] = true;\n                    break;\n                }\n            }\n        }\n    }\n}"
@@ -60,7 +60,7 @@
     "code": "#include <bits/stdc++.h>\nusing namespace std;\nint main(){\n    int n;\n    cin>>n;\n    vector<vector<int>> adj(n+1);\n    for(int i=0;i<n-1;i++){\n        int u,v; cin>>u>>v;\n        adj[u].push_back(v);\n        adj[v].push_back(u);\n    }\n    // dp[v][0] = max independent set in subtree of v, v not taken\n    // dp[v][1] = max independent set in subtree of v, v taken\n    vector<array<int,2>> dp(n+1,{0,0});\n    vector<bool> vis(n+1,false);\n    function<void(int,int)> dfs=[&](int v,int p){\n        dp[v][1]=1; dp[v][0]=0;\n        for(int u:adj[v]) if(u!=p){\n            dfs(u,v);\n            dp[v][1]+=dp[u][0];\n            dp[v][0]+=max(dp[u][0],dp[u][1]);\n        }\n    };\n    dfs(1,0);\n    int mis=max(dp[1][0],dp[1][1]);\n    cout<<(mis*2>n?\"Takahashi\":\"Aoki\")<<endl;\n}"
   },
   {
-    "model": "deepseek-chat",
+    "model": "deepseek-v4-flash",
     "prompt_type": "zero_shot",
     "language": "c++",
     "code": "#include <bits/stdc++.h>\nusing namespace std;\n\nvector<vector<int>> adj;\nvector<bool> matched;\n\nbool dfs(int u, int parent) {\n    for (int v : adj[u]) {\n        if (v == parent) continue;\n        if (dfs(v, u)) continue;\n        if (!matched[u] && !matched[v]) {\n            matched[u] = matched[v] = true;\n        }\n    }\n    return matched[u];\n}\n\nint main() {\n    ios::sync_with_stdio(false);\n    cin.tie(nullptr);\n    \n    int N;\n    cin >> N;\n    adj.assign(N, vector<int>());\n    matched.assign(N, false);\n    \n    for (int i = 0; i < N - 1; i++) {\n        int u, v;\n        cin >> u >> v;\n        u--; v--;\n        adj[u].push_back(v);\n        adj[v].push_back(u);\n    }\n    \n    dfs(0, -1);\n    \n    bool perfect = true;\n    for (int i = 0; i < N; i++) {\n        if (!matched[i]) {\n            perfect = false;\n            break;\n        }\n    }\n    \n    if (perfect) cout << \"Aoki\\n\";\n    else cout << \"Takahashi\\n\";\n    \n    return 0;\n}"

@@ -6,7 +6,7 @@
     "code": "#include <iostream>\n#include <cmath>\n#include <iomanip>\n\nusing namespace std;\n\nint main() {\n    double x1, y1, x2, y2, x3, y3;\n    cin >> x1 >> y1 >> x2 >> y2 >> x3 >> y3;\n    \n    // Calculate side lengths\n    double a = sqrt((x2-x3)*(x2-x3) + (y2-y3)*(y2-y3)); // side opposite to vertex 1\n    double b = sqrt((x1-x3)*(x1-x3) + (y1-y3)*(y1-y3)); // side opposite to vertex 2\n    double c = sqrt((x1-x2)*(x1-x2) + (y1-y2)*(y1-y2)); // side opposite to vertex 3\n    \n    // Perimeter\n    double perimeter = a + b + c;\n    \n    // Incenter coordinates (weighted average of vertices by opposite side lengths)\n    double cx = (a*x1 + b*x2 + c*x3) / perimeter;\n    double cy = (a*y1 + b*y2 + c*y3) / perimeter;\n    \n    // Area using cross product\n    double area = fabs((x2-x1)*(y3-y1) - (x3-x1)*(y2-y1)) / 2.0;\n    \n    // Inradius\n    double r = 2.0 * area / perimeter;\n    \n    cout << fixed << setprecision(6);\n    cout << cx << \" \" << cy << \" \" << r << endl;\n    \n    return 0;\n}"
   },
   {
-    "model": "deepseek-chat",
+    "model": "deepseek-v4-flash",
     "prompt_type": "zero_shot",
     "language": "c++",
     "code": "cx = (a * x1 + b * x2 + c * x3) / (a + b + c)\ncy = (a * y1 + b * y2 + c * y3) / (a + b + c)"
@@ -24,7 +24,7 @@
     "code": "import math\n\nline = input().split()\nx1, y1, x2, y2, x3, y3 = map(float, line)\n\na = math.sqrt((x2-x3)**2 + (y2-y3)**2)  # side opposite to vertex 1\nb = math.sqrt((x1-x3)**2 + (y1-y3)**2)  # side opposite to vertex 2\nc = math.sqrt((x1-x2)**2 + (y1-y2)**2)  # side opposite to vertex 3\n\nperimeter = a + b + c\n\ncx = (a*x1 + b*x2 + c*x3) / perimeter\ncy = (a*y1 + b*y2 + c*y3) / perimeter\n\ns = perimeter / 2\narea = math.sqrt(s * (s-a) * (s-b) * (s-c))\nr = area / s\n\nprint(f\"{cx:.6f} {cy:.6f} {r:.6f}\")"
   },
   {
-    "model": "deepseek-chat",
+    "model": "deepseek-v4-flash",
     "prompt_type": "zero_shot",
     "language": "python",
     "code": "import sys\nimport math\n\ndef solve():\n    data = sys.stdin.read().strip().split()\n    if not data:\n        return\n    x1, y1, x2, y2, x3, y3 = map(int, data[:6])\n    \n    # side lengths\n    a = math.hypot(x2 - x3, y2 - y3)  # opposite A\n    b = math.hypot(x1 - x3, y1 - y3)  # opposite B\n    c = math.hypot(x1 - x2, y1 - y2)  # opposite C\n    \n    # incenter coordinates\n    cx = (a * x1 + b * x2 + c * x3) / (a + b + c)\n    cy = (a * y1 + b * y2 + c * y3) / (a + b + c)\n    \n    # area using shoelace formula\n    area = abs(x1*(y2 - y3) + x2*(y3 - y1) + x3*(y1 - y2)) / 2.0\n    \n    # semiperimeter\n    s = (a + b + c) / 2.0\n    \n    # inradius\n    r = area / s\n    \n    print(f\"{cx:.15f} {cy:.15f} {r:.15f}\")\n\nif __name__ == \"__main__\":\n    solve()"
@@ -42,7 +42,7 @@
     "code": "#include <stdio.h>\n#include <math.h>\n\nint main() {\n    double x1, y1, x2, y2, x3, y3;\n    scanf(\"%lf %lf %lf %lf %lf %lf\", &x1, &y1, &x2, &y2, &x3, &y3);\n    \n    /* side lengths */\n    double a = sqrt((x2-x3)*(x2-x3) + (y2-y3)*(y2-y3)); /* opposite to vertex 1 */\n    double b = sqrt((x1-x3)*(x1-x3) + (y1-y3)*(y1-y3)); /* opposite to vertex 2 */\n    double c = sqrt((x1-x2)*(x1-x2) + (y1-y2)*(y1-y2)); /* opposite to vertex 3 */\n    \n    double perimeter = a + b + c;\n    double s = perimeter / 2.0;\n    \n    /* incircle center */\n    double cx = (a*x1 + b*x2 + c*x3) / perimeter;\n    double cy = (a*y1 + b*y2 + c*y3) / perimeter;\n    \n    /* area via cross product */\n    double area = fabs((x2-x1)*(y3-y1) - (x3-x1)*(y2-y1)) / 2.0;\n    \n    /* inradius */\n    double r = area / s;\n    \n    printf(\"%.6f %.6f %.6f\\n\", cx, cy, r);\n    \n    return 0;\n}"
   },
   {
-    "model": "deepseek-chat",
+    "model": "deepseek-v4-flash",
     "prompt_type": "zero_shot",
     "language": "c",
     "code": "#include <stdio.h>\n#include <math.h>\n\nint main() {\n    double x1, y1, x2, y2, x3, y3;\n    scanf(\"%lf %lf %lf %lf %lf %lf\", &x1, &y1, &x2, &y2, &x3, &y3);\n\n    // Side lengths\n    double a = sqrt((x2 - x3) * (x2 - x3) + (y2 - y3) * (y2 - y3));\n    double b = sqrt((x1 - x3) * (x1 - x3) + (y1 - y3) * (y1 - y3));\n    double c = sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2));\n\n    // Incenter coordinates (weighted average by side lengths)\n    double cx = (a * x1 + b * x2 + c * x3) / (a + b + c);\n    double cy = (a * y1 + b * y2 + c * y3) / (a + b + c);\n\n    // Semiperimeter\n    double s = (a + b + c) / 2.0;\n\n    // Area using Heron's formula\n    double area = sqrt(s * (s - a) * (s - b) * (s - c));\n\n    // Inradius\n    double r = area / s;\n\n    printf(\"%.10f %.10f %.10f\\n\", cx, cy, r);\n\n    return 0;\n}"
@@ -60,7 +60,7 @@
     "code": "import java.util.Scanner;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        double x1 = sc.nextDouble(), y1 = sc.nextDouble();\n        double x2 = sc.nextDouble(), y2 = sc.nextDouble();\n        double x3 = sc.nextDouble(), y3 = sc.nextDouble();\n        \n        // Side lengths\n        double a = Math.sqrt((x2-x3)*(x2-x3) + (y2-y3)*(y2-y3)); // opposite to vertex 1\n        double b = Math.sqrt((x1-x3)*(x1-x3) + (y1-y3)*(y1-y3)); // opposite to vertex 2\n        double c = Math.sqrt((x1-x2)*(x1-x2) + (y1-y2)*(y1-y2)); // opposite to vertex 3\n        \n        double perimeter = a + b + c;\n        \n        // Incenter coordinates\n        double cx = (a*x1 + b*x2 + c*x3) / perimeter;\n        double cy = (a*y1 + b*y2 + c*y3) / perimeter;\n        \n        // Area using cross product\n        double area = Math.abs((x2-x1)*(y3-y1) - (x3-x1)*(y2-y1)) / 2.0;\n        \n        // Inradius\n        double r = area / (perimeter / 2.0);\n        \n        System.out.printf(\"%.6f %.6f %.6f%n\", cx, cy, r);\n    }\n}"
   },
   {
-    "model": "deepseek-chat",
+    "model": "deepseek-v4-flash",
     "prompt_type": "zero_shot",
     "language": "java",
     "code": "import java.util.Scanner;\n\npublic class IncircleOfTriangle {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        \n        int x1 = sc.nextInt();\n        int y1 = sc.nextInt();\n        int x2 = sc.nextInt();\n        int y2 = sc.nextInt();\n        int x3 = sc.nextInt();\n        int y3 = sc.nextInt();\n        \n        double a = Math.sqrt((x2 - x3) * (x2 - x3) + (y2 - y3) * (y2 - y3));\n        double b = Math.sqrt((x1 - x3) * (x1 - x3) + (y1 - y3) * (y1 - y3));\n        double c = Math.sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2));\n        \n        double cx = (a * x1 + b * x2 + c * x3) / (a + b + c);\n        double cy = (a * y1 + b * y2 + c * y3) / (a + b + c);\n        \n        double s = (a + b + c) / 2.0;\n        double area = Math.sqrt(s * (s - a) * (s - b) * (s - c));\n        double r = (2 * area) / (a + b + c);\n        \n        System.out.printf(\"%.10f %.10f %.10f%n\", cx, cy, r);\n        \n        sc.close();\n    }\n}"

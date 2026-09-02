@@ -1,6 +1,6 @@
 [
   {
-    "model": "deepseek-chat",
+    "model": "deepseek-v4-flash",
     "prompt_type": "zero_shot",
     "language": "c",
     "code": "#include <stdio.h>\n\nint main() {\n    int n;\n    scanf(\"%d\", &n);\n    \n    int total_skill_points = 0;\n    int required_points = 0;\n    \n    for (int i = 0; i < n; i++) {\n        int a, b;\n        scanf(\"%d %d\", &a, &b);\n        total_skill_points += a;\n        required_points += b;\n    }\n    \n    if (total_skill_points >= required_points) {\n        printf(\"Yes\\n\");\n    } else {\n        printf(\"No\\n\");\n    }\n    \n    return 0;\n}"
@@ -18,7 +18,7 @@
     "code": "#include <stdio.h>\n\nint main(void) {\n    long long a, b, c, d;\n    if (scanf(\"%lld %lld %lld %lld\", &a, &b, &c, &d) != 4) return 0;\n\n    // Can learn all commands iff the total required points\n    // do not exceed the total available points.\n    if (a + b >= c + d) {\n        puts(\"Yes\");\n    } else {\n        puts(\"No\");\n    }\n\n    return 0;\n}"
   },
   {
-    "model": "deepseek-chat",
+    "model": "deepseek-v4-flash",
     "prompt_type": "zero_shot",
     "language": "c++",
     "code": "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    ios::sync_with_stdio(false);\n    cin.tie(nullptr);\n    \n    int n, sp;\n    cin >> n >> sp;\n    \n    bool canLearnAll = true;\n    \n    for (int i = 0; i < n; i++) {\n        int minSp, maxSp;\n        cin >> minSp >> maxSp;\n        if (!(sp >= minSp && sp <= maxSp)) {\n            canLearnAll = false;\n        }\n    }\n    \n    cout << (canLearnAll ? \"Yes\" : \"No\") << \"\\n\";\n    \n    return 0;\n}"
@@ -36,7 +36,7 @@
     "code": "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    ios::sync_with_stdio(false);\n    cin.tie(nullptr);\n\n    long long a, b, c, d;\n    cin >> a >> b >> c >> d;\n\n    // The character can learn all commands iff the total available skill points\n    // are at least the total required skill points.\n    if (a + b >= c + d) cout << \"Yes\\n\";\n    else cout << \"No\\n\";\n\n    return 0;\n}"
   },
   {
-    "model": "deepseek-chat",
+    "model": "deepseek-v4-flash",
     "prompt_type": "zero_shot",
     "language": "java",
     "code": "import java.util.*;\nimport java.io.*;\n\npublic class Main {\n    public static void main(String[] args) throws IOException {\n        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));\n        StringTokenizer st = new StringTokenizer(br.readLine());\n        \n        int n = Integer.parseInt(st.nextToken()); // number of commands\n        int m = Integer.parseInt(st.nextToken()); // number of skill types\n        \n        // skill points required for each command\n        int[] required = new int[n];\n        st = new StringTokenizer(br.readLine());\n        for (int i = 0; i < n; i++) {\n            required[i] = Integer.parseInt(st.nextToken());\n        }\n        \n        // adjacency list for prerequisites\n        List<Integer>[] prereq = new ArrayList[n];\n        for (int i = 0; i < n; i++) {\n            prereq[i] = new ArrayList<>();\n        }\n        \n        int[] indeg = new int[n];\n        for (int i = 0; i < n; i++) {\n            st = new StringTokenizer(br.readLine());\n            int k = Integer.parseInt(st.nextToken());\n            for (int j = 0; j < k; j++) {\n                int p = Integer.parseInt(st.nextToken()) - 1;\n                prereq[p].add(i);\n                indeg[i]++;\n            }\n        }\n        \n        // available skill points\n        int[] points = new int[m];\n        st = new StringTokenizer(br.readLine());\n        for (int i = 0; i < m; i++) {\n            points[i] = Integer.parseInt(st.nextToken());\n        }\n        \n        // Topological sort using Kahn's algorithm\n        Queue<Integer> queue = new LinkedList<>();\n        for (int i = 0; i < n; i++) {\n            if (indeg[i] == 0) {\n                queue.add(i);\n            }\n        }\n        \n        int[] learned = new int[n]; // 0 = not learned, 1 = learned\n        int[] allocated = new int[m]; // allocated points per skill type\n        \n        while (!queue.isEmpty()) {\n            int cmd = queue.poll();\n            \n            // Check if we can learn this command\n            int type = required[cmd];\n            if (allocated[type] < points[type]) {\n                allocated[type]++;\n                learned[cmd] = 1;\n            } else {\n                // Cannot learn this command\n                System.out.println(\"No\");\n                return;\n            }\n            \n            // Reduce indegree of dependent commands\n            for (int next : prereq[cmd]) {\n                indeg[next]--;\n                if (indeg[next] == 0) {\n                    queue.add(next);\n                }\n            }\n        }\n        \n        // Check if all commands are learned\n        for (int i = 0; i < n; i++) {\n            if (learned[i] == 0) {\n                System.out.println(\"No\");\n                return;\n            }\n        }\n        \n        System.out.println(\"Yes\");\n    }\n}"
@@ -54,7 +54,7 @@
     "code": "import java.io.*;\nimport java.util.*;\n\npublic class Main {\n    public static void main(String[] args) throws Exception {\n        // The problem statement provided is incomplete and contains no input format\n        // or concrete conditions to evaluate. To keep the program valid and runnable,\n        // we read all input but cannot derive any meaningful logic from missing specs.\n        //\n        // If the full statement/input format is supplied, the solution can be implemented.\n        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));\n        while (br.readLine() != null) {\n            // consume input\n        }\n        System.out.println(\"No\");\n    }\n}"
   },
   {
-    "model": "deepseek-chat",
+    "model": "deepseek-v4-flash",
     "prompt_type": "zero_shot",
     "language": "python",
     "code": "def solve():\n    import sys\n    input_data = sys.stdin.read().strip().split()\n    \n    if not input_data:\n        return\n    \n    idx = 0\n    n = int(input_data[idx]); idx += 1\n    skills = list(map(int, input_data[idx:idx+n])); idx += n\n    \n    m = int(input_data[idx]); idx += 1\n    \n    # For each command, we have required skill levels\n    for _ in range(m):\n        req = list(map(int, input_data[idx:idx+n])); idx += n\n        for i in range(n):\n            if skills[i] < req[i]:\n                print(\"No\")\n                return\n    \n    print(\"Yes\")\n\nif __name__ == \"__main__\":\n    solve()"

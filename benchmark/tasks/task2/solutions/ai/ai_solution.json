@@ -1,6 +1,6 @@
 [
   {
-    "model": "deepseek-chat",
+    "model": "deepseek-v4-flash",
     "prompt_type": "zero_shot",
     "language": "python",
     "code": "t = int(input())\nfor _ in range(t):\n    n, x = map(int, input().split())\n    max_d = 0\n    max_diff = -10**18  # best (d - h)\n    for _ in range(n):\n        d, h = map(int, input().split())\n        if d > max_d:\n            max_d = d\n        if d - h > max_diff:\n            max_diff = d - h\n    \n    # If we can kill in one blow\n    if max_d >= x:\n        print(1)\n        continue\n    \n    # If no blow reduces net heads, impossible\n    if max_diff <= 0:\n        print(-1)\n        continue\n    \n    # We need to reduce heads to <= max_d using the best net reduction per blow\n    # After each blow (except the last), net reduction is max_diff\n    # So we need: x - k * max_diff <= max_d\n    # => k >= (x - max_d) / max_diff\n    k = (x - max_d + max_diff - 1) // max_diff  # ceil division\n    print(k + 1)  # +1 for the final blow"

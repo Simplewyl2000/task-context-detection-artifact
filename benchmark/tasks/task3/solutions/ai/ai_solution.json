@@ -1,6 +1,6 @@
 [
   {
-    "model": "deepseek-chat",
+    "model": "deepseek-v4-flash",
     "prompt_type": "zero_shot",
     "language": "python",
     "code": "n = int(input())\ns = input().strip()\n\ntotal_g = s.count('G')\nsegments = []\ni = 0\nwhile i < n:\n    if s[i] == 'G':\n        j = i\n        while j < n and s[j] == 'G':\n            j += 1\n        segments.append((i, j - 1, j - i))\n        i = j\n    else:\n        i += 1\n\nif not segments:\n    print(0)\n    exit()\n\nif len(segments) == 1:\n    print(segments[0][2])\n    exit()\n\nmax_len = 0\nfor idx in range(len(segments)):\n    length = segments[idx][2]\n    # Try to extend with one swap from elsewhere\n    if total_g > length:\n        length += 1\n    max_len = max(max_len, length)\n\n# Try merging two segments separated by exactly one 'S'\nfor idx in range(len(segments) - 1):\n    end_first = segments[idx][1]\n    start_second = segments[idx + 1][0]\n    if start_second - end_first == 2:  # exactly one 'S' between them\n        merged = segments[idx][2] + segments[idx + 1][2]\n        if total_g > merged:\n            merged += 1\n        max_len = max(max_len, merged)\n\nprint(max_len)"

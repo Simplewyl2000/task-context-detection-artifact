@@ -1,6 +1,6 @@
 [
   {
-    "model": "deepseek-chat",
+    "model": "deepseek-v4-flash",
     "prompt_type": "zero_shot",
     "language": "c",
     "code": "#include <stdio.h>\n#define MOD 1000000007\n\nint dp[1001][1001];\n\nint main() {\n    int n, k;\n    scanf(\"%d %d\", &n, &k);\n\n    if (n < k) {\n        printf(\"0\\n\");\n        return 0;\n    }\n\n    dp[0][0] = 1;\n    for (int i = 1; i <= n; i++) {\n        for (int j = 1; j <= k && j <= i; j++) {\n            dp[i][j] = (dp[i-1][j-1] + (i >= j ? dp[i-j][j] : 0)) % MOD;\n        }\n    }\n\n    printf(\"%d\\n\", dp[n][k]);\n    return 0;\n}"
@@ -24,7 +24,7 @@
     "code": "import sys\ninput = sys.stdin.readline\n\nMOD = 10**9 + 7\n\ndef modinv(a, m=MOD):\n    return pow(a, m-2, m)\n\ndef comb(n, r, mod=MOD):\n    if r < 0 or r > n:\n        return 0\n    num = 1\n    den = 1\n    for i in range(r):\n        num = num * (n - i) % mod\n        den = den * (i + 1) % mod\n    return num * modinv(den) % mod\n\nn, k = map(int, input().split())\nprint(comb(n-1, k-1))"
   },
   {
-    "model": "deepseek-chat",
+    "model": "deepseek-v4-flash",
     "prompt_type": "zero_shot",
     "language": "python",
     "code": "MOD = 10**9 + 7\n\ndef solve():\n    n, k = map(int, input().split())\n    if n < k:\n        print(0)\n        return\n    \n    dp = [[0] * (k + 1) for _ in range(n + 1)]\n    dp[0][0] = 1\n    \n    for i in range(1, n + 1):\n        for j in range(1, min(i, k) + 1):\n            dp[i][j] = (dp[i - 1][j - 1] + (dp[i - j][j] if i >= j else 0)) % MOD\n    \n    print(dp[n][k])\n\nif __name__ == \"__main__\":\n    solve()"
@@ -36,7 +36,7 @@
     "code": "import sys\n\nMOD = 10**9 + 7\n\ndef main():\n    data = sys.stdin.read().strip().split()\n    if not data:\n        return\n    n, k = map(int, data)\n\n    # Number of ways to write n as a sum of k positive integers\n    # with indistinguishable boxes and balls = number of partitions\n    # of n into exactly k positive parts.\n    #\n    # DP:\n    # dp[i][j] = number of partitions of i into exactly j positive parts\n    #\n    # Recurrence:\n    # dp[i][j] = dp[i-1][j-1] + dp[i-j][j]\n    # Explanation:\n    # - one part is 1, remove it -> partition of i-1 into j-1 parts\n    # - all parts >= 2, subtract 1 from each part -> partition of i-j into j parts\n\n    if k > n or k <= 0:\n        print(0)\n        return\n\n    dp = [[0] * (k + 1) for _ in range(n + 1)]\n    dp[0][0] = 1\n\n    for i in range(1, n + 1):\n        for j in range(1, min(i, k) + 1):\n            dp[i][j] = dp[i - 1][j - 1]\n            if i >= j:\n                dp[i][j] = (dp[i][j] + dp[i - j][j]) % MOD\n\n    print(dp[n][k] % MOD)\n\nif __name__ == \"__main__\":\n    main()"
   },
   {
-    "model": "deepseek-chat",
+    "model": "deepseek-v4-flash",
     "prompt_type": "zero_shot",
     "language": "c++",
     "code": "#include <bits/stdc++.h>\nusing namespace std;\n\nconst int MOD = 1e9 + 7;\n\nint main() {\n    ios::sync_with_stdio(false);\n    cin.tie(nullptr);\n\n    int n, k;\n    cin >> n >> k;\n\n    if (n < k) {\n        cout << 0 << \"\\n\";\n        return 0;\n    }\n\n    // dp[i][j] = ways to partition i into exactly j parts\n    vector<vector<int>> dp(n + 1, vector<int>(k + 1, 0));\n    dp[0][0] = 1;\n\n    for (int i = 1; i <= n; i++) {\n        for (int j = 1; j <= min(i, k); j++) {\n            dp[i][j] = (dp[i - 1][j - 1] + dp[i - j][j]) % MOD;\n        }\n    }\n\n    cout << dp[n][k] << \"\\n\";\n    return 0;\n}"
@@ -54,7 +54,7 @@
     "code": "#include <bits/stdc++.h>\nusing namespace std;\n\nstatic const long long MOD = 1000000007LL;\n\nint main() {\n    ios::sync_with_stdio(false);\n    cin.tie(nullptr);\n\n    long long n, k;\n    cin >> n >> k;\n\n    // Number of ways to distribute n indistinguishable balls\n    // into k indistinguishable non-empty boxes equals the number\n    // of integer partitions of n into exactly k positive parts.\n    //\n    // DP recurrence:\n    // dp[i][j] = number of partitions of i into exactly j positive parts\n    // dp[i][j] = dp[i-1][j-1] + dp[i-j][j]\n    //\n    // Explanation:\n    // - Put 1 ball in each of the j boxes first, then partition remaining i-j\n    //   balls into j boxes: dp[i-j][j]\n    // - Or make one box contain exactly 1 ball and partition i-1 into j-1 boxes:\n    //   dp[i-1][j-1]\n\n    if (k > n || k <= 0 || n <= 0) {\n        cout << 0 << '\\n';\n        return 0;\n    }\n\n    vector<vector<long long>> dp(n + 1, vector<long long>(k + 1, 0));\n    dp[0][0] = 1;\n\n    for (long long i = 1; i <= n; ++i) {\n        for (long long j = 1; j <= k && j <= i; ++j) {\n            dp[i][j] = dp[i - 1][j - 1];\n            if (i >= j) {\n                dp[i][j] = (dp[i][j] + dp[i - j][j]) % MOD;\n            }\n        }\n    }\n\n    cout << dp[n][k] % MOD << '\\n';\n    return 0;\n}"
   },
   {
-    "model": "deepseek-chat",
+    "model": "deepseek-v4-flash",
     "prompt_type": "zero_shot",
     "language": "java",
     "code": "import java.util.Scanner;\n\npublic class Main {\n    static final int MOD = 1_000_000_007;\n\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        int n = sc.nextInt();\n        int k = sc.nextInt();\n        sc.close();\n\n        if (k > n) {\n            System.out.println(0);\n            return;\n        }\n\n        int[][] dp = new int[n + 1][k + 1];\n        dp[0][0] = 1;\n\n        for (int i = 1; i <= n; i++) {\n            for (int j = 1; j <= k && j <= i; j++) {\n                dp[i][j] = (dp[i - 1][j - 1] + (i >= j ? dp[i - j][j] : 0)) % MOD;\n            }\n        }\n\n        System.out.println(dp[n][k]);\n    }\n}"

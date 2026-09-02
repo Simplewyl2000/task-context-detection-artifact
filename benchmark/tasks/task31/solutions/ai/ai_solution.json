@@ -1,6 +1,6 @@
 [
   {
-    "model": "deepseek-chat",
+    "model": "deepseek-v4-flash",
     "prompt_type": "zero_shot",
     "language": "python",
     "code": "x, y, l, r = map(int, input().split())\n\n# Generate all possible powers of x and y up to r\npowers_x = [1]\npowers_y = [1]\n\n# For x, handle the case x == 1 separately\nif x == 1:\n    powers_x = [1]\nelse:\n    val = 1\n    while val <= r // x:\n        val *= x\n        powers_x.append(val)\n\nif y == 1:\n    powers_y = [1]\nelse:\n    val = 1\n    while val <= r // y:\n        val *= y\n        powers_y.append(val)\n\n# Generate all unlucky years\nunlucky = set()\nfor a in powers_x:\n    for b in powers_y:\n        s = a + b\n        if l <= s <= r:\n            unlucky.add(s)\n\n# If no unlucky years in range, the whole range is golden\nif not unlucky:\n    print(r - l + 1)\nelse:\n    sorted_unlucky = sorted(unlucky)\n    max_gap = 0\n    # Check gap before first unlucky year\n    max_gap = max(max_gap, sorted_unlucky[0] - l)\n    # Check gaps between unlucky years\n    for i in range(1, len(sorted_unlucky)):\n        max_gap = max(max_gap, sorted_unlucky[i] - sorted_unlucky[i-1] - 1)\n    # Check gap after last unlucky year\n    max_gap = max(max_gap, r - sorted_unlucky[-1])\n    print(max_gap)"

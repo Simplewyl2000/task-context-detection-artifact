@@ -6,7 +6,7 @@
     "code": "a = int(input())\nb = int(input())\nc = int(input())\nd = int(input())\ne = int(input())\nf = int(input())\n\nbest = 0\nfor i in range(min(a, d) + 1):\n    remaining_jackets = d - i\n    j = min(b, c, remaining_jackets)\n    cost = i * e + j * f\n    if cost > best:\n        best = cost\n\nprint(best)"
   },
   {
-    "model": "deepseek-chat",
+    "model": "deepseek-v4-flash",
     "prompt_type": "zero_shot",
     "language": "python",
     "code": "a = int(input().strip())\nb = int(input().strip())\nc = int(input().strip())\nd = int(input().strip())\ne = int(input().strip())\nf = int(input().strip())\n\nmax_cost = 0\n# Try all possible counts of type 2 suits\nmax_type2 = min(b, c, d)\nfor type2 in range(max_type2 + 1):\n    jackets_left = d - type2\n    type1 = min(a, jackets_left)\n    cost = type1 * e + type2 * f\n    if cost > max_cost:\n        max_cost = cost\n\nprint(max_cost)"

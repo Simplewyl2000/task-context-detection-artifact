@@ -1,6 +1,6 @@
 [
   {
-    "model": "deepseek-chat",
+    "model": "deepseek-v4-flash",
     "prompt_type": "zero_shot",
     "language": "python",
     "code": "k = int(input().strip())\n\n# length of current numbers (1-digit, 2-digit, ...)\nlength = 1\ncount = 9\nstart = 1\n\nwhile k > length * count:\n    k -= length * count\n    length += 1\n    count *= 10\n    start *= 10\n\n# Now k is within numbers of 'length' digits\nnumber = start + (k - 1) // length\ndigit_index = (k - 1) % length\n\nprint(str(number)[digit_index])"

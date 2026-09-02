@@ -1,6 +1,6 @@
 [
   {
-    "model": "deepseek-chat",
+    "model": "deepseek-v4-flash",
     "prompt_type": "zero_shot",
     "language": "python",
     "code": "k2, k3, k5, k6 = map(int, input().split())\n\n# First make as many 256 as possible\ncount256 = min(k2, k5, k6)\nk2 -= count256\nk5 -= count256\nk6 -= count256\n\n# Then make as many 32 as possible\ncount32 = min(k2, k3)\n\nresult = count256 * 256 + count32 * 32\nprint(result)"

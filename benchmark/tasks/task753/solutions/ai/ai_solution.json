@@ -6,7 +6,7 @@
     "code": "#include <bits/stdc++.h>\nusing namespace std;\n\nconst int MOD = 998244353;\n\nlong long power(long long a, long long b, long long mod) {\n    long long res = 1; a %= mod;\n    while (b > 0) { if (b & 1) res = res * a % mod; a = a * a % mod; b >>= 1; }\n    return res;\n}\n\nint main(){\n    long long N, M;\n    cin >> N >> M;\n    // Answer is C(N+M, N) mod 998244353\n    long long num = N + M;\n    long long k = min(N, M);\n    long long res = 1;\n    for (long long i = 0; i < k; i++) {\n        res = res % MOD * ((num - i) % MOD) % MOD;\n        res = res % MOD * power(i + 1, MOD - 2, MOD) % MOD;\n    }\n    cout << res << endl;\n}"
   },
   {
-    "model": "deepseek-chat",
+    "model": "deepseek-v4-flash",
     "prompt_type": "zero_shot",
     "language": "c++",
     "code": "#include <bits/stdc++.h>\nusing namespace std;\nconst int MOD = 998244353;\nint main() {\n    long long N, M;\n    cin >> N >> M;\n    cout << ((N+1) * (M+1)) % MOD << endl;\n    return 0;\n}"
@@ -24,7 +24,7 @@
     "code": "import sys\nfrom itertools import product\n\ndef solve():\n    input_data = sys.stdin.read().split()\n    N, M = int(input_data[0]), int(input_data[1])\n    MOD = 998244353\n    \n    grids = set()\n    for ks in product(range(M+1), repeat=N):\n        for ls in product(range(N+1), repeat=M):\n            grid = []\n            for i in range(N):\n                row = []\n                for j in range(M):\n                    row.append((1 if j < ks[i] else 0) + (1 if i < ls[j] else 0))\n                grid.append(tuple(row))\n            grids.add(tuple(grid))\n    print(len(grids) % MOD)\n\nsolve()"
   },
   {
-    "model": "deepseek-chat",
+    "model": "deepseek-v4-flash",
     "prompt_type": "zero_shot",
     "language": "python",
     "code": "MOD = 998244353\n\ndef modinv(a):\n    return pow(a, MOD - 2, MOD)\n\ndef comb(n, k):\n    if k < 0 or k > n:\n        return 0\n    num = den = 1\n    for i in range(k):\n        num = num * (n - i) % MOD\n        den = den * (i + 1) % MOD\n    return num * modinv(den) % MOD\n\nN, M = map(int, input().split())\nprint(comb(N + M, N))"
@@ -42,7 +42,7 @@
     "code": "import java.util.*;\nimport java.io.*;\n\npublic class Main {\n    static final long MOD = 998244353;\n    public static void main(String[] args) throws IOException {\n        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));\n        StringTokenizer st = new StringTokenizer(br.readLine());\n        int N = Integer.parseInt(st.nextToken());\n        int M = Integer.parseInt(st.nextToken());\n        int maxK = Math.min(N, M);\n        long[] C_N = new long[maxK+1], C_M = new long[maxK+1];\n        C_N[0] = C_M[0] = 1;\n        for(int i=1;i<=maxK;i++) { C_N[i]=C_N[i-1]*(N-i+1)%MOD; long inv=1,b=i,e=MOD-2,m=MOD; while(e>0){if((e&1)==1)inv=inv*b%m;b=b*b%m;e>>=1;} C_N[i]=C_N[i]*inv%MOD; }\n        for(int i=1;i<=maxK;i++) { C_M[i]=C_M[i-1]*(M-i+1)%MOD; long inv=1,b=i,e=MOD-2,m=MOD; while(e>0){if((e&1)==1)inv=inv*b%m;b=b*b%m;e>>=1;} C_M[i]=C_M[i]*inv%MOD; }\n        long ans=0, pow2=1;\n        for(int k=0;k<=maxK;k++) { ans=(ans+C_N[k]*C_M[k]%MOD*pow2)%MOD; pow2=pow2*2%MOD; }\n        System.out.println(ans);\n    }\n}"
   },
   {
-    "model": "deepseek-chat",
+    "model": "deepseek-v4-flash",
     "prompt_type": "zero_shot",
     "language": "java",
     "code": "import java.util.Scanner;\n\npublic class Main {\n    static final long MOD = 998244353;\n\n    static long modPow(long a, long e) {\n        long res = 1;\n        a %= MOD;\n        while (e > 0) {\n            if ((e & 1) == 1) res = res * a % MOD;\n            a = a * a % MOD;\n            e >>= 1;\n        }\n        return res;\n    }\n\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        long N = sc.nextLong();\n        long M = sc.nextLong();\n        long ans = modPow(M + 1, N) * modPow(N + 1, M) % MOD;\n        System.out.println(ans);\n    }\n}"
@@ -60,7 +60,7 @@
     "code": "#include <stdio.h>\n#define MOD 998244353LL\nint main(){\n    long long N,M;\n    scanf(\"%lld %lld\",&N,&M);\n    // Answer is C(N+M, N)\n    long long num=N+M, den=N;\n    if(den>num-den) den=num-den;\n    long long res=1;\n    for(long long i=0;i<den;i++){\n        res=res*(num-i)%MOD;\n        long long inv=1,b=MOD-2,base=(i+1)%MOD;\n        while(b){if(b&1)inv=inv*base%MOD;base=base*base%MOD;b>>=1;}\n        res=res*inv%MOD;\n    }\n    printf(\"%lld\\n\",res);\n}"
   },
   {
-    "model": "deepseek-chat",
+    "model": "deepseek-v4-flash",
     "prompt_type": "zero_shot",
     "language": "c",
     "code": "#include <stdio.h>\n#define MOD 998244353\n\nlong long modpow(long long a, long long e) {\n    long long res = 1;\n    while (e) {\n        if (e & 1) res = res * a % MOD;\n        a = a * a % MOD;\n        e >>= 1;\n    }\n    return res;\n}\n\nint main() {\n    int N, M;\n    scanf(\"%d %d\", &N, &M);\n    int K = N + M + 2;\n    long long fact[K+1], invfact[K+1];\n    fact[0] = 1;\n    for (int i = 1; i <= K; i++) fact[i] = fact[i-1] * i % MOD;\n    invfact[K] = modpow(fact[K], MOD-2);\n    for (int i = K; i >= 1; i--) invfact[i-1] = invfact[i] * i % MOD;\n    long long comb = fact[K] * invfact[N+1] % MOD * invfact[K-(N+1)] % MOD;\n    long long ans = (comb - 1 + MOD) % MOD;\n    printf(\"%lld\\n\", ans);\n    return 0;\n}"

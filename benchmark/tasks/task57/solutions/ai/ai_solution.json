@@ -1,6 +1,6 @@
 [
   {
-    "model": "deepseek-chat",
+    "model": "deepseek-v4-flash",
     "prompt_type": "zero_shot",
     "language": "python",
     "code": "n, k, p, x, y = map(int, input().split())\na = list(map(int, input().split()))\n\n# Count existing marks less than y\nless_y = sum(1 for v in a if v < y)\ngreater_equal_y = k - less_y\n\n# We need at least (n+1)//2 marks >= y\nneed_ge_y = (n + 1) // 2 - greater_equal_y\nif need_ge_y < 0:\n    need_ge_y = 0\n\n# The remaining slots after putting needed >= y marks\nremaining = n - k - need_ge_y\n\n# We cannot have more than n//2 marks less than y\nif less_y > n // 2:\n    print(-1)\nelse:\n    # Fill needed >= y marks with y, fill rest with 1\n    result = [y] * need_ge_y + [1] * remaining\n    # Check sum constraint\n    total_sum = sum(a) + sum(result)\n    if total_sum > x:\n        print(-1)\n    else:\n        print(' '.join(map(str, result)))"

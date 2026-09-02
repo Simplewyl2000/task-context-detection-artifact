@@ -1,6 +1,6 @@
 [
   {
-    "model": "deepseek-chat",
+    "model": "deepseek-v4-flash",
     "prompt_type": "zero_shot",
     "language": "python",
     "code": "t = int(input())\nfor _ in range(t):\n    n, x = map(int, input().split())\n    s = input().strip()\n    \n    pref = [0] * (n + 1)\n    for i in range(n):\n        pref[i+1] = pref[i] + (1 if s[i] == '0' else -1)\n    \n    total_bal = pref[n]\n    \n    if total_bal == 0:\n        if any(p == x for p in pref):\n            print(-1)\n        else:\n            print(0)\n    else:\n        count = 0\n        for bal in pref:\n            # solve total_bal * q + bal = x\n            # q = (x - bal) / total_bal\n            diff = x - bal\n            if diff % total_bal == 0:\n                q = diff // total_bal\n                if q >= 0:\n                    count += 1\n        print(count)"

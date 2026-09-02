@@ -1,6 +1,6 @@
 [
   {
-    "model": "deepseek-chat",
+    "model": "deepseek-v4-flash",
     "prompt_type": "zero_shot",
     "language": "c",
     "code": "#include <stdio.h>\n\nlong long max(long long a, long long b) {\n    return a > b ? a : b;\n}\n\nint main() {\n    int N, W;\n    scanf(\"%d %d\", &N, &W);\n    \n    int w[101];\n    int v[101];\n    for (int i = 0; i < N; i++) {\n        scanf(\"%d %d\", &w[i], &v[i]);\n    }\n    \n    long long dp[100001] = {0};\n    \n    for (int i = 0; i < N; i++) {\n        for (int j = W; j >= w[i]; j--) {\n            dp[j] = max(dp[j], dp[j - w[i]] + v[i]);\n        }\n    }\n    \n    long long answer = 0;\n    for (int j = 0; j <= W; j++) {\n        answer = max(answer, dp[j]);\n    }\n    \n    printf(\"%lld\\n\", answer);\n    \n    return 0;\n}"
@@ -24,7 +24,7 @@
     "code": "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n    \n    int N, W;\n    cin >> N >> W;\n    \n    vector<int> w(N), v(N);\n    for (int i = 0; i < N; i++) {\n        cin >> w[i] >> v[i];\n    }\n    \n    vector<long long> dp(W + 1, 0);\n    \n    for (int i = 0; i < N; i++) {\n        for (int j = W; j >= w[i]; j--) {\n            dp[j] = max(dp[j], dp[j - w[i]] + v[i]);\n        }\n    }\n    \n    cout << dp[W] << endl;\n    \n    return 0;\n}"
   },
   {
-    "model": "deepseek-chat",
+    "model": "deepseek-v4-flash",
     "prompt_type": "zero_shot",
     "language": "c++",
     "code": "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    ios::sync_with_stdio(false);\n    cin.tie(nullptr);\n    \n    int N, W;\n    cin >> N >> W;\n    \n    vector<int> w(N), v(N);\n    for (int i = 0; i < N; i++) {\n        cin >> w[i] >> v[i];\n    }\n    \n    // dp[j] = maximum value achievable with weight exactly j\n    // Initialize with -1 (unreachable) except dp[0] = 0\n    vector<long long> dp(W + 1, -1);\n    dp[0] = 0;\n    \n    for (int i = 0; i < N; i++) {\n        // Process in reverse to avoid using the same item multiple times\n        for (int j = W; j >= w[i]; j--) {\n            if (dp[j - w[i]] != -1) {\n                dp[j] = max(dp[j], dp[j - w[i]] + v[i]);\n            }\n        }\n    }\n    \n    long long ans = 0;\n    for (int j = 0; j <= W; j++) {\n        ans = max(ans, dp[j]);\n    }\n    \n    cout << ans << \"\\n\";\n    \n    return 0;\n}"
@@ -42,7 +42,7 @@
     "code": "import java.util.*;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        int N = sc.nextInt();\n        int W = sc.nextInt();\n        int[] w = new int[N];\n        int[] v = new int[N];\n        for (int i = 0; i < N; i++) {\n            w[i] = sc.nextInt();\n            v[i] = sc.nextInt();\n        }\n        \n        long[] dp = new long[W + 1];\n        for (int i = 0; i < N; i++) {\n            for (int j = W; j >= w[i]; j--) {\n                dp[j] = Math.max(dp[j], dp[j - w[i]] + v[i]);\n            }\n        }\n        \n        System.out.println(dp[W]);\n    }\n}"
   },
   {
-    "model": "deepseek-chat",
+    "model": "deepseek-v4-flash",
     "prompt_type": "zero_shot",
     "language": "java",
     "code": "import java.util.*;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        int N = sc.nextInt();\n        int W = sc.nextInt();\n        \n        int[] weight = new int[N];\n        int[] value = new int[N];\n        \n        for (int i = 0; i < N; i++) {\n            weight[i] = sc.nextInt();\n            value[i] = sc.nextInt();\n        }\n        \n        // dp[w] = maximum value achievable with exactly weight w\n        long[] dp = new long[W + 1];\n        Arrays.fill(dp, Long.MIN_VALUE);\n        dp[0] = 0;\n        \n        for (int i = 0; i < N; i++) {\n            int w = weight[i];\n            int v = value[i];\n            // iterate backwards to avoid using the same item multiple times\n            for (int j = W; j >= w; j--) {\n                if (dp[j - w] != Long.MIN_VALUE) {\n                    dp[j] = Math.max(dp[j], dp[j - w] + v);\n                }\n            }\n        }\n        \n        long maxVal = 0;\n        for (int j = 0; j <= W; j++) {\n            maxVal = Math.max(maxVal, dp[j]);\n        }\n        \n        System.out.println(maxVal);\n        sc.close();\n    }\n}"
@@ -54,7 +54,7 @@
     "code": "import java.io.*;\nimport java.util.*;\n\npublic class Main {\n    public static void main(String[] args) throws Exception {\n        FastScanner fs = new FastScanner(System.in);\n\n        int N = fs.nextInt();\n        long W = fs.nextLong();\n\n        long[] dp = new long[(int) W + 1];\n\n        for (int i = 0; i < N; i++) {\n            int weight = fs.nextInt();\n            long value = fs.nextLong();\n\n            for (int w = (int) W; w >= weight; w--) {\n                dp[w] = Math.max(dp[w], dp[w - weight] + value);\n            }\n        }\n\n        long ans = 0;\n        for (int w = 0; w <= W; w++) ans = Math.max(ans, dp[w]);\n\n        System.out.println(ans);\n    }\n\n    static class FastScanner {\n        private final InputStream in;\n        private final byte[] buffer = new byte[1 << 16];\n        private int ptr = 0, len = 0;\n\n        FastScanner(InputStream is) {\n            in = is;\n        }\n\n        private int read() throws IOException {\n            if (ptr >= len) {\n                len = in.read(buffer);\n                ptr = 0;\n                if (len <= 0) return -1;\n            }\n            return buffer[ptr++];\n        }\n\n        long nextLong() throws IOException {\n            int c;\n            do {\n                c = read();\n            } while (c <= ' ' && c != -1);\n\n            long sign = 1;\n            if (c == '-') {\n                sign = -1;\n                c = read();\n            }\n\n            long val = 0;\n            while (c > ' ') {\n                val = val * 10 + (c - '0');\n                c = read();\n            }\n            return val * sign;\n        }\n\n        int nextInt() throws IOException {\n            return (int) nextLong();\n        }\n    }\n}"
   },
   {
-    "model": "deepseek-chat",
+    "model": "deepseek-v4-flash",
     "prompt_type": "zero_shot",
     "language": "python",
     "code": "def solve():\n    import sys\n    input = sys.stdin.readline\n    \n    n, W = map(int, input().split())\n    items = [tuple(map(int, input().split())) for _ in range(n)]\n    \n    dp = [0] * (W + 1)\n    \n    for w, v in items:\n        for weight in range(W, w - 1, -1):\n            dp[weight] = max(dp[weight], dp[weight - w] + v)\n    \n    print(dp[W])\n\nif __name__ == \"__main__\":\n    solve()"

@@ -1,6 +1,6 @@
 [
   {
-    "model": "deepseek-chat",
+    "model": "deepseek-v4-flash",
     "prompt_type": "zero_shot",
     "language": "python",
     "code": "s = input().strip()\nn = len(s)\n\n# Check if the whole string is not a palindrome\nif s != s[::-1]:\n    print(n)\nelse:\n    # Whole string is palindrome, check if all characters are same\n    if len(set(s)) == 1:\n        print(0)\n    else:\n        # If not all same, then we can drop one character from either end\n        print(n - 1)"

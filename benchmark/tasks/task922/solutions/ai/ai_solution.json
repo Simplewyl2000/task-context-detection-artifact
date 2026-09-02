@@ -6,7 +6,7 @@
     "code": "#include <stdio.h>\n#include <string.h>\n\nint main() {\n    int N, W;\n    scanf(\"%d %d\", &N, &W);\n    \n    int w[105], v[105];\n    for (int i = 0; i < N; i++) {\n        scanf(\"%d %d\", &w[i], &v[i]);\n    }\n    \n    // dp[j] = max value with capacity j\n    long long dp[100005];\n    memset(dp, 0, sizeof(dp));\n    \n    for (int i = 0; i < N; i++) {\n        for (int j = W; j >= w[i]; j--) {\n            if (dp[j - w[i]] + v[i] > dp[j]) {\n                dp[j] = dp[j - w[i]] + v[i];\n            }\n        }\n    }\n    \n    printf(\"%lld\\n\", dp[W]);\n    \n    return 0;\n}"
   },
   {
-    "model": "deepseek-chat",
+    "model": "deepseek-v4-flash",
     "prompt_type": "zero_shot",
     "language": "c",
     "code": "#include <stdio.h>\n#include <string.h>\n\n#define MAX_N 100\n#define MAX_W 100000\n\nlong long dp[MAX_W + 1];\n\nint main() {\n    int N, W;\n    scanf(\"%d %d\", &N, &W);\n    \n    // Initialize dp array\n    memset(dp, 0, sizeof(dp));\n    \n    for (int i = 0; i < N; i++) {\n        int w, v;\n        scanf(\"%d %d\", &w, &v);\n        \n        // Iterate from W down to w to avoid reusing the same item\n        for (int j = W; j >= w; j--) {\n            if (dp[j - w] + v > dp[j]) {\n                dp[j] = dp[j - w] + v;\n            }\n        }\n    }\n    \n    // Find the maximum value achievable\n    long long max_value = 0;\n    for (int j = 0; j <= W; j++) {\n        if (dp[j] > max_value) {\n            max_value = dp[j];\n        }\n    }\n    \n    printf(\"%lld\\n\", max_value);\n    \n    return 0;\n}"
@@ -24,7 +24,7 @@
     "code": "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n    \n    int N, W;\n    cin >> N >> W;\n    \n    vector<int> w(N), v(N);\n    for (int i = 0; i < N; i++) {\n        cin >> w[i] >> v[i];\n    }\n    \n    vector<long long> dp(W + 1, 0);\n    \n    for (int i = 0; i < N; i++) {\n        for (int j = W; j >= w[i]; j--) {\n            dp[j] = max(dp[j], dp[j - w[i]] + v[i]);\n        }\n    }\n    \n    cout << dp[W] << endl;\n    \n    return 0;\n}"
   },
   {
-    "model": "deepseek-chat",
+    "model": "deepseek-v4-flash",
     "prompt_type": "zero_shot",
     "language": "c++",
     "code": "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    ios::sync_with_stdio(false);\n    cin.tie(nullptr);\n\n    int N, W;\n    cin >> N >> W;\n\n    vector<int> w(N), v(N);\n    for (int i = 0; i < N; i++) {\n        cin >> w[i] >> v[i];\n    }\n\n    // dp[w] = maximum value achievable with exactly weight w\n    vector<long long> dp(W + 1, -1e18);\n    dp[0] = 0;\n\n    for (int i = 0; i < N; i++) {\n        for (int weight = W; weight >= w[i]; weight--) {\n            if (dp[weight - w[i]] != -1e18) {\n                dp[weight] = max(dp[weight], dp[weight - w[i]] + v[i]);\n            }\n        }\n    }\n\n    long long ans = 0;\n    for (int weight = 0; weight <= W; weight++) {\n        ans = max(ans, dp[weight]);\n    }\n\n    cout << ans << \"\\n\";\n    return 0;\n}"
@@ -36,7 +36,7 @@
     "code": "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    ios::sync_with_stdio(false);\n    cin.tie(nullptr);\n\n    int N;\n    long long W;\n    cin >> N >> W;\n\n    vector<long long> w(N), v(N);\n    long long sumV = 0;\n    for (int i = 0; i < N; ++i) {\n        cin >> w[i] >> v[i];\n        sumV += v[i];\n    }\n\n    const long long INF = (1LL << 60);\n\n    // dp[value] = minimum weight needed to achieve total value exactly 'value'\n    vector<long long> dp(sumV + 1, INF);\n    dp[0] = 0;\n\n    for (int i = 0; i < N; ++i) {\n        for (long long val = sumV; val >= v[i]; --val) {\n            dp[val] = min(dp[val], dp[val - v[i]] + w[i]);\n        }\n    }\n\n    long long ans = 0;\n    for (long long val = 0; val <= sumV; ++val) {\n        if (dp[val] <= W) ans = val;\n    }\n\n    cout << ans << '\\n';\n    return 0;\n}"
   },
   {
-    "model": "deepseek-chat",
+    "model": "deepseek-v4-flash",
     "prompt_type": "zero_shot",
     "language": "java",
     "code": "import java.util.Scanner;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        \n        int N = sc.nextInt();\n        int W = sc.nextInt();\n        \n        int[] weights = new int[N];\n        int[] values = new int[N];\n        \n        for (int i = 0; i < N; i++) {\n            weights[i] = sc.nextInt();\n            values[i] = sc.nextInt();\n        }\n        \n        long[] dp = new long[W + 1];\n        \n        for (int i = 0; i < N; i++) {\n            for (int w = W; w >= weights[i]; w--) {\n                dp[w] = Math.max(dp[w], dp[w - weights[i]] + values[i]);\n            }\n        }\n        \n        System.out.println(dp[W]);\n        \n        sc.close();\n    }\n}"
@@ -60,7 +60,7 @@
     "code": "import sys\n\ndef solve():\n    input_data = sys.stdin.read().split()\n    idx = 0\n    N = int(input_data[idx]); idx += 1\n    W = int(input_data[idx]); idx += 1\n    \n    items = []\n    for i in range(N):\n        w = int(input_data[idx]); idx += 1\n        v = int(input_data[idx]); idx += 1\n        items.append((w, v))\n    \n    # Standard DP knapsack\n    dp = [0] * (W + 1)\n    \n    for w, v in items:\n        for j in range(W, w - 1, -1):\n            dp[j] = max(dp[j], dp[j - w] + v)\n    \n    print(dp[W])\n\nsolve()"
   },
   {
-    "model": "deepseek-chat",
+    "model": "deepseek-v4-flash",
     "prompt_type": "zero_shot",
     "language": "python",
     "code": "n, W = map(int, input().split())\nitems = [tuple(map(int, input().split())) for _ in range(n)]\n\ndp = [0] * (W + 1)\n\nfor w, v in items:\n    for weight in range(W, w - 1, -1):\n        dp[weight] = max(dp[weight], dp[weight - w] + v)\n\nprint(dp[W])"

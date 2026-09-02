@@ -1,6 +1,6 @@
 [
   {
-    "model": "deepseek-chat",
+    "model": "deepseek-v4-flash",
     "prompt_type": "zero_shot",
     "language": "python",
     "code": "import sys\n\ninput_data = sys.stdin.read().strip().splitlines()\nn, m = map(int, input_data[0].split())\ngrid = input_data[1:]\n\nrow_count = [0] * n\ncol_count = [0] * m\ntotal_walls = 0\n\nfor i in range(n):\n    for j in range(m):\n        if grid[i][j] == '*':\n            row_count[i] += 1\n            col_count[j] += 1\n            total_walls += 1\n\nfor i in range(n):\n    for j in range(m):\n        bomb_destroy = row_count[i] + col_count[j]\n        if grid[i][j] == '*':\n            bomb_destroy -= 1\n        if bomb_destroy == total_walls:\n            print(\"YES\")\n            print(i + 1, j + 1)\n            sys.exit()\n\nprint(\"NO\")"

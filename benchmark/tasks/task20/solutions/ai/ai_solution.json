@@ -1,6 +1,6 @@
 [
   {
-    "model": "deepseek-chat",
+    "model": "deepseek-v4-flash",
     "prompt_type": "zero_shot",
     "language": "python",
     "code": "MOD = 10**9 + 7\n\nn, T = map(int, input().split())\nsongs = []\nfor _ in range(n):\n    t, g = map(int, input().split())\n    songs.append((t, g))\n\n# dp[mask][last] = dict: time -> count\ndp = [[{} for _ in range(n)] for _ in range(1 << n)]\n\nfor i in range(n):\n    t, _ = songs[i]\n    if t <= T:\n        dp[1 << i][i][t] = 1\n\nfor mask in range(1 << n):\n    for last in range(n):\n        if not (mask & (1 << last)):\n            continue\n        for time, cnt in dp[mask][last].items():\n            for nxt in range(n):\n                if mask & (1 << nxt):\n                    continue\n                if songs[nxt][1] == songs[last][1]:\n                    continue\n                new_time = time + songs[nxt][0]\n                if new_time > T:\n                    continue\n                new_mask = mask | (1 << nxt)\n                dp[new_mask][nxt][new_time] = (dp[new_mask][nxt].get(new_time, 0) + cnt) % MOD\n\nans = 0\nfor mask in range(1 << n):\n    for last in range(n):\n        if T in dp[mask][last]:\n            ans = (ans + dp[mask][last][T]) % MOD\n\nprint(ans)"

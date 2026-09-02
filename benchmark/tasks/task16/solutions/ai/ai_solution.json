@@ -6,7 +6,7 @@
     "code": "def solve():\n    line = input().strip()\n    # Find where the number ends and letter begins\n    s = line[-1]\n    n = int(line[:-1])\n    \n    seat_offset = {'f': 1, 'e': 2, 'd': 3, 'a': 4, 'b': 5, 'c': 6}[s]\n    \n    r = n % 4\n    if r == 1:\n        cycle = (n - 1) // 4\n        start = cycle * 16\n    elif r == 2:\n        cycle = (n - 2) // 4\n        start = cycle * 16 + 7\n    elif r == 3:\n        cycle = (n - 3) // 4\n        start = cycle * 16\n    else:  # r == 0\n        cycle = (n - 4) // 4\n        start = cycle * 16 + 7\n    \n    print(start + seat_offset)\n\nsolve()"
   },
   {
-    "model": "deepseek-chat",
+    "model": "deepseek-v4-flash",
     "prompt_type": "zero_shot",
     "language": "python",
     "code": "order = {'f':1, 'e':2, 'd':3, 'a':4, 'b':5, 'c':6}"

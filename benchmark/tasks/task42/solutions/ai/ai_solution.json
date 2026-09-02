@@ -1,6 +1,6 @@
 [
   {
-    "model": "deepseek-chat",
+    "model": "deepseek-v4-flash",
     "prompt_type": "zero_shot",
     "language": "python",
     "code": "import sys\nimport bisect\n\ninput = sys.stdin.readline\n\nn = int(input())\ncakes = []\nvolumes = []\n\nfor _ in range(n):\n    r, h = map(int, input().split())\n    vol = r * r * h\n    cakes.append(vol)\n    volumes.append(vol)\n\n# Coordinate compression of volumes\nsorted_vols = sorted(set(volumes))\ncomp = {v: i+1 for i, v in enumerate(sorted_vols)}  # 1-indexed BIT\n\nsize = len(sorted_vols) + 2\nbit = [0] * size\n\ndef bit_update(idx, val):\n    while idx < size:\n        if val > bit[idx]:\n            bit[idx] = val\n        else:\n            # No need to update further if not bigger\n            pass\n        idx += idx & -idx\n\ndef bit_query(idx):\n    res = 0\n    while idx > 0:\n        if bit[idx] > res:\n            res = bit[idx]\n        idx -= idx & -idx\n    return res\n\nfor vol in cakes:\n    idx = comp[vol]\n    best = bit_query(idx - 1)  # strictly smaller volume\n    bit_update(idx, best + vol)\n\nans = bit_query(size - 1)\nprint(ans * 3.141592653589793)"

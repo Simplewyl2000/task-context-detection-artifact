@@ -1,6 +1,6 @@
 [
   {
-    "model": "deepseek-chat",
+    "model": "deepseek-v4-flash",
     "prompt_type": "zero_shot",
     "language": "python",
     "code": "n, k = input().split()\nk = int(k)\n\nn_str = n\ncount_zero = 0\nremove_count = 0\n\n# Scan from right to left\nfor digit in reversed(n_str):\n    if digit == '0':\n        count_zero += 1\n        if count_zero == k:\n            break\n    else:\n        remove_count += 1\n\nif count_zero == k:\n    print(remove_count)\nelse:\n    # Not enough zeros, answer is length - 1 (keep one zero)\n    print(len(n_str) - 1)"

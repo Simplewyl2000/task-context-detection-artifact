@@ -1,6 +1,6 @@
 [
   {
-    "model": "deepseek-chat",
+    "model": "deepseek-v4-flash",
     "prompt_type": "zero_shot",
     "language": "python",
     "code": "def count_occurrences(y, n):\n    \"\"\"Return how many x in [1, n] have y in path(x).\"\"\"\n    if y > n:\n        return 0\n    total = 0\n    # We'll maintain a queue of intervals [l, r] that map to y\n    stack = [(y, y)]\n    while stack:\n        l, r = stack.pop()\n        if l > n:\n            continue\n        total += min(r, n) - l + 1\n        # Expand upward\n        # From even numbers: previous can be 2*l .. 2*r+1\n        # From odd numbers: previous can be 2*l .. 2*r\n        if l % 2 == 0:\n            # All numbers in [l, r] are even? Not necessarily.\n            # But we can split into even and odd subranges\n            # Simpler: just compute new interval directly\n            nl = 2 * l\n            nr = 2 * r + 1\n        else:\n            nl = 2 * l\n            nr = 2 * r\n        if nl <= n:\n            stack.append((nl, nr))\n    return total\n\n\ndef solve():\n    n, k = map(int, input().split())\n    lo, hi = 1, n\n    ans = 1\n    while lo <= hi:\n        mid = (lo + hi) // 2\n        if count_occurrences(mid, n) >= k:\n            ans = mid\n            lo = mid + 1\n        else:\n            hi = mid - 1\n    print(ans)\n\n\nif __name__ == \"__main__\":\n    solve()"

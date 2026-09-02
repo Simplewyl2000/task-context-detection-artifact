@@ -1,6 +1,6 @@
 [
   {
-    "model": "deepseek-chat",
+    "model": "deepseek-v4-flash",
     "prompt_type": "zero_shot",
     "language": "python",
     "code": "import math\n\nN, M, K, L = map(int, input().split())\n\nif K + L > N:\n    print(-1)\nelse:\n    x = (K + L + M - 1) // M  # ceil division\n    if M * x <= N:\n        print(x)\n    else:\n        print(-1)"

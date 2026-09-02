@@ -1,6 +1,6 @@
 [
   {
-    "model": "deepseek-chat",
+    "model": "deepseek-v4-flash",
     "prompt_type": "zero_shot",
     "language": "python",
     "code": "n, m, r = map(int, input().split())\ns = list(map(int, input().split()))\nb = list(map(int, input().split()))\n\nmin_buy = min(s)\nmax_sell = max(b)\n\nif max_sell <= min_buy:\n    print(r)\nelse:\n    shares = r // min_buy\n    remaining = r % min_buy\n    print(remaining + shares * max_sell)"

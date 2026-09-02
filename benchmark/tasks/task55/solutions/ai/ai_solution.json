@@ -1,6 +1,6 @@
 [
   {
-    "model": "deepseek-chat",
+    "model": "deepseek-v4-flash",
     "prompt_type": "zero_shot",
     "language": "python",
     "code": "n, a, b, c, d = map(int, input().split())\n\n# Let the unknown cells be:\n# x1 a  x2\n# b  x3 c\n# x4 d  x5\n#\n# The four 2x2 squares:\n# top-left: x1 + a + b + x3\n# top-right: a + x2 + x3 + c\n# bottom-left: b + x3 + x4 + d\n# bottom-right: x3 + c + d + x5\n#\n# All equal to top-left sum S = x1 + a + b + x3\n#\n# From top-right equality:\n# a + x2 + x3 + c = x1 + a + b + x3  => x2 + c = x1 + b  => x2 = x1 + b - c\n# From bottom-left equality:\n# b + x3 + x4 + d = x1 + a + b + x3  => x4 + d = x1 + a  => x4 = x1 + a - d\n# From bottom-right equality:\n# x3 + c + d + x5 = x1 + a + b + x3  => c + d + x5 = x1 + a + b  => x5 = x1 + a + b - c - d\n#\n# All unknowns must be between 1 and n inclusive.\n# x1 can be any integer from 1..n such that:\n# 1 <= x1 <= n\n# 1 <= x1 + b - c <= n\n# 1 <= x1 + a - d <= n\n# 1 <= x1 + a + b - c - d <= n\n#\n# Count how many x1 satisfy all four.\n\nlow = 1\nhigh = n\n\n# condition for x2\nlow = max(low, 1 - (b - c))\nhigh = min(high, n - (b - c))\n\n# condition for x4\nlow = max(low, 1 - (a - d))\nhigh = min(high, n - (a - d))\n\n# condition for x5\nlow = max(low, 1 - (a + b - c - d))\nhigh = min(high, n - (a + b - c - d))\n\nif low > high:\n    print(0)\nelse:\n    # For each valid x1, x3 can be any from 1..n (since x3 is free)\n    # So total = (number of x1) * n\n    count_x1 = high - low + 1\n    print(count_x1 * n)"

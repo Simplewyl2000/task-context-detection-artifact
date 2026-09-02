@@ -6,7 +6,7 @@
     "code": "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    double x1, y1, r1, x2, y2, r2;\n    while (cin >> x1 >> y1 >> r1 >> x2 >> y2 >> r2) {\n        double d = sqrt((x2-x1)*(x2-x1) + (y2-y1)*(y2-y1));\n        double sum = r1 + r2;\n        double diff = abs(r1 - r2);\n        \n        if (d > sum + 1e-9) {\n            cout << 4 << endl;\n        } else if (abs(d - sum) < 1e-9) {\n            cout << 3 << endl;\n        } else if (d > diff + 1e-9) {\n            cout << 2 << endl;\n        } else if (abs(d - diff) < 1e-9) {\n            cout << 1 << endl;\n        } else {\n            cout << 0 << endl;\n        }\n    }\n    return 0;\n}"
   },
   {
-    "model": "deepseek-chat",
+    "model": "deepseek-v4-flash",
     "prompt_type": "zero_shot",
     "language": "c++",
     "code": "#include <iostream>\n#include <cmath>\nusing namespace std;\n\nint main() {\n    double x1, y1, r1, x2, y2, r2;\n    cin >> x1 >> y1 >> r1 >> x2 >> y2 >> r2;\n\n    double dx = x1 - x2;\n    double dy = y1 - y2;\n    double d = sqrt(dx*dx + dy*dy);\n\n    if (d > r1 + r2) {\n        // No intersection, separate\n        cout << 4 << endl;\n    } else if (abs(d - (r1 + r2)) < 1e-9) {\n        // Externally tangent (circumscribed)\n        cout << 3 << endl;\n    } else if (abs(d - abs(r1 - r2)) < 1e-9) {\n        // Internally tangent (inscribed)\n        cout << 1 << endl;\n    } else if (d < abs(r1 - r2)) {\n        // One contains the other without touching\n        cout << 0 << endl;\n    } else {\n        // Two intersection points\n        cout << 2 << endl;\n    }\n\n    return 0;\n}"
@@ -24,7 +24,7 @@
     "code": "#include <stdio.h>\n#include <math.h>\n\nint main() {\n    double x1, y1, r1, x2, y2, r2;\n    \n    while (scanf(\"%lf %lf %lf %lf %lf %lf\", &x1, &y1, &r1, &x2, &y2, &r2) == 6) {\n        double d = sqrt((x2-x1)*(x2-x1) + (y2-y1)*(y2-y1));\n        double sum = r1 + r2;\n        double diff = fabs(r1 - r2);\n        \n        if (d > sum + 1e-9) {\n            printf(\"4\\n\");\n        } else if (fabs(d - sum) < 1e-9) {\n            printf(\"3\\n\");\n        } else if (d > diff + 1e-9) {\n            printf(\"2\\n\");\n        } else if (fabs(d - diff) < 1e-9) {\n            printf(\"1\\n\");\n        } else {\n            printf(\"0\\n\");\n        }\n    }\n    \n    return 0;\n}"
   },
   {
-    "model": "deepseek-chat",
+    "model": "deepseek-v4-flash",
     "prompt_type": "zero_shot",
     "language": "c",
     "code": "#include <stdio.h>\n#include <math.h>\n\nint main() {\n    double x1, y1, r1, x2, y2, r2;\n    scanf(\"%lf %lf %lf %lf %lf %lf\", &x1, &y1, &r1, &x2, &y2, &r2);\n    \n    double dx = x1 - x2;\n    double dy = y1 - y2;\n    double d = sqrt(dx * dx + dy * dy);\n    double sum = r1 + r2;\n    double diff = fabs(r1 - r2);\n    \n    if (d > sum) {\n        printf(\"4\\n\");\n    } else if (d == sum) {\n        printf(\"3\\n\");\n    } else if (d > diff && d < sum) {\n        printf(\"2\\n\");\n    } else if (d == diff && d != 0) {\n        printf(\"1\\n\");\n    } else {\n        printf(\"0\\n\");\n    }\n    \n    return 0;\n}"
@@ -36,7 +36,7 @@
     "code": "#include <stdio.h>\n\nint main(void) {\n    long long x1, y1, r1, x2, y2, r2;\n    if (scanf(\"%lld %lld %lld %lld %lld %lld\", &x1, &y1, &r1, &x2, &y2, &r2) != 6) {\n        return 0;\n    }\n\n    long long dx = x1 - x2;\n    long long dy = y1 - y2;\n    long long d2 = dx * dx + dy * dy;\n\n    long long sum = r1 + r2;\n    long long sum2 = sum * sum;\n\n    long long diff = r1 - r2;\n    if (diff < 0) diff = -diff;\n    long long diff2 = diff * diff;\n\n    if (d2 > sum2) {\n        // Separate circles\n        printf(\"4\\n\");\n    } else if (d2 == sum2) {\n        // Externally tangent\n        printf(\"3\\n\");\n    } else if (d2 > diff2) {\n        // Intersect at two points\n        printf(\"2\\n\");\n    } else if (d2 == diff2) {\n        // Internally tangent\n        printf(\"1\\n\");\n    } else {\n        // One circle strictly inside the other\n        printf(\"0\\n\");\n    }\n\n    return 0;\n}"
   },
   {
-    "model": "deepseek-chat",
+    "model": "deepseek-v4-flash",
     "prompt_type": "zero_shot",
     "language": "python",
     "code": "import math\n\nx1, y1, r1 = map(int, input().split())\nx2, y2, r2 = map(int, input().split())\n\nd = math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2)\n\nif d > r1 + r2:\n    print(4)\nelif d == r1 + r2:\n    print(3)\nelif d > abs(r1 - r2) and d < r1 + r2:\n    print(2)\nelif d == abs(r1 - r2) and d != 0:\n    print(1)\nelse:\n    print(0)"
@@ -60,7 +60,7 @@
     "code": "import java.util.Scanner;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        while (sc.hasNextDouble()) {\n            double x1 = sc.nextDouble(), y1 = sc.nextDouble(), r1 = sc.nextDouble();\n            double x2 = sc.nextDouble(), y2 = sc.nextDouble(), r2 = sc.nextDouble();\n            \n            double d = Math.sqrt((x1-x2)*(x1-x2) + (y1-y2)*(y1-y2));\n            double sumR = r1 + r2;\n            double diffR = Math.abs(r1 - r2);\n            \n            final double EPS = 1e-9;\n            \n            if (d > sumR + EPS) {\n                System.out.println(4);\n            } else if (Math.abs(d - sumR) <= EPS) {\n                System.out.println(3);\n            } else if (d > diffR + EPS) {\n                System.out.println(2);\n            } else if (Math.abs(d - diffR) <= EPS) {\n                System.out.println(1);\n            } else {\n                System.out.println(0);\n            }\n        }\n    }\n}"
   },
   {
-    "model": "deepseek-chat",
+    "model": "deepseek-v4-flash",
     "prompt_type": "zero_shot",
     "language": "java",
     "code": "import java.util.Scanner;\n\npublic class CircleTangents {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        double x1 = sc.nextDouble();\n        double y1 = sc.nextDouble();\n        double r1 = sc.nextDouble();\n        double x2 = sc.nextDouble();\n        double y2 = sc.nextDouble();\n        double r2 = sc.nextDouble();\n        \n        double dx = x2 - x1;\n        double dy = y2 - y1;\n        double d = Math.sqrt(dx * dx + dy * dy);\n        \n        if (d > r1 + r2) {\n            System.out.println(4);\n        } else if (Math.abs(d - (r1 + r2)) < 1e-9) {\n            System.out.println(3);\n        } else if (d > Math.abs(r1 - r2)) {\n            System.out.println(2);\n        } else if (Math.abs(d - Math.abs(r1 - r2)) < 1e-9) {\n            System.out.println(1);\n        } else {\n            System.out.println(0);\n        }\n        \n        sc.close();\n    }\n}"

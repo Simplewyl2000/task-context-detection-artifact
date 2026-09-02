@@ -1,6 +1,6 @@
 [
   {
-    "model": "deepseek-chat",
+    "model": "deepseek-v4-flash",
     "prompt_type": "zero_shot",
     "language": "python",
     "code": "h1, h2 = map(int, input().strip().split())\na, b = map(int, input().strip().split())\n\n# Day 0: from 2 pm to 10 pm = 8 hours up\ncurrent = h1 + a * 8\nif current >= h2:\n    print(0)\nelse:\n    # After day 0, each full day: night down 12h, day up 12h\n    night_down = b * 12\n    day_up = a * 12\n    net = day_up - night_down\n    if net <= 0:\n        print(-1)\n    else:\n        days = 0\n        while True:\n            days += 1\n            # night: slip down\n            current -= night_down\n            # day: go up\n            current += day_up\n            if current >= h2:\n                print(days)\n                break"

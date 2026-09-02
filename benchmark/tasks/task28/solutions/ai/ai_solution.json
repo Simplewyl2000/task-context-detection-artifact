@@ -1,6 +1,6 @@
 [
   {
-    "model": "deepseek-chat",
+    "model": "deepseek-v4-flash",
     "prompt_type": "zero_shot",
     "language": "python",
     "code": "n, k = map(int, input().split())\n\nmax_inversions = n * (n - 1) // 2\n\ninversions = 0\nl = 0\nr = n - 1\n\nwhile l < r and k > 0:\n    gain = 2 * (r - l)\n    if k > 0:\n        inversions += gain\n        k -= 1\n        l += 1\n        r -= 1\n\n# If we still have swaps left, we've already reached max\nif inversions > max_inversions:\n    inversions = max_inversions\n\nprint(inversions)"

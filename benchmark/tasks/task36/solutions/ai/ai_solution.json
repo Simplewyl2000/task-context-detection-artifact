@@ -1,6 +1,6 @@
 [
   {
-    "model": "deepseek-chat",
+    "model": "deepseek-v4-flash",
     "prompt_type": "zero_shot",
     "language": "python",
     "code": "n, k = map(int, input().split())\n\nans = float('inf')\nfor l in range(1, n + 1):\n    for r in range(l, n + 1):\n        stones = r - l + 1\n        walk = min(abs(k - l), abs(k - r)) + (r - l)\n        ans = min(ans, stones + walk)\n\nprint(ans)"

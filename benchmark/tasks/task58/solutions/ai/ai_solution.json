@@ -1,6 +1,6 @@
 [
   {
-    "model": "deepseek-chat",
+    "model": "deepseek-v4-flash",
     "prompt_type": "zero_shot",
     "language": "python",
     "code": "n, m = map(int, input().strip().split())\na = list(map(int, input().strip().split()))\nb = set(map(int, input().strip().split()))\n\nregular = []\nauction = []\nfor i, val in enumerate(a, start=1):\n    if i in b:\n        auction.append(val)\n    else:\n        regular.append(val)\n\n# Take all regular questions first\npoints = sum(regular)\n\n# Sort auction questions by price\nauction.sort()\n\n# Take auction questions, doubling if possible\nfor price in auction:\n    if points > price:\n        points *= 2\n    else:\n        points += price\n\nprint(points)"

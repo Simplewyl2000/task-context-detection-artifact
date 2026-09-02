@@ -1,6 +1,6 @@
 [
   {
-    "model": "deepseek-chat",
+    "model": "deepseek-v4-flash",
     "prompt_type": "zero_shot",
     "language": "python",
     "code": "n, a, b = map(int, input().split())\ngroups = list(map(int, input().split()))\n\nsingle_tables = a\ndouble_tables = b\ndouble_used_by_one = 0\ndenied = 0\n\nfor g in groups:\n    if g == 1:\n        if single_tables > 0:\n            single_tables -= 1\n        elif double_tables > 0:\n            double_tables -= 1\n            double_used_by_one += 1\n        elif double_used_by_one > 0:\n            double_used_by_one -= 1\n        else:\n            denied += 1\n    else:  # g == 2\n        if double_tables > 0:\n            double_tables -= 1\n        else:\n            denied += 2\n\nprint(denied)"

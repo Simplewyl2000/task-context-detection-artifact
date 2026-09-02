@@ -1,6 +1,6 @@
 [
   {
-    "model": "deepseek-chat",
+    "model": "deepseek-v4-flash",
     "prompt_type": "zero_shot",
     "language": "python",
     "code": "l, r, a = map(int, input().split())\n\n# Step 1: Pair as many left and right directly as possible\npairs = min(l, r)\nl -= pairs\nr -= pairs\n\n# Step 2: Use ambidexters to balance the remaining difference\ndiff = max(l, r)  # only one of them is non-zero now\nif a >= diff:\n    a -= diff\n    pairs += diff\nelse:\n    pairs += a\n    a = 0\n\n# Step 3: Remaining ambidexters can be split equally to both sides\npairs += a // 2\n\n# Each pair contributes 2 players\nprint(pairs * 2)"

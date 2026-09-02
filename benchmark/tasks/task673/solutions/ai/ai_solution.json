@@ -1,6 +1,6 @@
 [
   {
-    "model": "deepseek-chat",
+    "model": "deepseek-v4-flash",
     "prompt_type": "zero_shot",
     "language": "c",
     "code": "#include <stdio.h>\n#define MOD 1000000007\n\nlong long modpow(long long a, long long e) {\n    long long r = 1;\n    while (e) {\n        if (e & 1) r = r * a % MOD;\n        a = a * a % MOD;\n        e >>= 1;\n    }\n    return r;\n}\n\nlong long fact[2000005], invfact[2000005];\n\nlong long comb(int n, int k) {\n    if (k < 0 || k > n) return 0;\n    return fact[n] * invfact[k] % MOD * invfact[n - k] % MOD;\n}\n\nlong long multichoose(int n, int k) {\n    return comb(n + k - 1, k);\n}\n\nint main() {\n    int N, M;\n    scanf(\"%d %d\", &N, &M);\n    int maxBinom = 0;\n    int binom[30];\n    for (int i = 0; i <= N; i++) {\n        int c = 1;\n        for (int j = 1; j <= i; j++)\n            c = c * (N - j + 1) / j;\n        binom[i] = c;\n        if (c > maxBinom) maxBinom = c;\n    }\n    int maxN = M + maxBinom;\n    fact[0] = 1;\n    for (int i = 1; i <= maxN; i++)\n        fact[i] = fact[i-1] * i % MOD;\n    invfact[maxN] = modpow(fact[maxN], MOD-2);\n    for (int i = maxN; i >= 1; i--)\n        invfact[i-1] = invfact[i] * i % MOD;\n\n    long long ans = 1;\n    for (int i = 0; i <= N; i++) {\n        ans = ans * multichoose(M, binom[i]) % MOD;\n    }\n    printf(\"%lld\\n\", ans);\n    return 0;\n}"
@@ -24,7 +24,7 @@
     "code": "#include <bits/stdc++.h>\nusing namespace std;\nconst int MOD = 1e9 + 7;\nlong long C[200005][2];\nint main(){\n    int N, M;\n    cin >> N >> M;\n    long long num = 1LL << N;\n    // C(num + M - 1, M)\n    long long ans = 1;\n    long long top = num + M - 1;\n    for(long long i = 0; i < M; i++){\n        ans = ans % MOD * ((top - i) % MOD) % MOD;\n        long long div = i + 1;\n        // modular inverse\n        long long inv = 1, base = div, exp = MOD-2, mod = MOD;\n        while(exp > 0){ if(exp&1) inv=inv*base%mod; base=base*base%mod; exp>>=1; }\n        ans = ans * inv % MOD;\n    }\n    cout << ans << endl;\n}"
   },
   {
-    "model": "deepseek-chat",
+    "model": "deepseek-v4-flash",
     "prompt_type": "zero_shot",
     "language": "c++",
     "code": "#include <bits/stdc++.h>\nusing namespace std;\nusing int64 = long long;\nconst int MOD = 1e9+7;\n\nint64 modpow(int64 a, int64 e) {\n    int64 r=1;\n    while(e) {\n        if(e&1) r=r*a%MOD;\n        a=a*a%MOD;\n        e>>=1;\n    }\n    return r;\n}\n\nint main() {\n    ios::sync_with_stdio(false);\n    cin.tie(nullptr);\n    int N, M;\n    cin >> N >> M;\n    int K = 1 << N;\n    int max_n = M + K;\n    vector<int64> fact(max_n+1, 1), invfact(max_n+1, 1);\n    for (int i=1; i<=max_n; i++) fact[i] = fact[i-1]*i % MOD;\n    invfact[max_n] = modpow(fact[max_n], MOD-2);\n    for (int i=max_n; i>=1; i--) invfact[i-1] = invfact[i]*i % MOD;\n    auto binom = [&](int n, int r) -> int64 {\n        if (r<0 || r>n) return 0;\n        return fact[n] * invfact[r] % MOD * invfact[n-r] % MOD;\n    };\n    cout << binom(M + K - 1, K - 1) << \"\\n\";\n    return 0;\n}"
@@ -42,7 +42,7 @@
     "code": "import java.util.*;\n\npublic class Main {\n    static final int MOD = 1_000_000_007;\n    \n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        int N = sc.nextInt(), M = sc.nextInt();\n        // Answer: (2^N)^M but only constant sequences? \n        // Actually answer might be 2^N * something\n        // For now, output 2^N as placeholder\n        long ans = 1;\n        for(int i=0;i<N*M;i++) ans = ans*2%MOD; // placeholder\n        System.out.println(ans);\n    }\n}"
   },
   {
-    "model": "deepseek-chat",
+    "model": "deepseek-v4-flash",
     "prompt_type": "zero_shot",
     "language": "java",
     "code": "import java.util.Scanner;\n\npublic class Main {\n    static final int MOD = 1_000_000_007;\n\n    static long modPow(long a, long e) {\n        long res = 1;\n        while (e > 0) {\n            if ((e & 1) == 1) res = res * a % MOD;\n            a = a * a % MOD;\n            e >>= 1;\n        }\n        return res;\n    }\n\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        int N = sc.nextInt();\n        int M = sc.nextInt();\n        int K = 1 << N; // 2^N\n        \n        // Compute C(M + K - 1, K - 1) mod MOD\n        long num = 1, den = 1;\n        for (int i = 1; i <= K - 1; i++) {\n            num = num * (M + K - i) % MOD;\n            den = den * i % MOD;\n        }\n        long ans = num * modPow(den, MOD - 2) % MOD;\n        System.out.println(ans);\n    }\n}"
@@ -60,7 +60,7 @@
     "code": "from itertools import product\nMOD = 10**9 + 7\n\ndef solve():\n    import sys\n    from itertools import product\n    input_data = sys.stdin.read().split()\n    N, M = int(input_data[0]), int(input_data[1])\n    \n    def is_sortable(seq):\n        seq = list(seq)\n        n = len(seq)\n        changed = True\n        while changed:\n            changed = False\n            for i in range(n-1):\n                if seq[i] > seq[i+1] and (seq[i] ^ seq[i+1]).bit_count() == 1:\n                    seq[i], seq[i+1] = seq[i+1], seq[i]\n                    changed = True\n        return seq == sorted(seq)\n    \n    count = 0\n    for seq in product(range(1 << N), repeat=M):\n        good = True\n        for mask in range(1 << N):\n            masked = tuple(x & mask for x in seq)\n            if not is_sortable(masked):\n                good = False\n                break\n        if good:\n            count += 1\n    print(count % MOD)\n\nsolve()"
   },
   {
-    "model": "deepseek-chat",
+    "model": "deepseek-v4-flash",
     "prompt_type": "zero_shot",
     "language": "python",
     "code": "MOD = 10**9 + 7\n\ndef solve():\n    import sys\n    input_data = sys.stdin.read().strip().split()\n    if not input_data:\n        return\n    N = int(input_data[0])\n    M = int(input_data[1])\n    ans = pow(M + 1, N, MOD)\n    print(ans)\n\nif __name__ == \"__main__\":\n    solve()"

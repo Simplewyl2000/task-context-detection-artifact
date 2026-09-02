@@ -1,6 +1,6 @@
 [
   {
-    "model": "deepseek-chat",
+    "model": "deepseek-v4-flash",
     "prompt_type": "zero_shot",
     "language": "python",
     "code": "d, k, a, b, t = map(int, input().split())\n\n# If d <= k, just drive the whole way\nif d <= k:\n    print(d * a)\nelse:\n    # Option 1: Drive first k, then walk the rest\n    ans = k * a + (d - k) * b\n    \n    # Option 2: Drive multiple full segments, possibly repair\n    full_segments = d // k\n    remaining = d % k\n    \n    # Try driving all full segments (with repairs between them) and then walk remaining\n    # full_segments times we drive k km, with (full_segments - 1) repairs\n    time_all_drive = full_segments * k * a + (full_segments - 1) * t\n    if remaining > 0:\n        # either walk remaining\n        time_with_walk = time_all_drive + remaining * b\n        ans = min(ans, time_with_walk)\n        # or repair and drive remaining\n        time_with_drive = time_all_drive + t + remaining * a\n        ans = min(ans, time_with_drive)\n    else:\n        ans = min(ans, time_all_drive)\n    \n    # Also consider driving fewer full segments and walking earlier\n    for drives in range(1, full_segments):\n        dist_driven = drives * k\n        time_driven = dist_driven * a + (drives - 1) * t\n        time_walk = (d - dist_driven) * b\n        ans = min(ans, time_driven + time_walk)\n    \n    print(ans)"
